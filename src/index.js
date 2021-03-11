@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 
+import store from './store';
 import App from './App';
-import data from './data';
 
-window.__data__ = data;
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App store={store} />, document.getElementById('root'));

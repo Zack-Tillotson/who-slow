@@ -1,20 +1,31 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 
-import cn from 'classnames'
+import useState from 'state/useState'
 
-import useData from 'data/useData';
+import cn from 'classnames'
 
 import './component.scss'
 
 function Component(props) {
-  const players = useData('players')
-  const games = useData('games')
-  const sessions = useData('sessions')
+  const players = useState('sessionConfig/players')
+  const games = useState('sessionConfig/games')
+  const sessions = useState('sessionConfig/sessions')
 
   return (
     <div>
       <h1>Who Slow</h1>
+
+      <div className="players-list">
+        <h2>Players</h2>
+        {players.length} players
+      </div>
+
+      <div className="games-list">
+        <h2>Games</h2>
+        {games.length} games
+      </div>
+
       <div className="session-list">
         <h2>Sessions</h2>
         {sessions.isLoaded && sessions.value.map(session => (

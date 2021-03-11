@@ -1,14 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 
 import cn from 'classnames'
-
-import useData from 'data/useData';
 
 import './component.scss'
 
 function Component(props) {
-  const session = useData(`session/${props.match.params.sessionId}`)
+  // `session/${props.match.params.sessionId}`
+  const session = useSelector().session
 
   return (
     <div>
