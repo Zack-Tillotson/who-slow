@@ -1,4 +1,8 @@
 const INITIAL = {
+  status: {
+    isInitializing: false,
+    isInitialized: false,    
+  },
   players: [],
   games: [],
   sessions: [],

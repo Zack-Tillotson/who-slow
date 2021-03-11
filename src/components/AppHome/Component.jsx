@@ -1,13 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 
-import useState from 'state/useState'
+import {useState} from 'state'
 
 import cn from 'classnames'
 
 import './component.scss'
 
 function Component(props) {
+
   const players = useState('sessionConfig/players')
   const games = useState('sessionConfig/games')
   const sessions = useState('sessionConfig/sessions')

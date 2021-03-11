@@ -1,2 +1,3 @@
+import appDb from './sagas/appDb';
 
-export default []
+export default [...appDb]
