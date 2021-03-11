@@ -15,8 +15,10 @@ const GAMES = [
 
 const PLAYERS = [
   {id: 1, name: 'Zack'},
-  {id: 1, name: 'Tanya'},
+  {id: 2, name: 'Tanya'},
 ]
+
+const SESSIONS = []
 
 // Must return object which 
 // 1. Fetches data
@@ -34,7 +36,7 @@ function request(name, onData) {
     }
     break;
     case (name === 'sessions'): {
-      value = []; // TODO fill out
+      value = SESSIONS;
     }
     break;
     case (name.startsWith('session/')): {

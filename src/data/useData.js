@@ -1,17 +1,18 @@
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import data from './index';
 
 function useData(dataName) {
+  const [value, updateValue] = useState(data.get(dataName));
 
   useEffect(() => {
-    data.watch(dataName);
+    data.watch(dataName, updateValue)
 
     return () => {
-      data.dispose(dataName);
+      data.dispose(dataName)
     }
-  }, [dataName]);
+  }, [dataName])
 
-  return data.get(dataName);
+  return value
 }
 
 export default useData

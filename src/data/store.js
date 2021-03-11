@@ -1,3 +1,5 @@
+import hardcodedSource from './sources/hardcoded'
+
 const EMPTY_VALUE = {
   isLoading: false,
   isLoaded: false,
@@ -6,47 +8,50 @@ const EMPTY_VALUE = {
   error: null,
 }
 
+const INITIAL_DATA = {
+  games: [],
+  players: [],
+  sessions: [],
+}
+
+const sources = [hardcodedSource]
+
 class Store {
   constructor() {
-    this.sources = []
-    this.data = {} // key = dataName, value = array of values matching sources
-    this.dataRequests = {} // key = dataName, value = request objects
+    this.data = INITIAL_DATA
+    
+    this.watch = this.watch.bind(this)
+    this.dataHandler = this.dataHandler.bind(this)
+
+    this.initialize();
   }
 
-  initialize(sources) {
-    if(!sources) throw new Error('Must initialize with array of sources')
-    this.sources = sources
+  initialize(targets = Object.keys(INITIAL_DATA)) {
+    return Promise.all(targets.map(this.watch))
   }
 
   get(dataName) {
-    const values = this.data[dataName];
-
-    if(!values) {
+    if(Object.keys(this.data).indexOf(dataName) === -1) {
       return EMPTY_VALUE
     }
 
-    return values[0] // Just take the first item (more is yagni atm)
+    return this.data[dataName]
   }
 
-  watch(dataName) {
-    this.sources.forEach(source => {
-      const key = source.id + dataName
-      if(!this.dataRequests[key]) this.dataRequests[key] = source.request(dataName, this.dataHandler.bind(this))
-    })
+  watch(dataName, onData) {
+    return Promise.all(sources.map(source => source.request(dataName, this.dataHandler)))
+      .then(() => typeof onData === 'function' && onData(this.get(dataName)))
   }
 
   dispose(dataName) {
-    this.sources.forEach(source => {
-      const key = source.id + dataName
-      const dataRequest = this.dataRequests[key]
-      if(!dataRequest) return
-      dataRequest.dispose()
-    })
+    return Promise.resolve(); // TODO
   }
 
   dataHandler(dataName, sourceId, value) {
-    this.data[dataName] = this.sources.map(source => source.id === sourceId ? value : null)
+    this.data[dataName] = value;
   }
+
+
 }
 
 export default Store

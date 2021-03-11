@@ -16,9 +16,8 @@ function Component(props) {
     <div>
       <h1>Who Slow</h1>
       <div className="session-list">
-        <h2>Session List</h2>
-        {sessions.isLoading && '...'}
-        {sessions.isLoaded && sessions.data.map(session => (
+        <h2>Sessions</h2>
+        {sessions.isLoaded && sessions.value.map(session => (
           <div className="session-list__item" key={session.id}>
             <h3>{session.game.name}</h3>
             <Link to={`/app/session/${session.id}/`}>Open</Link>
