@@ -1,3 +1,5 @@
+import types from '../types'
+
 const INITIAL = {
   status: {
     isInitializing: false,
@@ -9,6 +11,14 @@ const INITIAL = {
 }
 
 function sessionConfig(state = INITIAL, action) {
+  switch(action.type) {
+    case types.dbDataLoaded: {
+      return {
+        ...state,
+        ...action.payload,
+      }
+    }
+  }
   return state;
 }
 
