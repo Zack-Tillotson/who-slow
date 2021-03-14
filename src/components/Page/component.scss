@@ -1,0 +1,41 @@
+/* utility */
+
+.page__container {
+  max-width: 864px;
+  margin: 0 auto;
+}
+
+.--button-like {
+  text-align: center;
+  padding: var(--pad) var(--pad3);
+  margin: 0 var(--pad);
+  
+  background: var(--color-primary);
+  color: var(--color-font-contrast);
+  border-radius: 5px;
+  text-decoration: none;
+
+  &:link, &:visited {
+    color: var(--color-font-contrast);
+  }
+}
+
+/* page template styles */
+.page {
+  min-height: 100vh;
+
+  background: var(--layout-c-bg);
+
+  .page__content {
+    padding: var(--pad);
+
+  }
+
+  .page__foot {
+    margin-top: var(--pad2);
+
+    a:link, a:visited {
+      color: #666;
+    }
+  }
+}

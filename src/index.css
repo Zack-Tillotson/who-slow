@@ -5,11 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-size: 16px;
+
 }
 
 html {
@@ -20,6 +18,41 @@ html {
   box-sizing: inherit;
 }
 
+img {
+  max-width: 100%;
+}
+
+h1 {
+  font-size: 1.25rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+/********************************************
+ * App Variables ****************************
+ ********************************************/
 :root {
-  
+
+  /* colors */
+  --color-primary: #1D549B;
+  --color-secondary: #61C5A7;
+
+  --color-font-primary: #333;
+  --color-font-contrast: white;
+
+  /* layout */
+  --bg: #fafff9;
+  --bg-contrast: var(--color-primary);
+  --pad: 8px;
+  --pad2: calc(var(--pad) * 2);
+  --pad3: calc(var(--pad) * 3);
+  --pad4: calc(var(--pad) * 4);
+  --pad5: calc(var(--pad) * 5);
+
+  /* fonts */
+  --font-primary: xxx;
+  --font-secondary: yyy;
+
 }
