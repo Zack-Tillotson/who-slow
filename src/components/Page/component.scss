@@ -5,15 +5,25 @@
   margin: 0 auto;
 }
 
+.page__loader {
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 100%;
+  align-items: center;
+  justify-items: center;
+  min-height: 100vh; 
+}
+
 .--button-like {
   text-align: center;
   padding: var(--pad) var(--pad3);
-  margin: 0 var(--pad);
+  margin: var(--pad) 0;
   
   background: var(--color-primary);
   color: var(--color-font-contrast);
   border-radius: 5px;
   text-decoration: none;
+  cursor: pointer;
 
   &:link, &:visited {
     color: var(--color-font-contrast);

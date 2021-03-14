@@ -2,7 +2,7 @@ import types from '../types'
 
 const INITIAL = {
   status: {
-    isInitializing: false,
+    isInitializing: true,
     isInitialized: false,    
   },
   players: [],
@@ -15,6 +15,10 @@ function sessionConfig(state = INITIAL, action) {
     case types.dbDataLoaded: {
       return {
         ...state,
+        status: {
+          isInitialized: true,
+          isInitializing: false,
+        },
         ...action.payload,
       }
     }

@@ -1,3 +1,4 @@
-import appDb from './sagas/appDb';
+import appDb from './sagas/appDb'
+import ui from './sagas/ui'
 
-export default [...appDb]
+export default [...appDb, ...ui]

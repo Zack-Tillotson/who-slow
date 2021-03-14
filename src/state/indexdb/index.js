@@ -9,10 +9,14 @@ function openDb() {
     const openRequest = indexedDB.open(DB_NAME, DB_VERSION)
 
     openRequest.onupgradeneeded = function(event) {
-      let db = openRequest.result;
+      let db = event.target.result;
       switch(event.oldVersion) {
-        case 0: // No existing DB
-          return createBaseDb(db);
+        case 0: { // No existing DB
+          db.createObjectStore('games', {keyPath: 'id', autoIncrement: true});
+          db.createObjectStore('players', {keyPath: 'id', autoIncrement: true});
+          db.createObjectStore('sessions', {keyPath: 'id', autoIncrement: true});
+          return
+        }
       }
     };
 
@@ -45,12 +49,6 @@ async function getData(storeName) {
       resolve(request.result)
     }
   })
-}
-
-function createBaseDb(db) {
-  db.createObjectStore(db, 'games', {keyPath: 'id', autoIncrement: true});
-  db.createObjectStore(db, 'players', {keyPath: 'id', autoIncrement: true});
-  db.createObjectStore(db, 'sessions', {keyPath: 'id', autoIncrement: true});
 }
 
 async function initialize() {

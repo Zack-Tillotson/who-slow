@@ -1,43 +1,40 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 
-import {useState} from 'state'
+import {useState, dispatchAction, actions} from 'state'
+import {useDispatch} from 'react-redux'
 import cn from 'classnames'
 
 import Page from 'components/Page'
 
 import './component.scss'
+import logo from 'assets/turtle-400x400.png'
 
 function Component(props) {
 
-  const players = useState('sessionConfig/players')
-  const games = useState('sessionConfig/games')
-  const sessions = useState('sessionConfig/sessions')
+  const sessionConfig = useState('sessionConfig');
+  const {status, players, games, sessions} = sessionConfig;
+  const dispatch = useDispatch()
+  
+  if(!status.isInitialized) {
+    return (
+      <div className="page__loader">
+        <img src={logo} />
+      </div>
+    )    
+  }
+
+  const handleClickNewSessionClick = event => {
+    dispatch(actions.uiRequestNewSession())
+  }
 
   return (
-    <Page>
-      <div>
-        <h1>Who Slow</h1>
-
-        <div className="players-list">
-          <h2>Players</h2>
-          {players.length} players
-        </div>
-
-        <div className="games-list">
-          <h2>Games</h2>
-          {games.length} games
-        </div>
-
-        <div className="session-list">
-          <h2>Sessions</h2>
-          {sessions.isLoaded && sessions.value.map(session => (
-            <div className="session-list__item" key={session.id}>
-              <h3>{session.game.name}</h3>
-              <Link to={`/app/session/${session.id}/`}>Open</Link>
-            </div>
-          ))}
-        </div>
+    <Page className="app-home">
+      <h1 className="app-home__title">Who Slow</h1>
+      <div className="app-home__controls">
+        <button className="--button-like" onClick={handleClickNewSessionClick}>
+          New Session
+        </button>
       </div>
     </Page>
   );
