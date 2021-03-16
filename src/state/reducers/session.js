@@ -6,19 +6,14 @@ const INITIAL = {
     isInitialized: false,    
   },
   players: [],
-  games: [],
-  sessions: [],
-  newSessionForm: {
-    game: '',
-    players: [],
-  },
+  game: null,
 }
 
-function sessionConfig(state = INITIAL, action) {
+function session(state = INITIAL, action) {
   switch(action.type) {
     case types.dbDataLoaded: {
-      
-      if(action.payload.path !== 'initialize') return state
+
+      if(action.payload.path !== 'sessions' || !action.payload.params) return state
 
       return {
         ...state,
@@ -33,4 +28,4 @@ function sessionConfig(state = INITIAL, action) {
   return state;
 }
 
-export default sessionConfig;
+export default session

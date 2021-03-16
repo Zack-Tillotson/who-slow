@@ -1,3 +1,4 @@
 import {useSelector} from 'react-redux'
 
-export default path => useSelector(state => path.split('/').reduce((substate, pathPiece) => substate[pathPiece], state))
+export const pathSelector = path => state => path.split('/').reduce((substate, pathPiece) => substate[pathPiece], state)
+export default path => useSelector(pathSelector(path))

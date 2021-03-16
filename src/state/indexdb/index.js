@@ -39,11 +39,11 @@ function loadBaseData(db, storeName, data) {
   })
 }
 
-async function getData(storeName) {
+async function getObject(storeName, queryParams) {
   const db = await openDb()
   const transaction = db.transaction(storeName)
   const store = transaction.objectStore(storeName)
-  const request = store.getAll()
+  const request = queryParams?.id ? store.get(Number(queryParams.id)) : store.getAll()
   return new Promise(resolve => {
     request.onsuccess = () => {
       resolve(request.result)
@@ -60,7 +60,7 @@ async function initialize() {
     loadBaseData(db, 'players', PLAYERS),
   ])
 
-  const [games, players, sessions] = await Promise.all([getData('games'), getData('players'), getData('sessions')])
+  const [games, players, sessions] = await Promise.all([getObject('games'), getObject('players'), getObject('sessions')])
   return {
     games,
     players,
@@ -68,4 +68,20 @@ async function initialize() {
   }
 }
 
-export default {initialize}
+async function createObject(storeName, data) {
+  const db = await openDb()
+  const transaction = db.transaction(storeName, 'readwrite')
+  const store = transaction.objectStore(storeName)
+  const request = store.add(data)
+  return new Promise(resolve => {
+    request.onsuccess = event => {
+      resolve(event.target.result)
+    }
+  })
+}
+
+export default {
+  initialize, 
+  getObject,
+  createObject,
+}
