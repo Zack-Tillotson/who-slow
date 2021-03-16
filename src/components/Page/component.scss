@@ -18,15 +18,27 @@
   text-align: center;
   padding: var(--pad) var(--pad3);
   margin: var(--pad) 0;
+  border: solid 1px rgba(0,0,0,0);
+  font-weight: bold;
   
-  background: var(--color-primary);
-  color: var(--color-font-contrast);
+  background: #ccc;
   border-radius: 5px;
   text-decoration: none;
   cursor: pointer;
 
   &:link, &:visited {
     color: var(--color-font-contrast);
+  }
+
+  &.--primary {
+    background: var(--color-primary);
+    color: var(--color-font-contrast);
+  }
+
+  &.--hollow {
+    border-color: #ccc;
+    background: none;
+    color: var(--color-primary);
   }
 }
 

@@ -15,7 +15,7 @@ function Component(props) {
       {isHeadShown && (
         <PageHead className="page__head" />
       )}
-      <div className="page__content page__container">
+      <div className={cn('page__content', 'page__container', props.className)}>
         {props.children}
       </div>
       <div className="page__foot">

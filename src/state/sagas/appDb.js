@@ -1,10 +1,11 @@
-import {takeEvery, call, put} from 'redux-saga/effects'
+import {takeEvery, call, put, delay} from 'redux-saga/effects'
 import types from '../types'
 import actions from '../actions'
 
 import indexdb from '../indexdb'
 
 function* initAppDb(action) {
+  //yield delay(750)
   const data = yield indexdb.initialize();
   yield put(actions.dbDataLoaded({data, path: 'initialize'}))
 }

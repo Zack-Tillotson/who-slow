@@ -7,6 +7,7 @@ import {actions} from 'state'
 import useState from 'state/useState'
 
 import Page from 'components/Page'
+import Timer from 'components/Timer'
 
 import './component.scss'
 import logo from 'assets/turtle-400x400.png'
@@ -35,12 +36,19 @@ function Component(props) {
   const players = session.players.map(playerId => sessionConfig.players.find(player => player.id === playerId)).filter(Boolean)
 
   return (
-    <Page>
-      <h1>Who Slow</h1>
-      <div className="session">
-        <h2>Session</h2>
-        {session.isLoading && '...'}
-        {session.isLoaded && `Session ${session.value.id}`}        
+    <Page className="session">
+      <Timer className="session__timer" />
+      <div className="session__controls">
+        <button className="--button-like --hollow">Start/Stop</button>
+        <button className="--button-like --hollow">Pause</button>
+        <button className="--button-like --hollow">Undo</button>
+      </div>
+      <div className="session__players">
+        {players.map(player => (
+          <button key={player.id} className="player --button-like --primary">
+            {player.name}
+          </button>
+        ))}
       </div>
     </Page>
   );
