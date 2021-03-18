@@ -32,7 +32,7 @@ function Component(props) {
     <Page className="app-home">
       <h1 className="app-home__title">Who Slow</h1>
       <div className="app-home__controls">
-        <button className="--button-like" onClick={handleClickNewSessionClick}>
+        <button className="--button-like --primary --wide" onClick={handleClickNewSessionClick}>
           New Session
         </button>
       </div>

@@ -16,7 +16,7 @@ function Component(props) {
           <img src={hero} />
         </div>
         <div className="home__controls">
-          <Link to="/app/" className="--button-like">Open App</Link>
+          <Link to="/app/" className="--button-like --primary --wide">Open App</Link>
         </div>
         <div className="home__explanation">
           <h1 className="subtitle">The board game turn tracker</h1>

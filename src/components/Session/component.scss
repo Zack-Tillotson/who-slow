@@ -29,6 +29,11 @@
 
     @media(orientation: landscape) {
       flex-direction: column;
+
+      .--button-like {
+        margin-bottom: 0;
+        margin-top: 2px;
+      }
     }
   }
 
