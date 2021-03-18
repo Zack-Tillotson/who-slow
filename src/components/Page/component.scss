@@ -46,6 +46,12 @@
   &.--wide {
     width: 100%;
   }
+
+  &.--disabled {
+    cursor: auto;
+    color: #666!important; /* ytho */
+    background: #ddd!important;
+  }
 }
 
 /* page template styles */
