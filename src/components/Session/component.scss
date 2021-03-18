@@ -1,23 +1,50 @@
 .session {
+  display: grid;
+  grid-template:
+    "timer"
+    "controls"
+    "players";
+  grid-template-rows: auto auto 1fr;
+  grid-template-columns: 1fr;
+
+  @media(orientation: landscape) {
+    grid-template:
+      "timer controls"
+      "players players";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr auto;    
+  }
+
+  .session__timer {
+    grid-area: timer;
+  }
 
   .session__controls {
+    grid-area: controls;
+
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     gap: var(--pad);
+
+    @media(orientation: landscape) {
+      flex-direction: column;
+    }
   }
 
   .session__players {
+    grid-area: players;
+
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
 
     .player {
       width: 100%;
-      max-width: calc(50% - var(--pad) / 2);
-
-      @media(max-width: 400px) {
-        max-width: 100%;
+      max-width: 100%;
+      
+      @media(min-width: 400px) {
+        max-width: calc(50% - var(--pad) / 2);  
       }
     }
   }
