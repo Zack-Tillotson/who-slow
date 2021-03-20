@@ -7,7 +7,7 @@ import './component.scss'
 function Component(props) {
   return (
     <div>
-      Component
+      Session Stats
     </div>
   );
 }

@@ -15,8 +15,9 @@ function getEventTimes(events) {
 
   if(lastEvent.type ===  'TURN_START') return [lastEvent.when, Date.now()]
   if(lastEvent.type === 'PAUSE') return [lastPlayerEvent.when, lastEvent.when]
+  if(lastEvent.type === 'END') return [events[0].when, lastEvent.when]
 
-  console.log('Timer logic is wack')
+  console.warn('Timer logic is wack')
   return []
 
 }

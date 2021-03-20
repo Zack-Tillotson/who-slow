@@ -7,6 +7,7 @@ const INITIAL = {
   },
   players: [],
   game: null,
+  events: [],
 }
 
 function session(state = INITIAL, action) {
@@ -22,6 +23,15 @@ function session(state = INITIAL, action) {
           isInitializing: false,
         },
         ...action.payload.data,
+      }
+    }
+
+    case types.stateValueUpdated: {
+      if(!action.payload.path.startsWith('session/')) return state
+
+      return {
+        ...state,
+        [action.payload.path.substring('session/'.length)]: action.payload.value,
       }
     }
   }

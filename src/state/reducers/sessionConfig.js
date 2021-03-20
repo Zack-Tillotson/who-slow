@@ -29,6 +29,15 @@ function sessionConfig(state = INITIAL, action) {
         ...action.payload.data,
       }
     }
+
+    case types.stateValueUpdated: {
+      if(!action.payload.path.startsWith('sessionConfig')) return state
+
+      return {
+        ...state,
+        [action.payload.path.substring('sessionConfig'.length)]: action.payload,
+      }
+    }
   }
   return state;
 }

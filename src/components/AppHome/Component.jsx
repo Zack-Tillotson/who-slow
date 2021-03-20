@@ -12,7 +12,7 @@ import logo from 'assets/turtle-400x400.png'
 
 function Component(props) {
 
-  const sessionConfig = useState('sessionConfig');
+  const [sessionConfig] = useState('sessionConfig');
   const {status, players, games, sessions} = sessionConfig;
   const dispatch = useDispatch()
   

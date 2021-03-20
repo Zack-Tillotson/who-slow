@@ -72,10 +72,13 @@ async function createObject(storeName, data) {
   const db = await openDb()
   const transaction = db.transaction(storeName, 'readwrite')
   const store = transaction.objectStore(storeName)
-  const request = store.add(data)
+  const request = store.put(data)
   return new Promise(resolve => {
     request.onsuccess = event => {
       resolve(event.target.result)
+    }
+    request.onerror = event => {
+      console.warn('createObject error', event.toString())
     }
   })
 }
