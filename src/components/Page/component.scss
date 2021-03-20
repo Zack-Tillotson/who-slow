@@ -43,6 +43,13 @@
     color: var(--color-primary);
   }
 
+  &.--minimal {
+    background: none;
+    color: var(--color-font-primary);
+    font-weight: normal;
+    text-decoration: underline;
+  }
+
   &.--wide {
     width: 100%;
   }

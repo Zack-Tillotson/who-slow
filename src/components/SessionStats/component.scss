@@ -20,7 +20,11 @@
   .game-stats__highlights {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    justify-content: space-around;
+
+    @media(min-width: 800px) {
+      justify-content: space-between;
+    }
 
     .game-stats__highlight {
       display: inline-block;

@@ -9,7 +9,7 @@ const INITIAL = {
   games: [],
   sessions: [],
   newSessionForm: {
-    game: '',
+    game: 0,
     players: [],
   },
 }
@@ -31,11 +31,11 @@ function sessionConfig(state = INITIAL, action) {
     }
 
     case types.stateValueUpdated: {
-      if(!action.payload.path.startsWith('sessionConfig')) return state
+      if(!action.payload.path.startsWith('sessionConfig/')) return state
 
       return {
         ...state,
-        [action.payload.path.substring('sessionConfig'.length)]: action.payload,
+        [action.payload.path.substring('sessionConfig/'.length)]: action.payload.value,
       }
     }
   }

@@ -1,8 +1,10 @@
 import GAMES from './data/games'
 import PLAYERS from './data/players'
+const SESSION_FORM = [{id: 1, game: 1, players: [1, 2]}]
 
-const DB_VERSION = 1;
+const DB_VERSION = 3
 const DB_NAME = 'why-slow-local'
+
 
 function openDb() {
   return new Promise((resolve, reject) => {
@@ -15,7 +17,11 @@ function openDb() {
           db.createObjectStore('games', {keyPath: 'id', autoIncrement: true});
           db.createObjectStore('players', {keyPath: 'id', autoIncrement: true});
           db.createObjectStore('sessions', {keyPath: 'id', autoIncrement: true});
+          db.createObjectStore('sessionForm', {keyPath: 'id', autoIncrement: true});
           return
+        }
+        default: {
+          db.createObjectStore('sessionForm', {keyPath: 'id', autoIncrement: true});
         }
       }
     };
@@ -58,13 +64,20 @@ async function initialize() {
   await Promise.all([
     loadBaseData(db, 'games', GAMES),
     loadBaseData(db, 'players', PLAYERS),
+    loadBaseData(db, 'sessionForm', SESSION_FORM)
   ])
 
-  const [games, players, sessions] = await Promise.all([getObject('games'), getObject('players'), getObject('sessions')])
+  const [games, players, sessions, newSessionForm] = await Promise.all([
+    getObject('games'), 
+    getObject('players'),
+    getObject('sessions'),
+    getObject('sessionForm'),
+  ])
   return {
     games,
     players,
     sessions,
+    newSessionForm: newSessionForm[0],
   }
 }
 
@@ -76,9 +89,6 @@ async function createObject(storeName, data) {
   return new Promise(resolve => {
     request.onsuccess = event => {
       resolve(event.target.result)
-    }
-    request.onerror = event => {
-      console.warn('createObject error', event.toString())
     }
   })
 }
