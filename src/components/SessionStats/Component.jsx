@@ -10,9 +10,9 @@ import Page from 'components/Page'
 
 
 import './component.scss'
-import logo from 'assets/turtle-400x400.png'
+import logo from 'assets/logo-400x400.png'
 
-function calculateStats(session, players) {
+function calculateStats(session, fullPlayers) {
   const {events} = session
 
   const turns = events.map((event, index) => {
@@ -22,14 +22,17 @@ function calculateStats(session, players) {
     return {
       turn: index,
       time: event.when - prevEvent.when,
-      player: players.find(player => player.id === prevEvent.who),
+      player: fullPlayers.find(player => player.id === prevEvent.who),
     }
   }).filter(Boolean)
 
-  const playersWithTurns = players.map(player => ({
-    player,
-    turns: turns.filter(turn => turn.player === player),
-  })).map(player => ({
+  const playersWithTurns = session.players.map(playerId => {
+    const player = fullPlayers.find(player => player.id === playerId)
+    return {
+      player,
+      turns: turns.filter(turn => turn.player === player),
+    }
+  }).map(player => ({
     ...player,
     time: player.turns.reduce((time, turn) => time + turn.time, 0),
     turns: player.turns.map((turn, index) => ({...turn, round: index + 1}))

@@ -9,7 +9,7 @@ import cn from 'classnames'
 import Page from 'components/Page'
 
 import './component.scss'
-import logo from 'assets/turtle-400x400.png'
+import logo from 'assets/logo-400x400.png'
 
 function Component(props) {
 
@@ -32,7 +32,7 @@ function Component(props) {
   }
 
   const handleNewPlayerClick = event => {
-    updatePlayers([...players, {name: inputValue, color: COLORS[players.length]}])
+    updatePlayers([...players, {name: inputValue, color: (COLORS[players.length] || '#f00'), id: players.sort((a, b) => b.id - a.id)[0].id + 1}])
   }
 
   const handleTogglePlayer = player => event => {

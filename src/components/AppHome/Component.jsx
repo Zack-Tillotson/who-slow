@@ -8,7 +8,7 @@ import cn from 'classnames'
 import Page from 'components/Page'
 
 import './component.scss'
-import logo from 'assets/turtle-400x400.png'
+import logo from 'assets/logo-400x400.png'
 
 function Component(props) {
 

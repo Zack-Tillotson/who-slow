@@ -2,7 +2,7 @@ import GAMES from './data/games'
 import PLAYERS from './data/players'
 const SESSION_FORM = [{id: 1, game: 1, players: [1, 2]}]
 
-const DB_VERSION = 3
+const DB_VERSION = 4
 const DB_NAME = 'why-slow-local'
 
 
@@ -13,16 +13,19 @@ function openDb() {
     openRequest.onupgradeneeded = function(event) {
       let db = event.target.result;
       switch(event.oldVersion) {
-        case 0: { // No existing DB
-          db.createObjectStore('games', {keyPath: 'id', autoIncrement: true});
+        case 0: // No existing DB
+        case 1:
+        case 2:
+        case 3:
+          db.deleteObjectStore('games')
+          db.deleteObjectStore('players')
+          db.deleteObjectStore('sessions')
+          db.deleteObjectStore('sessionForm')
+        default: // Falling through
+          db.createObjectStore('games', {keyPath: 'id', autoIncrement: true}); 
           db.createObjectStore('players', {keyPath: 'id', autoIncrement: true});
           db.createObjectStore('sessions', {keyPath: 'id', autoIncrement: true});
           db.createObjectStore('sessionForm', {keyPath: 'id', autoIncrement: true});
-          return
-        }
-        default: {
-          db.createObjectStore('sessionForm', {keyPath: 'id', autoIncrement: true});
-        }
       }
     };
 
