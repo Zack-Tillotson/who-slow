@@ -69,7 +69,15 @@
 
   .page__content {
     padding: var(--pad);
+  }
 
+  .page__head {
+
+    @media(orientation: landscape) {
+      img {
+        height: 20px;
+      }
+    }
   }
 
   .page__foot {

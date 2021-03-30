@@ -74,7 +74,7 @@ function Component(props) {
   }
 
   return (
-    <Page className="session">
+    <Page className="session" isFooterShown={false}>
       <div className="session__helper">
         {!lastEvent && 'Click player to start' || lastEvent.type === 'END' && 'Click "View stats" for game overview'}
       </div>
@@ -120,7 +120,7 @@ function Component(props) {
         </div>
       )}
       {!isFixTurnDialogOpen && (
-        <div className="session__players">
+        <div className={cn('session__players', {['--players-1-2']: players.length < 3, ['--players-3-4']: players.length < 5 && players.length > 2, ['--players-5-6']: players.length < 7 && players.length > 4, ['--players-7-8']: players.length < 9 && players.length > 6})}>
           {players.map(player => (
             <button 
               key={player.id} 

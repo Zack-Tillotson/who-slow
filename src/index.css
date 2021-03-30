@@ -46,6 +46,8 @@ a {
   --bg: #fafff9;
   --bg-contrast: var(--color-primary);
   --pad: 8px;
+  --pad-quart: calc(var(--pad) / 4);
+  --pad-half: calc(var(--pad) / 2);
   --pad2: calc(var(--pad) * 2);
   --pad3: calc(var(--pad) * 3);
   --pad4: calc(var(--pad) * 4);

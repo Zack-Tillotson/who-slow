@@ -6,9 +6,10 @@
     "controls"
     "ended"
     "players";
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto auto auto 1fr;
   grid-template-columns: 1fr;
   grid-gap: var(--pad);
+  min-height: calc(100vh - 70px);
 
   @media(orientation: landscape) {
     grid-template:
@@ -16,8 +17,9 @@
       "timer controls"
       "ended ended"
       "players players";
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
     grid-template-columns: 1fr auto;    
+    min-height: calc(100vh - 40px);
   }
 
   .session__helper {
@@ -32,17 +34,18 @@
     grid-area: controls;
 
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     justify-content: space-between;
-    gap: var(--pad);
+    gap: var(--pad-half);
+
+    .--button-like {
+      margin-bottom: 0;
+      margin-top: 2px;
+      padding: var(--pad-half) var(--pad2 );
+    }
 
     @media(orientation: landscape) {
       flex-direction: column;
-
-      .--button-like {
-        margin-bottom: 0;
-        margin-top: 2px;
-      }
     }
 
     @media(min-width: 800px) {
@@ -57,17 +60,46 @@
   .session__players {
     grid-area: players;
 
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-gap: var(--pad);
 
-    .player {
-      width: 100%;
-      max-width: 100%;
-      color: black;
-      
-      @media(min-width: 400px) {
-        max-width: calc(50% - var(--pad) / 2);  
+    .--button-like {
+      margin: 0;
+      border-radius: 0;
+    }
+
+    &.--players-1-2 {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;  
+    }    
+
+    &.--players-3-4 {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;  
+    }
+
+    &.--players-5-6 {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;  
+    }
+
+    @media(orientation: landscape) {
+      &.--players-1-2 {
+        /* same */
+      }    
+
+      &.--players-3-4 {
+        /* same */
+      }
+
+      &.--players-5-6 {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;  
+      }
+
+      &.--players-7-8 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;  
       }
     }
   }
