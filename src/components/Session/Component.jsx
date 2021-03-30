@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState as useReactState} from 'react';
 import {Link} from 'react-router-dom'
 import cn from 'classnames'
 import {useDispatch} from 'react-redux'
@@ -8,6 +8,7 @@ import useState from 'state/useState'
 
 import Page from 'components/Page'
 import Timer from 'components/Timer'
+import FixTurnDialog from 'components/FixTurnDialog'
 
 import './component.scss'
 import logo from 'assets/turtle-400x400.png'
@@ -25,6 +26,8 @@ function Component(props) {
   }, [sessionId])
 
   const [events, updateEvents] = useState('session/events') // END, TURN_START, PAUSE, PAUSE_END
+
+  const [isFixTurnDialogOpen, updateFixTurnDialog] = useReactState(false)
 
   if(!session.status.isInitialized || !sessionConfig.status.isInitialized) {
     return (
@@ -57,6 +60,18 @@ function Component(props) {
   const handleEndClick = event => {
     updateEvents([...events, {type: 'END', when: Date.now()}])
   }
+  const handleFixTurnClick = event => {
+    updateFixTurnDialog(!isFixTurnDialogOpen)
+  }
+  const handleFixTurnSubmit = (who, timeDiff, ignoreInStats) => {
+    const when = timeDiff === 0 ? (Date.now() + lastPlayerEvent.when) / 2 : Date.now() - timeDiff * 1000 * 60;
+    const newEvents = [...events, {type: 'TURN_START', who, when}]
+    if(ignoreInStats) {
+      [newEvents.length - 2, newEvents.length - 1].forEach(index => newEvents[index].ignoreInStats = true)
+    }
+    updateEvents(newEvents)
+    updateFixTurnDialog(false) 
+  }
 
   return (
     <Page className="session">
@@ -80,6 +95,12 @@ function Component(props) {
           onClick={handleUndoClick}>
             Undo
         </button>
+        <button 
+          className={cn('--button-like', '--hollow', {['--disabled']: events.length === 0})} 
+          disabled={events.length === 0} 
+          onClick={handleFixTurnClick}>
+            Fix Turn
+        </button>
       </div>
       {isEnded && (
         <div className="session__ended">
@@ -90,18 +111,25 @@ function Component(props) {
           </Link>
         </div>
       )}
-      <div className="session__players">
-        {players.map(player => (
-          <button 
-            key={player.id} 
-            className={cn('player', '--button-like', '--primary', {['--disabled']: isPaused || isEnded})} 
-            style={{backgroundColor: player.color}} 
-            onClick={handlePlayerClick(player.id)} 
-            disabled={isPaused || isEnded}>
-              {player.name}
-          </button>
-        ))}
-      </div>
+      {isFixTurnDialogOpen && (
+        <div className="session__fix-turn">
+          <FixTurnDialog onCancel={() => updateFixTurnDialog(false)} onSubmit={handleFixTurnSubmit} players={players} lastPlayerEvent={lastPlayerEvent} />
+        </div>
+      )}
+      {!isFixTurnDialogOpen && (
+        <div className="session__players">
+          {players.map(player => (
+            <button 
+              key={player.id} 
+              className={cn('player', '--button-like', '--primary', {['--disabled']: isPaused || isEnded})} 
+              style={{backgroundColor: player.color}} 
+              onClick={handlePlayerClick(player.id)} 
+              disabled={isPaused || isEnded}>
+                {player.name}
+            </button>
+          ))}
+        </div>
+      )}
     </Page>
   );
 }

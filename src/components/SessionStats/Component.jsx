@@ -23,8 +23,9 @@ function calculateStats(session, fullPlayers) {
       turn: index,
       time: event.when - prevEvent.when,
       player: fullPlayers.find(player => player.id === prevEvent.who),
+      ignoreInStats: event.ignoreInStats,
     }
-  }).filter(Boolean)
+  }).filter(Boolean).filter(turn => !turn.ignoreInStats)
 
   const playersWithTurns = session.players.map(playerId => {
     const player = fullPlayers.find(player => player.id === playerId)

@@ -17,10 +17,14 @@ function openDb() {
         case 1:
         case 2:
         case 3:
-          db.deleteObjectStore('games')
-          db.deleteObjectStore('players')
-          db.deleteObjectStore('sessions')
-          db.deleteObjectStore('sessionForm')
+          try {
+            db.deleteObjectStore('games')
+            db.deleteObjectStore('players')
+            db.deleteObjectStore('sessions')
+            db.deleteObjectStore('sessionForm')
+          } catch(e) {
+            console.warn(e)
+          }
         default: // Falling through
           db.createObjectStore('games', {keyPath: 'id', autoIncrement: true}); 
           db.createObjectStore('players', {keyPath: 'id', autoIncrement: true});
