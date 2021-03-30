@@ -75,11 +75,14 @@ function Component(props) {
 
   return (
     <Page className="session">
+      <div className="session__helper">
+        {!lastEvent && 'Click player to start' || lastEvent.type === 'END' && 'Click "View stats" for game overview'}
+      </div>
       <Timer className="session__timer" events={events} players={players} />
       <div className="session__controls">
         <button 
-          className={cn('--button-like', '--hollow', {['--disabled']: isUnstarted || isEnded})}
-          disabled={isUnstarted || isEnded}
+          className={cn('--button-like', '--hollow', {['--disabled']: isUnstarted || isEnded || isPaused})}
+          disabled={isUnstarted || isEnded || isPaused}
           onClick={handleEndClick}>
             End
         </button>
@@ -96,8 +99,8 @@ function Component(props) {
             Undo
         </button>
         <button 
-          className={cn('--button-like', '--hollow', {['--disabled']: events.length === 0})} 
-          disabled={events.length === 0} 
+          className={cn('--button-like', '--hollow', {['--disabled']: events.length === 0 || isPaused})} 
+          disabled={events.length === 0 || isPaused} 
           onClick={handleFixTurnClick}>
             Fix Turn
         </button>

@@ -68,7 +68,7 @@ function Component({events, players}) {
 
   return (
     <div className={cn('timer', {['timer--no-clock']: !isClockVisible})} style={{borderColor}} onClick={handleClick}>
-      <div className="timer__player">{!lastEvent && 'Click player to start' || lastEvent.type === 'END' && 'Click "View stats" for game overview' || !player && '-' || player.name}</div>
+      <div className="timer__player">{!player && ' ' || player.name}</div>
       <div className="timer__clock">{clock}</div>
       <div className="timer__round">Round {Math.trunc((events.length - 1) / players.length) + 1}</div>
       <div className="timer__turn">{turnCount && `Turn ${turnCount}` || '-'}</div>

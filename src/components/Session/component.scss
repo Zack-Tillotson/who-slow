@@ -1,6 +1,7 @@
 .session {
   display: grid;
   grid-template:
+    "helper"
     "timer"
     "controls"
     "ended"
@@ -11,11 +12,16 @@
 
   @media(orientation: landscape) {
     grid-template:
+      "helper helper"
       "timer controls"
       "ended ended"
       "players players";
     grid-template-rows: auto auto 1fr;
     grid-template-columns: 1fr auto;    
+  }
+
+  .session__helper {
+    grid-area: helper;
   }
 
   .session__timer {
