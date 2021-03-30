@@ -42,14 +42,23 @@
       margin-bottom: 0;
       margin-top: 2px;
       padding: var(--pad-half) var(--pad2 );
+      font-size: 12px;
     }
 
     @media(orientation: landscape) {
       flex-direction: column;
+
+      .--button-like {
+        font-size: 14px;
+      }
     }
 
     @media(min-width: 800px) {
       justify-content: center;
+
+      .--button-like {
+        font-size: 16px;
+      }
     }
   }
 
@@ -66,6 +75,8 @@
     .--button-like {
       margin: 0;
       border-radius: 0;
+      text-shadow: 0 0 3px #fff;
+      color: #000;
     }
 
     &.--players-1-2 {

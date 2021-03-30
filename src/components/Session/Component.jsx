@@ -38,7 +38,10 @@ function Component(props) {
   }
 
   const game = sessionConfig.games[session.game]
-  const players = session.players.map(playerId => sessionConfig.players.find(player => player.id === playerId)).filter(Boolean)
+  const players = session.players
+    .map(playerId => sessionConfig.players.find(player => player.id === playerId))
+    .filter(Boolean)
+    .map((player, index) => ({...player, color: session.colors[index]}))
 
   const lastEvent = [...events].reverse()[0] || null
   const lastPlayerEvent = events.filter(tEvent => tEvent.type === 'TURN_START').reverse()[0] || null
@@ -80,6 +83,11 @@ function Component(props) {
       </div>
       <Timer className="session__timer" events={events} players={players} />
       <div className="session__controls">
+        <Link
+          to="colors/" 
+          className={cn('--button-like', '--hollow')}>
+            Colors
+        </Link>
         <button 
           className={cn('--button-like', '--hollow', {['--disabled']: isUnstarted || isEnded || isPaused})}
           disabled={isUnstarted || isEnded || isPaused}
@@ -104,6 +112,7 @@ function Component(props) {
           onClick={handleFixTurnClick}>
             Fix Turn
         </button>
+
       </div>
       {isEnded && (
         <div className="session__ended">

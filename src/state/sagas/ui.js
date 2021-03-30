@@ -6,9 +6,9 @@ import {pathSelector} from '../useState'
 import {loadObject} from './appDb'
 
 function* handleRequestNewSession(action) {
-  const {players, game} = (yield select(pathSelector('sessionConfig/newSessionForm')))
+  const {players, game, colors} = (yield select(pathSelector('sessionConfig/newSessionForm')))
 
-  const sessionId = yield call(indexdb.createObject, 'sessions', {game, players})
+  const sessionId = yield call(indexdb.createObject, 'sessions', {game, players, colors})
 
   window.location = `/app/session/${sessionId}/`
 }

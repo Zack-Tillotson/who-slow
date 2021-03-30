@@ -1,0 +1,20 @@
+.color-player {
+}
+
+.color-player__title {
+  margin: 0;
+}
+
+.color-player__colors {
+  display: grid;
+  grid-gap: var(--pad-half);
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
+
+  .--button-like {
+    border: solid 4px rgba(0,0,0,0);
+    margin: 0;
+    min-height: 35px;
+    padding: var(--pad-half);
+  }
+}

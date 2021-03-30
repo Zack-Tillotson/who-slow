@@ -12,6 +12,7 @@ import AppGames from 'components/AppGames';
 import AppPlayers from 'components/AppPlayers';
 import AppSessions from 'components/AppSessions';
 import Session from 'components/Session';
+import SessionColors from 'components/SessionColors';
 import SessionStats from 'components/SessionStats';
 import FileNotFound from 'components/FileNotFound';
 
@@ -20,6 +21,7 @@ function App({store}) {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
+          <Route path="/app/session/:sessionId/colors/" component={SessionColors} exact />
           <Route path="/app/session/:sessionId/stats/" component={SessionStats} exact />
           <Route path="/app/session/:sessionId/" component={Session} exact />
           <Route path="/app/sessions/" exact component={AppSessions} />

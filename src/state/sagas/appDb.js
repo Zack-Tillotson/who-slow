@@ -20,23 +20,20 @@ export function* loadObject(objectName, params) {
 function* handleStateValueUpdated(action) {
   const {path, value} = action.payload
   if(path.startsWith('session/')) {
-    const {events, game, players} = yield select(pathSelector('session')) // Is updated state
-    const id = Number(window.location.href.split('/').slice(-2, -1)[0])
-    yield call(indexdb.createObject, 'sessions', {id, events, game, players})
-  }
-  if(path === 'sessionConfig/games') {
+    const {events, game, players, colors} = yield select(pathSelector('session')) // Is updated state
+    const id = Number(window.location.href.split('app/session/')[1].slice('/')[0])
+    yield call(indexdb.createObject, 'sessions', {id, events, game, players, colors})
+  } else if(path === 'sessionConfig/games') {
     const games = action.payload.value
     for(let i = 0 ; i < games.length; i++) {
       yield call(indexdb.createObject, 'games', games[i])
     }
-  }
-  if(path === 'sessionConfig/players') {
+  } else if(path === 'sessionConfig/players') {
     const players = action.payload.value
     for(let i = 0 ; i < players.length; i++) {
       yield call(indexdb.createObject, 'players', players[i])
     }
-  }
-  if(path === 'sessionConfig/newSessionForm') {
+  } else if(path === 'sessionConfig/newSessionForm') {
     const form = action.payload.value
     yield call(indexdb.createObject, 'sessionForm', {...form, id: 1})
   }

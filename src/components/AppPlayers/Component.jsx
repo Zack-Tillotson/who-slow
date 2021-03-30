@@ -1,6 +1,5 @@
 import React, {useState as useReactState} from 'react';
 import {Link, useHistory} from 'react-router-dom'
-import {COLORS} from 'state/indexdb/data/players'
 
 import {useState, dispatchAction, actions} from 'state'
 import {useDispatch} from 'react-redux'
@@ -32,7 +31,7 @@ function Component(props) {
   }
 
   const handleNewPlayerClick = event => {
-    updatePlayers([...players, {name: inputValue, color: (COLORS[players.length] || '#f00'), id: players.sort((a, b) => b.id - a.id)[0].id + 1}])
+    updatePlayers([...players, {name: inputValue, id: players.sort((a, b) => b.id - a.id)[0].id + 1}])
   }
 
   const handleTogglePlayer = player => event => {
@@ -59,7 +58,7 @@ function Component(props) {
         <tbody>
           {players.map(player => (
             <tr key={player.id} onClick={handleTogglePlayer(player.id)}>
-              <td colspan="2" style={{background: form.players.indexOf(player.id) >= 0 ? player.color : ''}}>{player.name}</td>
+              <td colSpan="2" style={{background: form.players.indexOf(player.id) >= 0 ? '#ccc' : ''}}>{player.name}</td>
             </tr>
           ))}
           <tr>

@@ -1,5 +1,15 @@
 import types from '../types'
 
+export const COLORS = [
+  '#ff7c7c',
+  '#8dd889',
+  '#74a2dd',
+  '#f3f261',
+  '#c461f3',
+  '#62f9fc',
+  '#fc9e62',
+]
+
 const INITIAL = {
   status: {
     isInitializing: true,
@@ -8,6 +18,7 @@ const INITIAL = {
   players: [],
   game: null,
   events: [],
+  colors: COLORS,
 }
 
 function session(state = INITIAL, action) {
@@ -16,7 +27,7 @@ function session(state = INITIAL, action) {
 
       if(action.payload.path !== 'sessions' || !action.payload.params) return state
 
-      return {
+      const newState = {
         ...state,
         status: {
           isInitialized: true,
@@ -24,6 +35,12 @@ function session(state = INITIAL, action) {
         },
         ...action.payload.data,
       }
+
+      if(!newState.colors) {
+        newState.colors = COLORS
+      }
+
+      return newState
     }
 
     case types.stateValueUpdated: {

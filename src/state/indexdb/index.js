@@ -2,9 +2,8 @@ import GAMES from './data/games'
 import PLAYERS from './data/players'
 const SESSION_FORM = [{id: 1, game: 1, players: [1, 2]}]
 
-const DB_VERSION = 4
+const DB_VERSION = 5
 const DB_NAME = 'why-slow-local'
-
 
 function openDb() {
   return new Promise((resolve, reject) => {
@@ -26,10 +25,14 @@ function openDb() {
             console.warn(e)
           }
         default: // Falling through
-          db.createObjectStore('games', {keyPath: 'id', autoIncrement: true}); 
-          db.createObjectStore('players', {keyPath: 'id', autoIncrement: true});
-          db.createObjectStore('sessions', {keyPath: 'id', autoIncrement: true});
-          db.createObjectStore('sessionForm', {keyPath: 'id', autoIncrement: true});
+          try {
+            db.createObjectStore('games', {keyPath: 'id', autoIncrement: true}); 
+            db.createObjectStore('players', {keyPath: 'id', autoIncrement: true});
+            db.createObjectStore('sessions', {keyPath: 'id', autoIncrement: true});
+            db.createObjectStore('sessionForm', {keyPath: 'id', autoIncrement: true});
+          } catch(e) {
+            console.warn(e)
+          }
       }
     };
 
