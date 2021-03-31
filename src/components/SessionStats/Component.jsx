@@ -23,7 +23,7 @@ function calculateStats(session, fullPlayers) {
       turn: index,
       time: event.when - prevEvent.when,
       player: fullPlayers.find(player => player.id === prevEvent.who),
-      ignoreInStats: event.ignoreInStats,
+      ignoreInStats: prevEvent.ignoreInStats,
     }
   }).filter(Boolean).filter(turn => !turn.ignoreInStats)
 
@@ -41,7 +41,7 @@ function calculateStats(session, fullPlayers) {
 
   const longestTurn = turns.sort((a, b) => b.time - a.time)[0]
   const shortestTurn = turns.sort((a, b) => a.time - b.time)[0]
-  const slowestPlayer = playersWithTurns.sort((a, b) => b.time - a.time)[0]
+  const slowestPlayer = [...playersWithTurns].sort((a, b) => b.time - a.time)[0]
 
   return {
     time: turns.reduce((time, turn) => time + turn.time, 0),
@@ -95,7 +95,7 @@ function Component(props) {
         <div className="game-stats__overview">
           {stats.players.map((player, index) => (
             <div key={index} className="game-stats__overview-player">
-              <div className="game-stats__color-background" style={{width: `${player.time / stats.time * 100}%`, backgroundColor: player.player.color}} />
+              <div className="game-stats__color-background" style={{width: `${player.time / stats.time * 100}%`, backgroundColor: session.colors[index]}} />
               {player.player.name}: {nicePrintTime(player.time)}
             </div>
           ))}
@@ -116,14 +116,14 @@ function Component(props) {
 
       <hr />
       
-      {stats.players.map(player => (
+      {stats.players.map((player, playerIndex) => (
         <div key={player.player.id} className="session-stats__player-stats player-stats">
           <h2>{player.player.name}: {nicePrintTime(player.time)}</h2>
           <div className="player-stats__turns">
             {player.turns.map((turn, index) => (
               <div key={index} className="player-stats__turns-turn">
                 Turn {turn.round}: {nicePrintTime(turn.time)}
-                <div className="game-stats__color-background" style={{width: `${turn.time / stats.highlights.longestTurn.time * 100}%`, backgroundColor: player.player.color}} />
+                <div className="game-stats__color-background" style={{width: `${turn.time / stats.highlights.longestTurn.time * 100}%`, backgroundColor: session.colors[playerIndex]}} />
               </div>
             ))}
           </div>

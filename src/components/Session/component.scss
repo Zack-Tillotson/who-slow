@@ -15,8 +15,8 @@
     grid-template:
       "helper helper"
       "timer controls"
-      "ended ended"
-      "players players";
+      "ended controls"
+      "players controls";
     grid-template-rows: auto auto auto 1fr;
     grid-template-columns: 1fr auto;    
     min-height: calc(100vh - 40px);
@@ -47,6 +47,7 @@
 
     @media(orientation: landscape) {
       flex-direction: column;
+      justify-content: start;
 
       .--button-like {
         font-size: 14px;
@@ -81,7 +82,7 @@
 
     &.--players-1-2 {
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;  
+      grid-template-rows: 1fr 1fr;  
     }    
 
     &.--players-3-4 {

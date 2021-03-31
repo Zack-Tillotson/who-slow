@@ -17,10 +17,6 @@
     text-align: center;
     font-size: 60px;
 
-    @media(orientation: landscape) {
-      font-size: 90px;
-    }
-
     @media(min-width: 800px) {
       font-size: 100px;
     }
