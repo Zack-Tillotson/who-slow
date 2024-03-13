@@ -60,7 +60,7 @@ function Component({events, players}) {
     break
   }
 
-  const turnCount = events.filter(event => player && event.who === player.id).length
+  const turnCount = events.length
 
   const handleClick = event => {
     updateIsClockVisible(!isClockVisible)

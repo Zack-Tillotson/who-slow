@@ -52,7 +52,8 @@ function Component(props) {
   const handlePlayerClick = who => event => updateEvents([...events, {type: 'TURN_START', who, when: Date.now()}])
   const handlePauseClick = event => {
     if(lastEvent.type === 'PAUSE') {
-      updateEvents([...events.slice(0, -2), {...lastPlayerEvent, when: Date.now() + lastPlayerEvent.when - lastEvent.when}])
+      const pauseDuration = Date.now() - lastEvent.when
+      updateEvents([...events.slice(0, -1)].map(event => ({...event, when: event.when + pauseDuration})))
     } else {
       updateEvents([...events, {type: 'PAUSE', when: Date.now()}])
     }
