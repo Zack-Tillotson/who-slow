@@ -13,5 +13,8 @@ export default defineConfig({
       '**/.{idea,git,cache,output,temp}/**',
       './src/config/**',
     ],
+    coverage: {
+      reporter: ['text', 'json-summary', 'json'],
+    },
   },
 })
