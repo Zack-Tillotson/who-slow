@@ -14,6 +14,7 @@ export default defineConfig({
       './src/config/**',
     ],
     coverage: {
+      provider: 'v8',
       reporter: ['text', 'json-summary', 'json'],
     },
   },
