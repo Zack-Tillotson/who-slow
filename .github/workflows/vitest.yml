@@ -1,6 +1,7 @@
 name: 'Test:Unit'
 on: 
   pull_request:
+    branches: [ v2, main]
 
 jobs:
   test:
