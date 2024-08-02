@@ -5,5 +5,13 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    include: ['./src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      './src/config/**',
+    ],
   },
 })
