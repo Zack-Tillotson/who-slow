@@ -5,4 +5,5 @@ import Page from './page'
 test('Page', () => {
   render(<Page />)
   expect(screen.getByRole('heading', { level: 1, name: 'Who Slow v2' })).toBeDefined()
+  expect(screen.getByRole('heading', { level: 2, name: 'About' })).toBeDefined()
 })
