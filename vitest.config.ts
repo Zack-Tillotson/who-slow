@@ -17,5 +17,6 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json-summary', 'json'],
     },
+    setupFiles: './src/test-utils/vitest.setup.mjs',
   },
 })
