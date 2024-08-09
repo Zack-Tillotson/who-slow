@@ -1,0 +1,11 @@
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.logo {
+  display: inline-block;
+  width: auto;
+  height: 50px;
+}
