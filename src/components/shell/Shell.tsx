@@ -1,26 +1,29 @@
 'use client'
 
 import Image from 'next/image';
-import { AppShell, Burger, NavLink } from '@mantine/core';
+import { Anchor, AppShell, Box, Breadcrumbs, Burger, Divider, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {IconMapCog, IconHome, IconUsers, IconDice5} from '@tabler/icons-react'
+import {IconMapCog, IconUsers, IconDice5, IconHome} from '@tabler/icons-react'
 
 import logo from '@/assets/headline-250x50.png'
-import styles from './dashboard.module.scss'
+import styles from './shell.module.scss'
+import { useEffect } from 'react';
+import { useDataState } from '@/state';
+import { BreadcrumbNav } from '../breadcrumbNav';
 
-type DashboardType = Readonly<{
+type ShellType = Readonly<{
   children: React.ReactNode;
 }>
 
 const navLinks = [{
     href: '/app/', 
-    title: 'Dashboard', 
-    desc: 'View everything', 
+    title: 'Home', 
+    desc: 'Welcome to Who Slow', 
     IconImage: IconHome,
   }, {
     href: '/app/campaign/', 
     title: 'Campaigns', 
-    desc: 'Your campaigns or simple game sessions', 
+    desc: 'View and manage campaigns', 
     IconImage: IconMapCog,
   }, {
     href: '/app/player/', 
@@ -35,8 +38,11 @@ const navLinks = [{
   }
 ]
 
-export function Dashboard({children}: DashboardType) {
+export function Shell({children}: ShellType) {
   const [opened, { toggle }] = useDisclosure();
+  useEffect(() => {
+    useDataState.persist.rehydrate();
+  }, [])
 
   return (
     <AppShell
@@ -77,6 +83,7 @@ export function Dashboard({children}: DashboardType) {
       </AppShell.Navbar>
 
       <AppShell.Main>
+        <BreadcrumbNav />
         {children}
       </AppShell.Main>
     </AppShell>

@@ -1,13 +1,14 @@
-import {Dashboard} from '@/views/dashboard'
+import {Shell} from '@/components/shell'
 
 export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
-    <Dashboard>
+    <Shell>
       {children}
-    </Dashboard>
+    </Shell>
   );
 }

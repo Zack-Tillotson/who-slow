@@ -1,4 +1,4 @@
-import { Campaign } from "@/views/campaigns"
+import { CampaignForm } from "@/views/campaigns"
 
 type CampaignPageProps = {
   params: {
@@ -8,8 +8,6 @@ type CampaignPageProps = {
 
 export default function CampaignPage({params: {campaignId}}: CampaignPageProps) {
   return (
-    <>
-      <Campaign campaignId={campaignId} />
-    </>
+    <CampaignForm campaignId={campaignId} />
   )
 }
