@@ -1,7 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
 import { 
   Game,
@@ -84,16 +84,15 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
         const campaign = get().getCampaign(campaignId)
         if(!campaign) return []
 
-        const rawSessions = campaign.sessions || []
-        const sessions = get().sessions.filter(session => rawSessions.includes(session.id))
+        const sessions = get().getSessions().filter(session => session.campaign == campaignId)
 
         return sessions
       },
 
       // Games ////////////////////////////////////////////////////////////////////////
 
-      getGame(stringId: string) {
-        const game = get().getGames().find(({bggId}) => bggId === Number(stringId))
+      getGame(stringId: string|number) {
+        const game = get().getGames().find(({bggId}) => bggId == Number(stringId))
         return game
       },
 
@@ -144,9 +143,22 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
         }
       },
 
+      removeGame: (stringId: string|number) => {
+        const gameSessions = get().getSessions().filter(({game}) => game == stringId)
+
+        if(gameSessions.length) {
+          return false
+        }
+
+        const games = get().getGames().filter(({bggId}) => bggId != stringId)
+        set({games})
+
+        return true
+      },
+
       // Players /////////////////////////////////////////////////////////////////////////
 
-      getPlayer(stringId: string) {
+      getPlayer(stringId: string|number) {
         const player = get().getPlayers().find(({id}) => id === Number(stringId))
         return player
       },
@@ -199,7 +211,7 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
 
       // Sessions ////////////////////////////////////////////////////////////////////////
 
-      getSession(stringId: string) {
+      getSession(stringId: string | number) {
         const session = get().getSessions().find(({id}) => id === Number(stringId))
         return session
       },
@@ -257,6 +269,20 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
           campaign: Number(campaignId),
           game: -1,
           sessionPlayers: [],
+        }
+      },
+      getSessionStatusText(status: string) {
+        switch(status) {
+          case 'PRE':
+            return 'Not started'
+          case 'IN':
+            return 'In progress'
+          case 'PAUSE':
+            return 'Paused'
+          case 'POST':
+            return 'Game complete'
+          default:
+            return 'Unknown'
         }
       },
     }),

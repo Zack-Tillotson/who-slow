@@ -100,7 +100,7 @@ export function SessionForm({sessionId}: ViewProps) {
               <Select 
                 {...field}
                 value={`${field.value}`}
-                data={games.map(game => ({label: game.bggId + '', value: `${game.bggId}`}))}
+                data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
               />
             )}
           />

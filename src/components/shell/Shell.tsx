@@ -1,42 +1,19 @@
 'use client'
 
 import Image from 'next/image';
-import { Anchor, AppShell, Box, Breadcrumbs, Burger, Divider, NavLink } from '@mantine/core';
+import { AppShell,Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {IconMapCog, IconUsers, IconDice5, IconHome} from '@tabler/icons-react'
 
 import logo from '@/assets/headline-250x50.png'
 import styles from './shell.module.scss'
 import { useEffect, useState } from 'react';
 import { useDataState } from '@/state';
 import { BreadcrumbNav } from '../breadcrumbNav';
+import { NavLinks } from '../navLinks';
 
 type ShellType = Readonly<{
   children: React.ReactNode;
 }>
-
-const navLinks = [{
-    href: '/app/', 
-    title: 'Home', 
-    desc: 'Welcome to Who Slow', 
-    IconImage: IconHome,
-  }, {
-    href: '/app/campaign/', 
-    title: 'Campaigns', 
-    desc: 'View and manage campaigns', 
-    IconImage: IconMapCog,
-  }, {
-    href: '/app/player/', 
-    title: 'Players', 
-    desc: 'Configure the players of your campaign', 
-    IconImage: IconUsers,
-  }, {
-    href: '/app/game/', 
-    title: 'Games', 
-    desc: 'Configure the games you play', 
-    IconImage: IconDice5,
-  }
-]
 
 export function Shell({children}: ShellType) {
   const [opened, { toggle }] = useDisclosure();
@@ -78,15 +55,7 @@ export function Shell({children}: ShellType) {
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
-        {navLinks.map(({href, title, desc, IconImage}) => (
-          <NavLink
-            key={href}
-            href={href}
-            label={title}
-            description={desc}
-            leftSection={<IconImage size="1rem" stroke={1.5} />}
-          />
-        ))}
+        <NavLinks withHome />
       </AppShell.Navbar>
 
       <AppShell.Main>

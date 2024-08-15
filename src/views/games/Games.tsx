@@ -17,9 +17,9 @@ export function Games() {
       <Button component={Link} href={`/app/game/new/`}>New</Button>
       <Title order={1}>Games list</Title>
       
-      {games.map(({bggId}) => (
+      {games.map(({bggId, name}) => (
         <div key={bggId}>
-          <Title order={2}>{bggId}</Title>
+          <Title order={2}>{name} (#{bggId})</Title>
           <Button component={Link} href={`/app/game/${bggId}/`}>View</Button>
         </div>
       ))}

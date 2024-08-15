@@ -1,8 +1,9 @@
 'use client'
 
 import { useDataState } from "@/state";
-import { Box, Button, Text, Title } from "@mantine/core";
+import { Box, Button, Group, Pill, Text, Title } from "@mantine/core";
 import Link from "next/link";
+import { Session } from "../sessions";
 
 type CampaignViewProps = {
   campaignId: string,
@@ -42,17 +43,15 @@ export function Campaign({campaignId}: CampaignViewProps) {
         )}
       </Box>
       <Box>
-        <Title order={2}>Sessions</Title>
-        <Button component={Link} href={`/app/session/new/?campaign=${campaignId}`}>New</Button>
+        <Group>
+          <Title order={2} flex={1}>Sessions</Title>
+          <Button component={Link} href={`/app/session/new/?campaign=${campaignId}`}>New</Button>
+        </Group>
         {!sessions.length && (
           <Text>No sessions yet</Text>
         )}
-        {sessions.map((session, index) => (
-          <div key={session.id}>
-            <Title order={3}>Session {index + 1}.</Title>
-            <Text>{session.date.toLocaleDateString()}</Text>
-            <Text>Playing {session.game}</Text>
-          </div>
+        {sessions.map((session) => (
+          <Session key={session.id} sessionId={session.id} />
         ))}
       </Box>
     </>

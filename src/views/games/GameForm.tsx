@@ -12,6 +12,7 @@ type ViewProps = {
 
 interface FormInputs {
   bggId: number
+  name: string
 }
 
 export function GameForm({gameId}: ViewProps) {
@@ -46,11 +47,22 @@ export function GameForm({gameId}: ViewProps) {
           </tr>
         </thead>
         <tbody>
-          <tr>
+        <tr>
             <td>BGG ID</td>
             <td>
               <Controller
                 name="bggId"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => <TextInput {...field} />}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td>
+              <Controller
+                name="name"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => <TextInput {...field} />}
