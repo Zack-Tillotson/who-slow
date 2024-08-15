@@ -1,4 +1,4 @@
-import { Game } from "@/views/games"
+import { Game } from '@/views/games'
 
 type PageProps = {
   params: {
@@ -8,8 +8,6 @@ type PageProps = {
 
 export default function GamePage({params: {gameId}}: PageProps) {
   return (
-    <>
-      <Game gameId={gameId} />
-    </>
+    <Game gameId={gameId} />
   )
 }
