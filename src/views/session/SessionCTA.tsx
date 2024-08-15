@@ -1,15 +1,14 @@
 'use client'
 
 import { Button, Card, Title } from "@mantine/core";
+import Link from "next/link";
 
 export function SessionCTA() {
-
-  const handleNewClick = () => console.log('new session')
 
   return (
     <Card>
       <Title order={2}>Start game session</Title>
-      <Button onClick={handleNewClick}>New</Button>
+      <Button component={Link} href="/app/session/new/?campaignId=0">New</Button>
     </Card>
   )
 }

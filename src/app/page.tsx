@@ -11,7 +11,7 @@ import Image from 'next/image'
 import styles from "./page.module.scss";
 import hero from '@/assets/logo-400x400.png'
 
-export default function LandingPage() {
+export default function Landing() {
   return (
     <Flex
       className={styles.container}

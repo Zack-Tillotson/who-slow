@@ -10,20 +10,24 @@ export type Player = {
 export type Campaign = {
   id: number,
   name: string,
+  sessions?: Session[],
 }
 
 export type SessionPlayer = {
+  id: number,
   player: Player["id"],
   order: number,
   color: string,
 }
 
 export type Session = {
-  data: Date,
+  id: number,
+  date: string,
   status: 'PRE'|'IN'|'PAUSE'|'POST',
   campaign: Campaign["id"],
   game: Game["bggId"],
   sessionPlayers: SessionPlayer[],
+  events?: Event[],
 }
 
 export type DataState = {
@@ -36,7 +40,8 @@ export type DataState = {
   isLoading: Boolean,
   isError: Boolean,
 
-  getCampaign: (stringId: string) => Campaign | undefined,
+  getCampaign: (stringId: string|number) => Campaign | undefined,
+  getCampaignSessions: (campaignId: number) => Session[],
   getCampaigns: () => Campaign[],
   saveCampaign: (campaign: Campaign) => Campaign,
   getCampaignForm: (stringId?: string) => Campaign,
@@ -50,4 +55,9 @@ export type DataState = {
   getPlayers: () => Player[],
   savePlayer: (player: Player) => Player,
   getPlayerForm: (stringId?: string) => Player,
+
+  getSession: (stringId: string) => Session | undefined,
+  getSessions: () => Session[],
+  saveSession: (session: Session) => Session,
+  getSessionForm: (stringId?: string, campaignId?: string) => Session,
 }
