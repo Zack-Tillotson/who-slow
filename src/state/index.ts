@@ -7,6 +7,8 @@ import {
   Game,
   Player,
   Campaign,
+  Session,
+
   DataState,
 } from './types'
 
@@ -27,8 +29,8 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
 
       // Campaigns ////////////////////////////////////////////////////////////////////////
 
-      getCampaign(stringId: string) {
-        const campaign = get().getCampaigns().find(({id}) => id === Number(stringId))
+      getCampaign(targetId: string|number) {
+        const campaign = get().getCampaigns().find(({id}) => id === Number(targetId))
         return campaign
       },
 
@@ -76,6 +78,16 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
           id: -1,
           name: '',
         }
+      },
+
+      getCampaignSessions(campaignId: number) {
+        const campaign = get().getCampaign(campaignId)
+        if(!campaign) return []
+
+        const rawSessions = campaign.sessions || []
+        const sessions = get().sessions.filter(session => rawSessions.includes(session.id))
+
+        return sessions
       },
 
       // Games ////////////////////////////////////////////////////////////////////////
@@ -184,10 +196,83 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
           name: '',
         }
       },
+
+      // Sessions ////////////////////////////////////////////////////////////////////////
+
+      getSession(stringId: string) {
+        const session = get().getSessions().find(({id}) => id === Number(stringId))
+        return session
+      },
+
+      getSessions() {
+        return get().sessions
+      },
+
+      saveSession(session: Session) {
+        // TODO validate
+
+        const {getSessions} = get()
+        const sessions = getSessions()
+        
+        // Update ID as needed
+        if(typeof session.id === 'string') session.id = Number(session.id)
+        if(session.id < 0) {
+          session.id = sessions.length
+        }
+
+        // Add events as needed
+        if(!session.events) {
+          session.events = []
+        }
+
+        const updatedSessions = [...sessions]
+
+        // Add to state
+        const existingIndex = sessions.findIndex(({id}) => id === session.id)
+        if(existingIndex < 0) {
+          updatedSessions.push(session)
+        } else {
+          updatedSessions[existingIndex] = session
+        }
+        
+        set({
+          sessions: updatedSessions,
+        })
+
+        return session
+      },
+
+      getSessionForm(stringId = '-1', campaignId = '-1') {
+        if(stringId && stringId != '-1') {
+          const session = get().getSession(stringId)
+          if(session) {
+            return session
+          }
+        }
+
+        return {
+          id: -1,
+          date: new Date().toString(),
+          status: 'PRE',
+          campaign: Number(campaignId),
+          game: -1,
+          sessionPlayers: [],
+        }
+      },
     }),
     {
       name: 'who-slow-app-data',
-      partialize: ({campaigns, players, games}) => ({campaigns, players, games}),
+      partialize: ({
+        campaigns,
+        players,
+        games,
+        sessions,
+      }) => ({
+        campaigns,
+        players,
+        games,
+        sessions,
+      }),
       skipHydration: true,
     }
   )

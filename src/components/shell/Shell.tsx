@@ -7,7 +7,7 @@ import {IconMapCog, IconUsers, IconDice5, IconHome} from '@tabler/icons-react'
 
 import logo from '@/assets/headline-250x50.png'
 import styles from './shell.module.scss'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDataState } from '@/state';
 import { BreadcrumbNav } from '../breadcrumbNav';
 
@@ -40,8 +40,15 @@ const navLinks = [{
 
 export function Shell({children}: ShellType) {
   const [opened, { toggle }] = useDisclosure();
+  const [renderCount, forceRerender] = useState(0)
   useEffect(() => {
-    useDataState.persist.rehydrate();
+    const result = useDataState.persist.rehydrate()
+    if(!result) {
+      forceRerender(renderCount+1)
+    } else {
+      result.then(() => forceRerender(renderCount+1))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -84,7 +91,8 @@ export function Shell({children}: ShellType) {
 
       <AppShell.Main>
         <BreadcrumbNav />
-        {children}
+        {useDataState.persist.hasHydrated() && children}
+        {!useDataState.persist.hasHydrated() && 'Loading...'}
       </AppShell.Main>
     </AppShell>
   );
