@@ -35,7 +35,7 @@ export function Session({sessionId}: ViewProps) {
         <Text>Playing {getGame(session.game)?.name}</Text>
         <Text>{session.sessionPlayers.map(({player}) => (getPlayer(player)?.name ?? 'Player')).join(', ')}</Text>
       </div>
-      <Button component={Link} href={`/app/session/${session.id}/play`}>Start session</Button>
+      <Button component={Link} href={`/app/session/${session.id}/play`}>Begin game</Button>
     </>
   )
 }

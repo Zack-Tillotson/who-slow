@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useDataState } from '@/state';
 import { BreadcrumbNav } from '../breadcrumbNav';
 import { NavLinks } from '../navLinks';
+import Link from 'next/link';
 
 type ShellType = Readonly<{
   children: React.ReactNode;
@@ -28,6 +29,8 @@ export function Shell({children}: ShellType) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const isHydrated = !!(useDataState?.persist?.hasHydrated())
+
   return (
     <AppShell
       header={{ height: 75 }}
@@ -39,13 +42,15 @@ export function Shell({children}: ShellType) {
       padding="md"
     >
       <AppShell.Header px="sm" py="sm" className={styles.header}>
-        <Image
-          className={styles.logo}
-          width="250"
-          height="50"
-          src={logo}
-          alt="Beautiful turtle logo"
-        />
+        <Link href="/app/">
+          <Image
+            className={styles.logo}
+            width="250"
+            height="50"
+            src={logo}
+            alt="Beautiful turtle logo"
+          />
+        </Link>
         <Burger
           opened={opened}
           onClick={toggle}
@@ -59,9 +64,8 @@ export function Shell({children}: ShellType) {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <BreadcrumbNav />
-        {useDataState.persist.hasHydrated() && children}
-        {!useDataState.persist.hasHydrated() && 'Loading...'}
+        {isHydrated && children}
+        {!isHydrated && 'Loading...'}
       </AppShell.Main>
     </AppShell>
   );
