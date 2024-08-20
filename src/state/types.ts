@@ -21,14 +21,20 @@ export type SessionPlayer = {
   color: string,
 }
 
+export type SessionEvent = {
+  type: 'TURN_START'|'END'|'PAUSE', 
+  who?: Player["id"],
+  when: number,
+}
+
 export type Session = {
   id: number,
-  date: string,
+  date: number,
   status: 'PRE'|'IN'|'PAUSE'|'POST',
   campaign: Campaign["id"],
   game: Game["bggId"],
   sessionPlayers: SessionPlayer[],
-  events?: Event[],
+  events: SessionEvent[],
 }
 
 export type DataState = {
@@ -54,7 +60,7 @@ export type DataState = {
   getGameForm: (stringId?: string) => Game,
 
   getPlayer: (stringId: string|number) => Player | undefined,
-  getPlayers: () => Player[],
+  getPlayers: (targetPlayers?: SessionPlayer[]) => Player[],
   savePlayer: (player: Player) => Player,
   getPlayerForm: (stringId?: string) => Player,
 
@@ -62,5 +68,9 @@ export type DataState = {
   getSessions: () => Session[],
   saveSession: (session: Session) => Session,
   getSessionForm: (stringId?: string, campaignId?: string) => Session,
-  getSessionStatusText: (status: string) => string,
+  getSessionStatus: (session: Session) => string,
+  getSessionStatusText: (session: Session) => string,
+  setSessionEvents: (session: Session, events: SessionEvent[]) => Session,
+  pushSessionEvent: (session: Session, event: SessionEvent) => Session,
+  popSessionEvent: (session: Session, popCount?: number) => Session,
 }

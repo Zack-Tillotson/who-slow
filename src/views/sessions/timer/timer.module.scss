@@ -1,0 +1,61 @@
+.timer {
+  width: 100%;
+  
+  border-left: solid 50px rgba(0,0,0,0);
+  border-right: solid 50px rgba(0,0,0,0);
+  border-top: solid 5px rgba(0,0,0,0);
+  border-bottom: solid 5px rgba(0,0,0,0);
+
+  display: grid;
+  grid-template-areas: 
+    "player player"
+    "clock  clock"
+    "round  turn";
+
+  .timerClock {
+    grid-area: clock;
+
+    font-family: Roboto Mono, Consolas, Courier;
+    text-align: center;
+    font-size: 60px;
+
+    @media(min-width: 800px) {
+      font-size: 100px;
+    }
+  }
+
+  .timerPlayer {
+    grid-area: player;
+
+    font-weight: bold;
+    padding: 0 var(--pad, 4px);
+  }
+
+  .timerRound {
+    grid-area: round;
+
+    padding: 0 var(--pad, 4px);
+  }
+
+  .timerTurn {
+    grid-area: turn;
+
+    text-align: right;
+    padding: 0 var(--pad, 4px);
+  }
+
+}
+
+.timerNoClock {
+  grid-template-areas: 
+    "player player"
+    "round turn";
+
+  .timerPlayer {
+    font-size: 40px;
+  }
+
+  .timerClock {
+    display: none;
+  }
+}

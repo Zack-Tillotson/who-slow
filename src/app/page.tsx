@@ -28,6 +28,7 @@ export default function Landing() {
           width="400"
           height="400"
           alt="Beautiful turtle with 'Who Slow' logo"
+          priority
         />
       </div>
       <div className={styles.explanation}>
