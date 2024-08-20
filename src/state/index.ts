@@ -8,8 +8,10 @@ import {
   Player,
   Campaign,
   Session,
+  SessionPlayer,
 
   DataState,
+  SessionEvent,
 } from './types'
 
 export const useDataState = create<DataState, [["zustand/persist", { campaigns: Campaign[]; }]] >(
@@ -163,8 +165,15 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
         return player
       },
 
-      getPlayers() {
-        return get().players
+      // Returns all players (if no param) or players with ids represented in targetPlayers
+      getPlayers(targetPlayers?: SessionPlayer[]) {
+        const rawPlayers = get().players
+        if(!targetPlayers) {
+          return rawPlayers
+        }
+        return rawPlayers.filter(({id: targetId}) => 
+          targetPlayers.find(({player}) => player == targetId)
+        )
       },
 
       savePlayer(player: Player) {
@@ -271,19 +280,38 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
           sessionPlayers: [],
         }
       },
-      getSessionStatusText(status: string) {
-        switch(status) {
-          case 'PRE':
+      getSessionStatus(session: Session) {
+        const latestType = session.events.length === 0 
+          ? '' 
+          : session.events[session.events.length - 1].type
+        return latestType
+      },
+      getSessionStatusText(session: Session) {
+        const latestType = get().getSessionStatus(session)
+        switch(latestType) {
+          case '':
             return 'Not started'
-          case 'IN':
-            return 'In progress'
           case 'PAUSE':
             return 'Paused'
-          case 'POST':
-            return 'Game complete'
+          case 'TURN_START':
+            return 'In progress'
+          case 'END':
+            return 'Session ended'
           default:
             return 'Unknown'
         }
+      },
+      setSessionEvents: (session: Session, events: SessionEvent[]) => {
+        return get().saveSession({...session, events})
+      },
+      pushSessionEvent: (session: Session, event: SessionEvent) => {
+        const updatedSession = {...session, events: [...session.events || []]}
+        updatedSession.events.push(event)
+        return get().saveSession(updatedSession)
+      },
+      popSessionEvent: (session: Session, popCount = 1) => {
+        const updatedSession = {...session, events: session.events.slice(0, -1 * popCount)}
+        return get().saveSession(updatedSession)
       },
     }),
     {

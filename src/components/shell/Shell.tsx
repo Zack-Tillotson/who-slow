@@ -49,6 +49,7 @@ export function Shell({children}: ShellType) {
             height="50"
             src={logo}
             alt="Beautiful turtle logo"
+            priority
           />
         </Link>
         <Burger
