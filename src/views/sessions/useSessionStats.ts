@@ -24,7 +24,7 @@ export function useSessionStats(session: Session, fullPlayers: Player[]) {
       turn: index,
       time: event.when - prevEvent.when,
       player: fullPlayers.find(player => player.id == prevEvent.who),
-      sessionPlayer: session.sessionPlayers.find(({player}) => player == event.who)
+      sessionPlayer: session.sessionPlayers.find(({player}) => player == prevEvent.who)
     }
   }).filter(Boolean) as Turn[]
 
