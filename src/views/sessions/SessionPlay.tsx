@@ -89,7 +89,7 @@ export function SessionPlay({sessionId}: ViewProps) {
                 bg={isPaused ? '#ccc' : color}
                 onClick={handlePlayerClick(id)}
                 className={styles.playerButton}
-                disabled={isPaused || isEnded || isUnstarted}
+                disabled={isPaused || isEnded}
               >
                 {player.name}
               </Button>
