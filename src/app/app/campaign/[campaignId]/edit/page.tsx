@@ -6,6 +6,10 @@ type CampaignPageProps = {
   },
 }
 
+export const metadata: Metadata = {
+  title: "Edit campaign | Who Slow ",
+}
+
 export default function CampaignPage({params: {campaignId}}: CampaignPageProps) {
   return (
     <CampaignForm campaignId={campaignId} />

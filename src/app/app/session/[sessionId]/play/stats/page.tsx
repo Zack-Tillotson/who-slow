@@ -1,3 +1,4 @@
+import { Metadata } from "next"
 import { SessionStats } from "@/views/sessions"
 
 type PageProps = {
@@ -6,10 +7,12 @@ type PageProps = {
   },
 }
 
+export const metadata: Metadata = {
+  title: "Session stats | Who Slow ",
+}
+
 export default function SessionPage({params: {sessionId}}: PageProps) {
   return (
-    <>
-      <SessionStats sessionId={sessionId} />
-    </>
+    <SessionStats sessionId={sessionId} />
   )
 }
