@@ -35,6 +35,7 @@ export function NavLinks({withHome = false}: NavLinksProps) {
       {linksToRender.map(({href, title, desc, IconImage}) => (
           <NavLink
             key={href}
+            data-testid={`navlink-${title.toLowerCase()}`}
             href={href}
             label={title}
             description={desc}
