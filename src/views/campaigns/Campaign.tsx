@@ -51,7 +51,7 @@ export function Campaign({campaignId}: CampaignViewProps) {
           <Text>No sessions yet</Text>
         )}
         {sessions.map((session) => (
-          <Session key={session.id} sessionId={session.id} />
+          <Session key={session.id} sessionId={`${session.id}`} />
         ))}
       </Box>
     </>

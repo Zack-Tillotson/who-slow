@@ -273,11 +273,12 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
 
         return {
           id: -1,
-          date: new Date().toString(),
+          date: Date.now(),
           status: 'PRE',
           campaign: Number(campaignId),
           game: -1,
           sessionPlayers: [],
+          events: [],
         }
       },
       getSessionStatus(session: Session) {
