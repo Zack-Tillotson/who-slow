@@ -39,39 +39,18 @@ export function GameForm({gameId}: ViewProps) {
 
   return (
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
-      <table>
-        <thead>
-          <tr>
-            <td>Field</td>
-            <td>Value</td>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>BGG ID</td>
-            <td>
-              <Controller
-                name="bggId"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => <TextInput {...field} />}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Name</td>
-            <td>
-              <Controller
-                name="name"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => <TextInput {...field} />}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      
+      <Controller
+        name="bggId"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => <TextInput {...field} label="BGG ID" />}
+      />
+      <Controller
+        name="name"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => <TextInput {...field} label="Name" />}
+      />
       <Button type="submit">Submit</Button>
     </form>
   )

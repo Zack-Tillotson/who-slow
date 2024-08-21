@@ -72,74 +72,61 @@ export function SessionForm({sessionId}: ViewProps) {
 
   return (
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
-      <Stack component={'dl'} gap="0" mb="lg">
-        <dt><Text fw={700}>Campaign</Text></dt>
-        <dd>
-          <Controller
-            name="campaign"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Select 
-                {...field}
-                value={`${field.value}`}
-                data={campaigns.map(campaign => ({label: campaign.name, value: `${campaign.id}`}))}
-              />
-            )}
+      <Controller
+        name="campaign"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <Select 
+            {...field}
+            label="Campaign"
+            value={`${field.value}`}
+            data={campaigns.map(campaign => ({label: campaign.name, value: `${campaign.id}`}))}
           />
-        </dd>
-      </Stack>
-      <Stack component={'dl'} gap="0" mb="lg">
-        <dt><Text fw={700}>Game</Text></dt>
-        <dd>
-          <Controller
-            name="game"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Select 
-                {...field}
-                value={`${field.value}`}
-                data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
-              />
-            )}
+        )}
+      />
+      <Controller
+        name="game"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <Select 
+            {...field}
+            label="Game"
+            value={`${field.value}`}
+            data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
           />
-        </dd>
-      </Stack>
-      <Text fw={700}>Players</Text>
+        )}
+      />
       {new Array(playerCount).fill('').map((player, index) => (
-        <Stack key={index} component={'dl'} gap="0" mb="lg">
-          <dt><Text fw={700}>#{index + 1}.</Text></dt>
-          <dd>
-            <Group>
-              <Controller
-                name={`sessionPlayers.${index}.player`}
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select 
-                    {...field}
-                    value={`${field.value}`}
-                    data={players.map(player => ({label: player.name, value: `${player.id}`}))}
-                  />
-                )}
-              />
-              <Button onClick={handleRemovePlayer(index)}>×</Button>
-            </Group>
+        <Stack key={index} mb="md">
+          <Group>
             <Controller
-                name={`sessionPlayers.${index}.color`}
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (<ColorInput {...field} />)}
-              />
-          </dd>
+              name={`sessionPlayers.${index}.player`}
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select 
+                  {...field}
+                  label={`Player ${index + 1}`}
+                  value={`${field.value}`}
+                  data={players.map(player => ({label: player.name, value: `${player.id}`}))}
+                />
+              )}
+            />
+            <Button onClick={handleRemovePlayer(index)} mt="lg">×</Button>
+          </Group>
+          <Controller
+              name={`sessionPlayers.${index}.color`}
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (<ColorInput {...field} label={`Player ${index + 1} color`} />)}
+          />
         </Stack>
       ))}
       <Stack component={'dl'} gap="0" mb="lg">
-        <dt></dt>
-        <dd><Button onClick={handleAddPlayerClick}>Add player</Button></dd>
+        <Button onClick={handleAddPlayerClick}>Add player</Button>
       </Stack>
-      
       <Button type="submit">Submit</Button>
     </form>
   )
