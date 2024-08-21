@@ -1,4 +1,5 @@
 import { CampaignForm } from "@/views/campaigns"
+import { Metadata } from "next"
 
 type CampaignPageProps = {
   params: {

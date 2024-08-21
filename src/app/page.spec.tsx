@@ -1,9 +1,7 @@
 import { expect, test } from 'vitest'
+import { render, screen } from '@/test-utils/';
 
 import Landing from './page'
-
-// import { render, screen } from '@/test-utils/';
-import { render, screen } from  '../test-utils/';
 
 test('Landing', () => {
   render(<Landing />)
