@@ -3,12 +3,12 @@ import { test, expect } from '@playwright/test';
 test.describe('games', () => {
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('/app/game/')
+    await page.goto('/game/')
   })
 
   test('can navigate to new game view', async ({ page }) => {
     await page.getByRole('link', { name: 'New' }).click()
-    await expect(page).toHaveURL('/app/game/new/')
+    await expect(page).toHaveURL('/game/new/')
   })
 })
 
@@ -17,7 +17,7 @@ test.describe('new game', () => {
   const BGG_ID = 1234
   const NAME = 'Test game'
   test.beforeEach(async ({ page }) => {
-    await page.goto('/app/game/new/')
+    await page.goto('/game/new/')
   })
 
   test('can fill out form', async ({ page }) => {
@@ -25,7 +25,7 @@ test.describe('new game', () => {
     await page.getByLabel('Name').fill(NAME)
     await page.getByRole('button', { name: 'Submit' }).click();
     
-    await expect(page).toHaveURL(`/app/game/${BGG_ID}/`)
+    await expect(page).toHaveURL(`/game/${BGG_ID}/`)
     await expect(page.getByText(NAME)).toBeVisible()
   })
 })

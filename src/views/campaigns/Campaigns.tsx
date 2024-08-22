@@ -14,13 +14,13 @@ export function Campaigns() {
   
   return (
     <>
-      <Button component={Link} href={`/app/campaign/new/`}>New</Button>
+      <Button component={Link} href={`/campaign/new/`}>New</Button>
       <Title order={1}>Campaign list</Title>
       
       {campaigns.map(({id, name}) => (
         <div key={id}>
           <Title order={2}>{name}</Title>
-          <Button component={Link} href={`/app/campaign/${id}/`}>View</Button>
+          <Button component={Link} href={`/campaign/${id}/`}>View</Button>
         </div>
       ))}
     </>

@@ -30,7 +30,7 @@ export function CampaignForm({campaignId}: CampaignViewProps) {
   const handleLocalSubmit = (data: FormInputs) => {
     try {
       const result = saveCampaign({...data, id: campaign.id})
-      router.push(`/app/campaign/${result.id}/`)
+      router.push(`/campaign/${result.id}/`)
     } catch(e) {
       console.log(e)
       return

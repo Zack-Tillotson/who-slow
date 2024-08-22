@@ -29,13 +29,13 @@ export function Session({sessionId}: ViewProps) {
       <div>
         <Group>
           <Title order={3} flex={1}>{new Date(session.date).toLocaleDateString()}</Title>
-          <Button component={Link} href={`/app/session/${session.id}/edit`} variant="subtle">Edit</Button>
+          <Button component={Link} href={`/session/${session.id}/edit`} variant="subtle">Edit</Button>
           <Pill bg={session.status === 'POST' ? 'lightgreen' : ''}>{getSessionStatusText(session)}</Pill>
         </Group>
         <Text>Playing {getGame(session.game)?.name}</Text>
         <Text>{session.sessionPlayers.map(({player}) => (getPlayer(player)?.name ?? 'Player')).join(', ')}</Text>
       </div>
-      <Button component={Link} href={`/app/session/${session.id}/play`}>Begin game</Button>
+      <Button component={Link} href={`/session/${session.id}/play`}>Begin game</Button>
     </>
   )
 }

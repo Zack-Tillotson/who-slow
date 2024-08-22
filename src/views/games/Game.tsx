@@ -32,7 +32,7 @@ export function Game({gameId}: ViewProps) {
     const result = removeGame(gameId)
     setError('')
     if(result) {
-      router.push(`/app/game/`)
+      router.push(`/game/`)
     } else {
       setError('Unable to remove game')
     }

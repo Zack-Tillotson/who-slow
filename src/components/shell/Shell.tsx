@@ -42,7 +42,7 @@ export function Shell({children}: ShellType) {
       padding="md"
     >
       <AppShell.Header px="sm" py="sm" className={styles.header}>
-        <Link href="/app/">
+        <Link href="/">
           <Image
             className={styles.logo}
             width="250"

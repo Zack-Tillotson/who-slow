@@ -45,7 +45,7 @@ export function Campaign({campaignId}: CampaignViewProps) {
       <Box>
         <Group>
           <Title order={2} flex={1}>Sessions</Title>
-          <Button component={Link} href={`/app/session/new/?campaign=${campaignId}`}>New</Button>
+          <Button component={Link} href={`/session/new/?campaign=${campaignId}`}>New</Button>
         </Group>
         {!sessions.length && (
           <Text>No sessions yet</Text>

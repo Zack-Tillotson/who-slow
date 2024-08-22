@@ -6,22 +6,22 @@ interface NavLinksProps {
 }
 
 const navLinks = [{
-  href: '/app/', 
+  href: '/', 
   title: 'Home', 
   desc: 'Welcome to Who Slow', 
   IconImage: IconHome,
 }, {
-  href: '/app/campaign/', 
+  href: '/campaign/', 
   title: 'Campaigns', 
   desc: 'View and manage campaigns', 
   IconImage: IconMapCog,
 }, {
-  href: '/app/player/', 
+  href: '/player/', 
   title: 'Players', 
   desc: 'Configure the players of your campaign', 
   IconImage: IconUsers,
 }, {
-  href: '/app/game/', 
+  href: '/game/', 
   title: 'Games', 
   desc: 'Configure the games you play', 
   IconImage: IconDice5,
