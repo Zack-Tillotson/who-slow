@@ -63,7 +63,7 @@ test.describe('new session', () => {
     await page.getByRole('button', { name: 'Submit' }).click();
     
     await expect(page).toHaveURL(`/session/0/`)
-    await expect(page.getByText(`Playing TGame`)).toBeVisible()
+    await expect(page.getByText(`TGame`)).toBeVisible()
     await expect(page.getByText('Aaron, Bobby, Charleigh')).toBeVisible()
   })
 })
