@@ -30,7 +30,7 @@ export function GameForm({gameId}: ViewProps) {
   const handleLocalSubmit = (data: FormInputs) => {
     try {
       const result = saveGame(data)
-      router.push(`/app/game/${result.bggId}/`)
+      router.push(`/game/${result.bggId}/`)
     } catch(e) {
       console.log(e)
       return

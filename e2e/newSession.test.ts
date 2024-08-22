@@ -3,12 +3,12 @@ import { test, expect, Page } from '@playwright/test';
 test.describe('sessions', () => {
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('/app/')
+    await page.goto('/')
   })
 
   test('can navigate to new session view', async ({ page }) => {
     await page.getByRole('link', { name: 'New session' }).click()
-    await expect(page).toHaveURL('/app/session/new/?campaignId=0')
+    await expect(page).toHaveURL('/session/new/?campaignId=0')
   })
 })
 
@@ -25,7 +25,7 @@ test.describe('new session', () => {
   }
   const COLORS = ['#F00', '#0F0', '#00F']
   test.beforeEach(async ({ page }) => {
-    await page.goto('/app/')
+    await page.goto('/')
     await page.evaluate(() => window.localStorage['who-slow-app-data'] = JSON.stringify({
       "state":{
         "campaigns":[{"id":0,"name":"Just play"},{"id":1,"name":"TCampaign"}],
@@ -35,7 +35,7 @@ test.describe('new session', () => {
       },
       "version":0
     }))
-    await page.goto('/app/session/new/')
+    await page.goto('/session/new/')
     await page.reload()
     await page.evaluate(() => console.log(localStorage['who-slow-app-data']))
   })
@@ -62,8 +62,8 @@ test.describe('new session', () => {
 
     await page.getByRole('button', { name: 'Submit' }).click();
     
-    await expect(page).toHaveURL(`/app/session/0/`)
-    await expect(page.getByText(`Playing TGame`)).toBeVisible()
+    await expect(page).toHaveURL(`/session/0/`)
+    await expect(page.getByText(`TGame`)).toBeVisible()
     await expect(page.getByText('Aaron, Bobby, Charleigh')).toBeVisible()
   })
 })

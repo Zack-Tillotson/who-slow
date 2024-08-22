@@ -1,29 +1,29 @@
 import { NavLink } from '@mantine/core'
-import {IconMapCog, IconUsers, IconDice5, IconHome} from '@tabler/icons-react'
+import {IconMapCog, IconUsers, IconDice5, IconHome, IconChevronRight} from '@tabler/icons-react'
 
 interface NavLinksProps {
   withHome?: boolean,
 }
 
 const navLinks = [{
-  href: '/app/', 
+  href: '/', 
   title: 'Home', 
   desc: 'Welcome to Who Slow', 
   IconImage: IconHome,
 }, {
-  href: '/app/campaign/', 
+  href: '/campaign/', 
   title: 'Campaigns', 
-  desc: 'View and manage campaigns', 
+  desc: 'View and manage campaigns, a series of game sessions that share stats.', 
   IconImage: IconMapCog,
 }, {
-  href: '/app/player/', 
+  href: '/player/', 
   title: 'Players', 
-  desc: 'Configure the players of your campaign', 
+  desc: 'Configure players. Enter new players here when they are part of a session.', 
   IconImage: IconUsers,
 }, {
-  href: '/app/game/', 
+  href: '/game/', 
   title: 'Games', 
-  desc: 'Configure the games you play', 
+  desc: 'Configure the games you play. Link with BoardGameGeek to get detailed info.', 
   IconImage: IconDice5,
 }
 ]
@@ -40,6 +40,7 @@ export function NavLinks({withHome = false}: NavLinksProps) {
             label={title}
             description={desc}
             leftSection={<IconImage size="1rem" stroke={1.5} />}
+            rightSection={<IconChevronRight />}
           />
         ))}
     </>

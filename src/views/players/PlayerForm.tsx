@@ -30,7 +30,7 @@ export function PlayerForm({playerId}: ViewProps) {
   const handleLocalSubmit = (data: FormInputs) => {
     try {
       const result = savePlayer({...data, id: player.id})
-      router.push(`/app/player/${result.id}/`)
+      router.push(`/player/${result.id}/`)
     } catch(e) {
       console.log(e)
       return
