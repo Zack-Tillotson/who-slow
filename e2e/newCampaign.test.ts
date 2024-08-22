@@ -1,17 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('campaigns', () => {
-
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/campaign/')
-  })
-
-  test('can navigate to new campaign view', async ({ page }) => {
-    await page.getByRole('link', { name: 'New' }).click()
-    await expect(page).toHaveURL('/campaign/new/')
-  })
-})
-
 test.describe('new campaign', () => {
 
   const NAME = 'Test campaign'

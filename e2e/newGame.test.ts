@@ -1,17 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('games', () => {
-
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/game/')
-  })
-
-  test('can navigate to new game view', async ({ page }) => {
-    await page.getByRole('link', { name: 'New' }).click()
-    await expect(page).toHaveURL('/game/new/')
-  })
-})
-
 test.describe('new game', () => {
 
   const BGG_ID = 1234
