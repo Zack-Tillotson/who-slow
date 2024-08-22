@@ -52,7 +52,7 @@ export function SessionForm({sessionId}: ViewProps) {
         date: session.date,
       }
       const result = saveSession(fullSession)
-      router.push(`/app/session/${result.id}/`)
+      router.push(`/session/${result.id}/`)
     } catch(e) {
       console.log(e)
       return

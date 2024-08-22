@@ -12,7 +12,7 @@ export function SessionCTA() {
   return (
     <Stack>
       <NavLinks />
-      <Button component={Link} href="/app/session/new/?campaignId=0">New Session</Button>
+      <Button component={Link} href="/session/new/?campaignId=0">New Session</Button>
     </Stack>
   )
 }

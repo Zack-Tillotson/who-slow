@@ -1,10 +1,13 @@
 import { expect, test } from 'vitest'
-import { render, screen } from '@/test-utils/';
 
 import Landing from './page'
 
-test('Landing', () => {
+import { render, screen } from '@/test-utils/';
+
+test('App landing', () => {
   render(<Landing />)
-  expect(screen.getByRole('heading', { level: 1, name: 'Board game stats and turn timer' })).toBeDefined()
-  expect(screen.getByRole('link')).toHaveAttribute('href', '/app')
+  expect(screen.getByRole('heading', { level: 1, name: 'Welcome to Who Slow' })).toBeDefined()
+  expect(screen.getByTestId('navlink-campaigns')).toHaveAttribute('href', '/campaign/')
+  expect(screen.getByTestId('navlink-players')).toHaveAttribute('href', '/player/')
+  expect(screen.getByTestId('navlink-games')).toHaveAttribute('href', '/game/')
 })

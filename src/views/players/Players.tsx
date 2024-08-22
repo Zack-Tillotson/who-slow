@@ -14,13 +14,13 @@ export function Players() {
   
   return (
     <>
-      <Button component={Link} href={`/app/player/new/`}>New</Button>
+      <Button component={Link} href={`/player/new/`}>New</Button>
       <Title order={1}>Player list</Title>
       
       {players.map(({id, name}) => (
         <div key={id}>
           <Title order={2}>{name}</Title>
-          <Button component={Link} href={`/app/player/${id}/`}>View</Button>
+          <Button component={Link} href={`/player/${id}/`}>View</Button>
         </div>
       ))}
     </>

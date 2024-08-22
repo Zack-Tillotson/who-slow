@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation'
 
 import styles from './breadcrumbNav.module.scss'
 
-const baseStep = {href: '/app/', title: 'Home'}
+const baseStep = {href: '/', title: 'Home'}
 
 export function BreadcrumbNav() {
   const section = usePathname()
-    .slice(5) // '/app/...'
+    .slice(1) // '/...'
     .split('/')[0]
   const routeSteps = [
     baseStep, 

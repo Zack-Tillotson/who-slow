@@ -3,12 +3,12 @@ import { test, expect } from '@playwright/test';
 test.describe('players', () => {
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('/app/player/')
+    await page.goto('/player/')
   })
 
   test('can navigate to new player view', async ({ page }) => {
     await page.getByRole('link', { name: 'New' }).click()
-    await expect(page).toHaveURL('/app/player/new/')
+    await expect(page).toHaveURL('/player/new/')
   })
 })
 
@@ -16,7 +16,7 @@ test.describe('new player', () => {
 
   const NAME = 'Test player'
   test.beforeEach(async ({ page }) => {
-    await page.goto('/app/player/new/')
+    await page.goto('/player/new/')
   })
 
   test('can fill out form', async ({ page }) => {

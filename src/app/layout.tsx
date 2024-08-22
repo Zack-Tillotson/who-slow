@@ -3,9 +3,10 @@ import {
   ColorSchemeScript, 
   MantineProvider, 
 } from '@mantine/core'
-import {theme} from '@/theme/'
-
 import { Inter } from "next/font/google"
+import {theme} from '@/theme/'
+import { Shell } from "@/components/shell"
+
 
 import "./_styles/reset.scss"
 import "./_styles/mantine.scss"
@@ -31,7 +32,9 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
           <MantineProvider theme={theme}>
-            {children}
+            <Shell>
+              {children}
+            </Shell>
           </MantineProvider>    
         </body>
       </html>

@@ -14,13 +14,13 @@ export function Games() {
   
   return (
     <>
-      <Button component={Link} href={`/app/game/new/`}>New</Button>
+      <Button component={Link} href={`/game/new/`}>New</Button>
       <Title order={1}>Games list</Title>
       
       {games.map(({bggId, name}) => (
         <div key={bggId}>
           <Title order={2}>{name} (#{bggId})</Title>
-          <Button component={Link} href={`/app/game/${bggId}/`}>View</Button>
+          <Button component={Link} href={`/game/${bggId}/`}>View</Button>
         </div>
       ))}
     </>
