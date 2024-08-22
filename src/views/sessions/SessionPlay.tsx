@@ -56,7 +56,7 @@ export function SessionPlay({sessionId}: ViewProps) {
             <Button p="xs" m="0" fz="xs" onClick={handleUndoClick} disabled={isPaused || session.events.length === 0}>Undo</Button>
             {isEnded && (
               <>
-                <Button p="xs" m="0" fz="xs" component={Link} href="stats/">View session stats</Button>
+                <Button p="xs" m="0" fz="xs" component={Link} href={`/session/${sessionId}/stats/`}>View session stats</Button>
               </>
             )}
             {!isEnded && (
