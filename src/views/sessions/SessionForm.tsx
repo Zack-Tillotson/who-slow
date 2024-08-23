@@ -75,12 +75,13 @@ export function SessionForm({sessionId}: ViewProps) {
         name="campaign"
         control={control}
         rules={{ required: true }}
-        required
         render={({ field }) => (
           <Select 
             {...field}
             label="Campaign"
             data-testid="select-campaign"
+            required
+            value={`${field.value}`}
             data={campaigns.map(campaign => ({label: campaign.name, value: `${campaign.id}`}))}
           />
         )}
@@ -89,12 +90,13 @@ export function SessionForm({sessionId}: ViewProps) {
         name="game"
         control={control}
         rules={{ required: true }}
-        required
         render={({ field }) => (
           <Select 
             {...field}
             label="Game"
             data-testid="select-game"
+            required
+            value={`${field.value}`}
             data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
           />
         )}
