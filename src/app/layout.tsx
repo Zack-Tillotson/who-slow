@@ -4,9 +4,10 @@ import {
   MantineProvider, 
 } from '@mantine/core'
 import { Inter } from "next/font/google"
+import { ErrorBoundary } from "react-error-boundary"
 import {theme} from '@/theme/'
 import { Shell } from "@/components/shell"
-
+import {NiceError} from '@/components/error'
 
 import "./_styles/reset.scss"
 import "./_styles/mantine.scss"
@@ -33,7 +34,9 @@ export default function RootLayout({
         <body className={inter.className}>
           <MantineProvider theme={theme}>
             <Shell>
-              {children}
+              <ErrorBoundary fallback={<NiceError />}>
+                {children}
+              </ErrorBoundary>
             </Shell>
           </MantineProvider>    
         </body>

@@ -1,0 +1,1 @@
+export {NiceError} from './NiceError'
