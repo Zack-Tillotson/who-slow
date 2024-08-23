@@ -80,6 +80,7 @@ export function SessionForm({sessionId}: ViewProps) {
           <Select 
             {...field}
             label="Campaign"
+            data-testid="select-campaign"
             data={campaigns.map(campaign => ({label: campaign.name, value: `${campaign.id}`}))}
           />
         )}
@@ -93,6 +94,7 @@ export function SessionForm({sessionId}: ViewProps) {
           <Select 
             {...field}
             label="Game"
+            data-testid="select-game"
             data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
           />
         )}
@@ -117,6 +119,7 @@ export function SessionForm({sessionId}: ViewProps) {
                 {...field}
                 flex={1}
                 label={`Name`}
+                data-testid={`select-player${index+1}`}
                 value={`${field.value}`}
                 data={players.map(player => ({
                   label: player.name,
@@ -129,7 +132,9 @@ export function SessionForm({sessionId}: ViewProps) {
               name={`sessionPlayers.${index}.color`}
               control={control}
               rules={{ required: true }}
-              render={({ field }) => (<ColorInput {...field} label={`Color`} />)}
+              render={({ field }) => (
+                <ColorInput {...field} label={`Color`} data-testid={`input-color${index+1}`} />
+              )}
           />
         </Stack>
       ))}
