@@ -1,7 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-
-import cn from 'classnames'
 
 import Page from 'components/Page'
 
@@ -16,11 +13,16 @@ function Component(props) {
           <img src={hero} />
         </div>
         <div className="home__controls">
-          <Link to="/app/" className="--button-like --primary --wide">Open App</Link>
+          <a
+            href="https://whoslow-v2--who-slow.us-central1.hosted.app/"
+            className="--button-like --primary --wide"
+          >
+            Open App
+          </a>
         </div>
         <div className="home__explanation">
-          <h1 className="subtitle">The board game turn tracker</h1>
-          <p>Use this site to track how long your turns are when you're playing board games.</p>
+          <h1 className="subtitle">Seriously for fun</h1>
+          <p>Play board games, keep track of sessions, and find out "Who Slow?!"</p>
         </div>
       </div>
     </Page>
