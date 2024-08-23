@@ -3,7 +3,7 @@
 import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, ColorInput, Group, Select, Stack, Text, TextInput, Title } from "@mantine/core"
+import { Button, ColorInput, Group, Select, Stack, Divider, Title } from "@mantine/core"
 import { useSearchParams, useRouter } from "next/navigation";
 import { Campaign, Game, Session, SessionPlayer } from "@/state/types";
 import { useState } from "react";
@@ -14,7 +14,6 @@ type ViewProps = {
 }
 
 type FormInputTypes = {
-  status: 'PRE'|'IN'|'PAUSE'|'POST',
   campaign: Campaign["id"],
   game: Game["bggId"],
   sessionPlayers: SessionPlayer[],
@@ -32,16 +31,16 @@ export function SessionForm({sessionId}: ViewProps) {
     getPlayers,
   } = useDataState()
 
-  const campaign = params.get('campaign') || '-1'
+  const campaign = params.get('campaignId') || '-1'
   const session = getSessionForm(sessionId, campaign)
   
   const campaigns = getCampaigns()
   const games = getGames()
   const players = getPlayers()
 
-  const [playerCount, updatePlayerCount] = useState(1)
+  const [playerCount, updatePlayerCount] = useState(2)
 
-  const { handleSubmit, control, setValue, getValues } = useForm<Session>({
+  const { handleSubmit, control, setValue, getValues, formState: {isValid} } = useForm<Session>({
     defaultValues: session,
   })
   const handleLocalSubmit = (data: Session) => {
@@ -76,11 +75,12 @@ export function SessionForm({sessionId}: ViewProps) {
         name="campaign"
         control={control}
         rules={{ required: true }}
+        required
         render={({ field }) => (
           <Select 
             {...field}
             label="Campaign"
-            value={`${field.value}`}
+            data-testid="select-campaign"
             data={campaigns.map(campaign => ({label: campaign.name, value: `${campaign.id}`}))}
           />
         )}
@@ -89,45 +89,56 @@ export function SessionForm({sessionId}: ViewProps) {
         name="game"
         control={control}
         rules={{ required: true }}
+        required
         render={({ field }) => (
           <Select 
             {...field}
             label="Game"
-            value={`${field.value}`}
+            data-testid="select-game"
             data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
           />
         )}
       />
+      <Divider mt="lg" mb="lg" />
+      <Group gap="0" mb="lg">
+        <Title order={2} size="xs" flex={1}>Players</Title>
+        <Button onClick={handleAddPlayerClick}>+ Add</Button>
+      </Group>
       {new Array(playerCount).fill('').map((player, index) => (
         <Stack key={index} mb="md">
           <Group>
-            <Controller
-              name={`sessionPlayers.${index}.player`}
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select 
-                  {...field}
-                  label={`Player ${index + 1}`}
-                  value={`${field.value}`}
-                  data={players.map(player => ({label: player.name, value: `${player.id}`}))}
-                />
-              )}
-            />
-            <Button onClick={handleRemovePlayer(index)} mt="lg">×</Button>
+            <Title order={3} size="xs" flex={1}>Player #{index + 1}</Title>
+            <Button onClick={handleRemovePlayer(index)} mt="lg">× Remove</Button>
           </Group>
+          <Controller
+            name={`sessionPlayers.${index}.player`}
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Select 
+                {...field}
+                flex={1}
+                label={`Name`}
+                data-testid={`select-player${index+1}`}
+                value={`${field.value}`}
+                data={players.map(player => ({
+                  label: player.name,
+                  value: `${player.id}`,
+                }))}
+              />
+            )}
+          />
           <Controller
               name={`sessionPlayers.${index}.color`}
               control={control}
               rules={{ required: true }}
-              render={({ field }) => (<ColorInput {...field} label={`Player ${index + 1} color`} />)}
+              render={({ field }) => (
+                <ColorInput {...field} label={`Color`} data-testid={`input-color${index+1}`} />
+              )}
           />
         </Stack>
       ))}
-      <Stack component={'dl'} gap="0" mb="lg">
-        <Button onClick={handleAddPlayerClick}>Add player</Button>
-      </Stack>
-      <Button type="submit">Submit</Button>
+      <Button type="submit" variant={isValid ? 'filled' : 'outline'}>Submit</Button>
     </form>
   )
 }
