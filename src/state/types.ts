@@ -30,7 +30,6 @@ export type SessionEvent = {
 export type Session = {
   id: number,
   date: number,
-  status: 'PRE'|'IN'|'PAUSE'|'POST',
   campaign: Campaign["id"],
   game: Game["bggId"],
   sessionPlayers: SessionPlayer[],
