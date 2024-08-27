@@ -25,7 +25,7 @@ export function Campaign({campaignId}: CampaignViewProps) {
   }
 
   const {id, name} = campaign
-  const sessions = getCampaignSessions(id)
+  const sessions = [...getCampaignSessions(id)].reverse()
     
   return (
     <>
@@ -48,7 +48,7 @@ export function Campaign({campaignId}: CampaignViewProps) {
         <Title order={2} flex={1} size="md">Play sessions</Title>
         <Button
           component={Link}
-          href={`/session/new/?campaign=${campaignId}`}
+          href={`/session/new/?campaignId=${campaignId}`}
           leftSection={<IconPlus size="1rem" stroke={1.5} />}
         >
           New
