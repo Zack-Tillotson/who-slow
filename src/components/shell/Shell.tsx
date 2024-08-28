@@ -8,7 +8,6 @@ import logo from '@/assets/headline-250x50.png'
 import styles from './shell.module.scss'
 import { useEffect, useState } from 'react';
 import { useDataState } from '@/state';
-import { BreadcrumbNav } from '../breadcrumbNav';
 import { NavLinks } from '../navLinks';
 import Link from 'next/link';
 
