@@ -1,0 +1,31 @@
+.turnContainer {
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.turn {
+  position: relative;
+  min-width: 100px;
+  color: white;
+  text-shadow: 0 0 10px black;
+}
+
+.turnBgTop {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 50%;
+  transform: skew(30deg);
+}
+
+.turnBgBot {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
+  bottom: 0;
+  transform: skew(-30deg);
+}

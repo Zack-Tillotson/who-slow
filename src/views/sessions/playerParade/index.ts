@@ -1,0 +1,1 @@
+export {PlayerParade} from './PlayerParade'
