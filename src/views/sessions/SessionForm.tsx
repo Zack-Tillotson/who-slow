@@ -7,6 +7,7 @@ import { Button, ColorInput, Group, Select, Stack, Divider, Title } from "@manti
 import { useSearchParams, useRouter } from "next/navigation";
 import { Campaign, Game, Session, SessionPlayer } from "@/state/types";
 import { useState } from "react";
+import { IconChevronCompactDown, IconChevronCompactUp, IconX } from "@tabler/icons-react";
 
 type ViewProps = {
   sessionId?: string,
@@ -38,7 +39,7 @@ export function SessionForm({sessionId}: ViewProps) {
   const games = getGames()
   const players = getPlayers()
 
-  const [playerCount, updatePlayerCount] = useState(2)
+  const [playerCount, updatePlayerCount] = useState(session.sessionPlayers.length || 2)
 
   const { handleSubmit, control, setValue, getValues, formState: {isValid} } = useForm<Session>({
     defaultValues: session,
@@ -65,8 +66,29 @@ export function SessionForm({sessionId}: ViewProps) {
   const handleRemovePlayer = (playerIndex: number) => () => {
     for(let moveIndex = playerIndex ; moveIndex < playerCount - 1 ; moveIndex++) {
       setValue(`sessionPlayers.${moveIndex}.player`, getValues(`sessionPlayers.${moveIndex + 1}.player`))
+      setValue(`sessionPlayers.${moveIndex}.color`, getValues(`sessionPlayers.${moveIndex + 1}.color`))
     }
     updatePlayerCount(playerCount - 1)
+  }
+
+  const getPlayerValues = (playerIndex: number) => {
+    return {
+      player: getValues(`sessionPlayers.${playerIndex}.player`),
+      color: getValues(`sessionPlayers.${playerIndex}.color`),
+    }
+  }
+
+  const setPlayerValues = (playerIndex: number, {player, color}: {player: number, color: string}) => {
+    setValue(`sessionPlayers.${playerIndex}.player`, player)
+    setValue(`sessionPlayers.${playerIndex}.color`, color)
+
+  }
+
+  const handleSwapPlayers = (aIndex: number, bIndex: number) => () => {
+    const aValues = getPlayerValues(aIndex)
+    const bValues = getPlayerValues(bIndex)
+    setPlayerValues(bIndex, aValues)
+    setPlayerValues(aIndex, bValues)
   }
 
   return (
@@ -103,41 +125,84 @@ export function SessionForm({sessionId}: ViewProps) {
       />
       <Divider mt="lg" mb="lg" />
       <Group gap="0" mb="lg">
-        <Title order={2} size="xs" flex={1}>Players</Title>
+        <Title order={2} size="xs" flex={1}>{playerCount} Players</Title>
         <Button onClick={handleAddPlayerClick}>+ Add</Button>
       </Group>
       {new Array(playerCount).fill('').map((player, index) => (
-        <Stack key={index} mb="md">
-          <Group>
-            <Title order={3} size="xs" flex={1}>Player #{index + 1}</Title>
-            <Button onClick={handleRemovePlayer(index)} mt="lg">× Remove</Button>
-          </Group>
-          <Controller
-            name={`sessionPlayers.${index}.player`}
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Select 
-                {...field}
-                flex={1}
-                label={`Name`}
-                data-testid={`select-player${index+1}`}
-                value={`${field.value}`}
-                data={players.map(player => ({
-                  label: player.name,
-                  value: `${player.id}`,
-                }))}
-              />
-            )}
-          />
-          <Controller
-              name={`sessionPlayers.${index}.color`}
+        <Stack key={index} mb="lg" gap="0">
+          <Title
+            order={3}
+            size="xs"
+            flex={1}
+            bg="#eee"
+            pt="sm"
+            pb="sm"
+            pl="sm"
+          >
+            Player #{index + 1}
+          </Title>
+          <Group pl="sm">
+            <Controller
+              name={`sessionPlayers.${index}.player`}
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <ColorInput {...field} label={`Color`} data-testid={`input-color${index+1}`} />
+                <Select 
+                  {...field}
+                  flex={1}
+                  label={`Name`}
+                  data-testid={`select-player${index+1}`}
+                  value={`${field.value}`}
+                  data={players.map(player => ({
+                    label: player.name,
+                    value: `${player.id}`,
+                  }))}
+                />
               )}
-          />
+            />
+            <Controller
+                name={`sessionPlayers.${index}.color`}
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <ColorInput {...field} label={`Color`} data-testid={`input-color${index+1}`} />
+                )}
+            />
+          </Group>
+          <Group mt="xs" pl="sm">
+            <Button
+              variant="outline"
+              onClick={handleSwapPlayers(index, index + 1)}
+              disabled={index + 1 === playerCount}
+              pl="xs"
+              pr="xs"
+              size="xs"
+              aria-label="Move up in the list"
+            >
+              <IconChevronCompactDown />
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleSwapPlayers(index - 1, index)}
+              disabled={index === 0}
+              pl="xs"
+              pr="xs"
+              size="xs"
+              aria-label="Move down in the list"
+            >
+              <IconChevronCompactUp />
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleRemovePlayer(index)}
+              pl="xs"
+              pr="xs"
+              size="xs"
+              aria-label="Remove player"
+            >
+              <IconX />
+            </Button>
+          </Group>
         </Stack>
       ))}
       <Button type="submit" variant={isValid ? 'filled' : 'outline'}>Submit</Button>

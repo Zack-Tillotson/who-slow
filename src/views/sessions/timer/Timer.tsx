@@ -8,9 +8,10 @@ export interface TimerProps {
   events: SessionEvent[],
   players: Player[],
   sessionPlayers: SessionPlayer[],
+  forceShowClock: boolean,
 }
 
-export function Timer({events, players, sessionPlayers}: TimerProps) {
+export function Timer({events, players, sessionPlayers, forceShowClock = false}: TimerProps) {
 
   const {
     isClockVisible,
@@ -23,9 +24,11 @@ export function Timer({events, players, sessionPlayers}: TimerProps) {
     handleClick,
   } = useTimer(events, players, sessionPlayers)
 
+  const showClock = isClockVisible || forceShowClock
+
   return (
     <div
-      className={`${styles.timer} ${!isClockVisible && styles.timerNoClock}`}
+      className={`${styles.timer} ${!showClock && styles.timerNoClock}`}
       style={{borderColor}}
       onClick={handleClick}
     >

@@ -24,10 +24,20 @@ export function useSessionPlay(sessionId: string|number) {
   const events = session.events || []
 
   const lastEvent = [...events].reverse()[0] || null
-  const lastPlayerEvent = events.filter(tEvent => tEvent.type === 'TURN_START').reverse()[0] || null
+  const turnEvents = events.filter(tEvent => tEvent.type === 'TURN_START')
+  const lastPlayerEvent = turnEvents[turnEvents.length - 1] || null
   const isUnstarted = events.length === 0
   const isEnded = !!lastEvent && lastEvent.type === 'END'
   const isPaused = !!lastEvent && lastEvent.type === 'PAUSE'
+  
+  const nextSessionPlayerIndex = turnEvents.length % session.sessionPlayers.length
+  const sessionPlayer = session.sessionPlayers[nextSessionPlayerIndex]
+  const nextPlayer = players.find(({id}) => session.sessionPlayers[nextSessionPlayerIndex].player == id) || players[0]
+  const nextTurn = {
+    playerId: nextPlayer?.id,
+    name: nextPlayer?.name,
+    color: sessionPlayer.color,
+  }
 
   const handlePlayerClick = (who: number) => () => pushSessionEvent(session, {type: 'TURN_START', who, when: Date.now()})
   const handlePauseClick = () => {
@@ -59,6 +69,8 @@ export function useSessionPlay(sessionId: string|number) {
     isEnded,
     isPaused,
     isFixTurnDialogOpen,
+
+    nextTurn,
 
     handlePlayerClick,
     handlePauseClick,
