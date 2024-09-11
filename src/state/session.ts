@@ -2,6 +2,7 @@ import {
   Session,
   SessionEvent,
   DataState,
+  SessionForm,
 } from './types'
 
 export default function (get: () => DataState, set: (state: Partial<DataState>) => void) {
@@ -58,35 +59,78 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       return session
     },
 
-    getSessionForm(sessionId = '-1', campaignId = '-1') {
+    saveSessionForm(formData: SessionForm) {
+      const session = get().getSession(formData.id) || {
+        id: formData.id,
+        date: new Date().getTime(),
+        game: -1,
+        campaign: -1,
+        sessionPlayers: [],
+        events: [],
+      }
+
+      const players = get().getPlayers()
+
+      session.game = formData.game
+      session.campaign = formData.campaign
+      session.sessionPlayers = formData.players.map(({player, color}, index) => {
+        let foundPlayer = players.find(({name}) => name == player)
+        if(!foundPlayer) {
+          foundPlayer = get().savePlayer({id: -1, name: player})
+        }
+        return {
+          id: index,
+          player: foundPlayer.id,
+          color,
+          order: index + 1,
+        }
+      })
+      
+      return get().saveSession(session)
+    },
+
+    getSessionForm(sessionId = '-1', campaignId = '-1'): SessionForm {
       if(sessionId != '-1') {
         const session = get().getSession(sessionId)
         if(session) {
-          return session
+          const players = get()
+            .getPlayers(session.sessionPlayers)
+            .map((player, index) => ({
+              player: player.name, 
+              color: session.sessionPlayers[index].color,
+            }))
+          return {
+            id: session.id,
+            campaign: session.campaign,
+            game: session.game,
+            players,
+          }
         }
       }
 
       const sessions = get().getCampaignSessions(Number(campaignId))
       if(sessions.length > 0) {
         const priorSession = sessions[sessions.length - 1]
-        const {campaign, game, sessionPlayers} = JSON.parse(JSON.stringify(priorSession))
+        const {campaign, game, sessionPlayers} = priorSession
+        const players = get()
+          .getPlayers(sessionPlayers)
+          .map((player, index) => ({
+            player: player.name, 
+            color: sessionPlayers[index].color,
+          }))
         return {
           id: -1,
-          date: Date.now(),
           campaign,
           game,
-          sessionPlayers: sessionPlayers.slice(0, 2),
-          events: [],
+          players,
         }
       }
 
       return {
         id: -1,
-        date: Date.now(),
         campaign: Number(campaignId),
         game: -1,
-        sessionPlayers: [],
-        events: [],
+        players: [],
       }
     },
     getSessionStatus(session: Session) {
