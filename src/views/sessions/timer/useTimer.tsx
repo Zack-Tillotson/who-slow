@@ -69,8 +69,10 @@ export function useTimer(events: SessionEvent[], players: Player[], sessionPlaye
     break
   }
 
-  const roundCount = Math.trunc((events.length - 1) / players.length) + 1
-  const turnCount = events.filter(event => event.type === 'TURN_START').length + 1
+  const turnEvents = events.filter(event => event.type === 'TURN_START')
+  const turnCount = turnEvents.length
+  const roundCount = Math.trunc((turnEvents.length - 1) / players.length) + 1
+  const roundTurnCount = (turnCount - 1) % players.length + 1
 
   const handleClick = () => {
     updateIsClockVisible(!isClockVisible)
@@ -80,8 +82,9 @@ export function useTimer(events: SessionEvent[], players: Player[], sessionPlaye
     isClockVisible,
     currentPlayer,
     clock,
-    roundCount,
     turnCount,
+    roundCount,
+    roundTurnCount,
     borderColor,
 
     handleClick,

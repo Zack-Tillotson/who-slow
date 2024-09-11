@@ -14,12 +14,6 @@ type ViewProps = {
   campaign?: string,
 }
 
-type FormInputTypes = {
-  campaign: Campaign["id"],
-  game: Game["bggId"],
-  sessionPlayers: SessionPlayer[],
-}
-
 export function SessionForm({sessionId}: ViewProps) {
   
   const router = useRouter()
@@ -50,6 +44,7 @@ export function SessionForm({sessionId}: ViewProps) {
         ...data,
         id: session.id,
         date: session.date,
+        sessionPlayers: data.sessionPlayers.slice(0, playerCount),
       }
       const result = saveSession(fullSession)
       router.push(`/session/${result.id}/`)
