@@ -20,7 +20,7 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
       players: [],
       campaigns: [{
         id: 0,
-        name: '',
+        name: 'Just play',
       }],
       sessions: [],
 

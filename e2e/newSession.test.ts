@@ -47,8 +47,8 @@ test.describe('new session', () => {
   }
 
   test('can fill out form', async ({ page }) => {
-    await page.getByRole('button', {name: '+ Add'}).click()
-    await page.getByRole('button', {name: '+ Add'}).click()
+    await page.getByRole('button', {name: 'Add player'}).click()
+    await page.getByRole('button', {name: 'Add player'}).click()
 
     await selectMuiOption(page, 'select-campaign', 'TCampaign')
     await selectMuiOption(page, 'select-game', 'TGame')

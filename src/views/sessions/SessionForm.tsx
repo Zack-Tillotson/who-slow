@@ -3,21 +3,15 @@
 import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, ColorInput, Group, Select, Stack, Divider, Title } from "@mantine/core"
+import { Button, ColorInput, Group, Select, Stack, Divider, Title, Autocomplete } from "@mantine/core"
 import { useSearchParams, useRouter } from "next/navigation";
-import { Campaign, Game, Session, SessionPlayer } from "@/state/types";
+import { SessionForm as SessionFormType } from "@/state/types";
 import { useState } from "react";
-import { IconChevronCompactDown, IconChevronCompactUp, IconX } from "@tabler/icons-react";
+import { IconChevronCompactDown, IconChevronCompactUp, IconPlus, IconX } from "@tabler/icons-react";
 
 type ViewProps = {
   sessionId?: string,
   campaign?: string,
-}
-
-type FormInputTypes = {
-  campaign: Campaign["id"],
-  game: Game["bggId"],
-  sessionPlayers: SessionPlayer[],
 }
 
 export function SessionForm({sessionId}: ViewProps) {
@@ -26,7 +20,7 @@ export function SessionForm({sessionId}: ViewProps) {
   const params = useSearchParams()
   const {
     getSessionForm,
-    saveSession,
+    saveSessionForm,
     getCampaigns,
     getGames,
     getPlayers,
@@ -39,19 +33,17 @@ export function SessionForm({sessionId}: ViewProps) {
   const games = getGames()
   const players = getPlayers()
 
-  const [playerCount, updatePlayerCount] = useState(session.sessionPlayers.length || 2)
+  const [playerCount, updatePlayerCount] = useState(session.players.length || 2)
 
-  const { handleSubmit, control, setValue, getValues, formState: {isValid} } = useForm<Session>({
+  const { handleSubmit, control, setValue, getValues, formState: {isValid} } = useForm<SessionFormType>({
     defaultValues: session,
   })
-  const handleLocalSubmit = (data: Session) => {
+  const handleLocalSubmit = (data: SessionFormType) => {
     try {
-      const fullSession = {
+      const result = saveSessionForm({
         ...data,
-        id: session.id,
-        date: session.date,
-      }
-      const result = saveSession(fullSession)
+        players: data.players.slice(0, playerCount),
+      })
       router.push(`/session/${result.id}/`)
     } catch(e) {
       console.log(e)
@@ -65,22 +57,22 @@ export function SessionForm({sessionId}: ViewProps) {
 
   const handleRemovePlayer = (playerIndex: number) => () => {
     for(let moveIndex = playerIndex ; moveIndex < playerCount - 1 ; moveIndex++) {
-      setValue(`sessionPlayers.${moveIndex}.player`, getValues(`sessionPlayers.${moveIndex + 1}.player`))
-      setValue(`sessionPlayers.${moveIndex}.color`, getValues(`sessionPlayers.${moveIndex + 1}.color`))
+      setValue(`players.${moveIndex}.player`, getValues(`players.${moveIndex + 1}.player`))
+      setValue(`players.${moveIndex}.color`, getValues(`players.${moveIndex + 1}.color`))
     }
     updatePlayerCount(playerCount - 1)
   }
 
   const getPlayerValues = (playerIndex: number) => {
     return {
-      player: getValues(`sessionPlayers.${playerIndex}.player`),
-      color: getValues(`sessionPlayers.${playerIndex}.color`),
+      player: getValues(`players.${playerIndex}.player`),
+      color: getValues(`players.${playerIndex}.color`),
     }
   }
 
-  const setPlayerValues = (playerIndex: number, {player, color}: {player: number, color: string}) => {
-    setValue(`sessionPlayers.${playerIndex}.player`, player)
-    setValue(`sessionPlayers.${playerIndex}.color`, color)
+  const setPlayerValues = (playerIndex: number, {player, color}: {player: string, color: string}) => {
+    setValue(`players.${playerIndex}.player`, player)
+    setValue(`players.${playerIndex}.color`, color)
 
   }
 
@@ -113,20 +105,24 @@ export function SessionForm({sessionId}: ViewProps) {
         control={control}
         rules={{ required: true }}
         render={({ field }) => (
-          <Select 
+          <Autocomplete 
             {...field}
             label="Game"
             data-testid="select-game"
             required
-            value={`${field.value}`}
-            data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
+            data={games.map(game => game.name)}
           />
         )}
       />
       <Divider mt="lg" mb="lg" />
       <Group gap="0" mb="lg">
         <Title order={2} size="xs" flex={1}>{playerCount} Players</Title>
-        <Button onClick={handleAddPlayerClick}>+ Add</Button>
+        <Button
+          onClick={handleAddPlayerClick}
+          leftSection={<IconPlus size="1rem" stroke={1.5} />}
+        >
+          Add player
+        </Button>
       </Group>
       {new Array(playerCount).fill('').map((player, index) => (
         <Stack key={index} mb="lg" gap="0">
@@ -143,25 +139,21 @@ export function SessionForm({sessionId}: ViewProps) {
           </Title>
           <Group pl="sm">
             <Controller
-              name={`sessionPlayers.${index}.player`}
+              name={`players.${index}.player`}
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <Select 
+                <Autocomplete 
                   {...field}
                   flex={1}
                   label={`Name`}
                   data-testid={`select-player${index+1}`}
-                  value={`${field.value}`}
-                  data={players.map(player => ({
-                    label: player.name,
-                    value: `${player.id}`,
-                  }))}
+                  data={players.map(player => player.name)}
                 />
               )}
             />
             <Controller
-                name={`sessionPlayers.${index}.color`}
+                name={`players.${index}.color`}
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (

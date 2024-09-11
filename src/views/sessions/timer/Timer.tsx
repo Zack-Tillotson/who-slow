@@ -18,7 +18,7 @@ export function Timer({events, players, sessionPlayers, forceShowClock = false}:
     currentPlayer,
     clock,
     roundCount,
-    turnCount,
+    roundTurnCount,
     borderColor,
 
     handleClick,
@@ -35,7 +35,7 @@ export function Timer({events, players, sessionPlayers, forceShowClock = false}:
       <div className={styles.timerPlayer}>{currentPlayer?.name ?? '-'}</div>
       <div className={styles.timerClock}>{clock}</div>
       <div className={styles.timerRound}>{roundCount ? `Round ${roundCount}` : '-'}</div>
-      <div className={styles.timerTurn}>{turnCount ? `Turn ${turnCount}` : '-'}</div>
+      <div className={styles.timerTurn}>{roundTurnCount ? `Turn ${roundTurnCount} of ${players.length}` : `${players.length} players`}</div>
     </div>
   );
 }

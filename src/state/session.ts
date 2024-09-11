@@ -2,6 +2,7 @@ import {
   Session,
   SessionEvent,
   DataState,
+  SessionForm,
 } from './types'
 
 export default function (get: () => DataState, set: (state: Partial<DataState>) => void) {
@@ -18,18 +19,27 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
     saveSession(session: Session) {
       // TODO validate
 
-      const {getSessions} = get()
+      const {getSessions, getCampaign, saveCampaign} = get()
       const sessions = getSessions()
       
       // Update ID as needed
       if(typeof session.id === 'string') session.id = Number(session.id)
       if(session.id < 0) {
-        session.id = sessions.length
+        session.id = (sessions[sessions.length - 1]?.id ?? 0) + 1
       }
 
       // Add events as needed
       if(!session.events) {
         session.events = []
+      }
+
+      // Update campaign as needed
+      if(session.campaign === -1) {
+        let defaultCampaign = getCampaign(0)
+        if(!defaultCampaign) {
+          defaultCampaign = saveCampaign({id: 0, name: 'Just play'})
+        }
+        session.campaign = defaultCampaign.id
       }
 
       const updatedSessions = [...sessions]
@@ -49,31 +59,82 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       return session
     },
 
-    getSessionForm(stringId = '-1', campaignId = '-1') {
-      if(stringId && stringId != '-1') {
-        const session = get().getSession(stringId)
+    saveSessionForm(formData: SessionForm) {
+      const session = get().getSession(formData.id) || {
+        id: formData.id,
+        date: new Date().getTime(),
+        game: -1,
+        campaign: -1,
+        sessionPlayers: [],
+        events: [],
+      }
+
+      const players = get().getPlayers()
+
+      const game = get().getOrCreateGameByName(formData.game)
+
+      session.game = game.bggId
+      session.campaign = formData.campaign
+      session.sessionPlayers = formData.players.map(({player, color}, index) => {
+        let foundPlayer = players.find(({name}) => name == player)
+        if(!foundPlayer) {
+          foundPlayer = get().savePlayer({id: -1, name: player})
+        }
+        return {
+          id: index,
+          player: foundPlayer.id,
+          color,
+          order: index + 1,
+        }
+      })
+      
+      return get().saveSession(session)
+    },
+
+    getSessionForm(sessionId = '-1', campaignId = '-1'): SessionForm {
+      if(sessionId != '-1') {
+        const session = get().getSession(sessionId)
         if(session) {
-          return session
+          const players = get()
+            .getPlayers(session.sessionPlayers)
+            .map((player, index) => ({
+              player: player.name, 
+              color: session.sessionPlayers[index].color,
+            }))
+          const gameName = get().getGame(session.game)?.name || ''
+          return {
+            id: session.id,
+            campaign: session.campaign,
+            game: gameName,
+            players,
+          }
         }
       }
 
       const sessions = get().getCampaignSessions(Number(campaignId))
       if(sessions.length > 0) {
         const priorSession = sessions[sessions.length - 1]
-        const copySession = JSON.parse(JSON.stringify(priorSession))
+        const {campaign, game, sessionPlayers} = priorSession
+        const players = get()
+          .getPlayers(sessionPlayers)
+          .map((player, index) => ({
+            player: player.name, 
+            color: sessionPlayers[index].color,
+          }))
+        const gameName = get().getGame(game)?.name || ''
         return {
-          ...copySession,
           id: -1,
+          campaign,
+          game: gameName,
+          players,
         }
       }
 
       return {
         id: -1,
-        date: Date.now(),
         campaign: Number(campaignId),
-        game: -1,
-        sessionPlayers: [],
-        events: [],
+        game: '',
+        players: [],
       }
     },
     getSessionStatus(session: Session) {
