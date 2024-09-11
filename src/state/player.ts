@@ -12,12 +12,14 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
     },
 
     // Returns all players (if no param) or players with ids represented in targetPlayers
-    getPlayers(targetPlayers?: SessionPlayer[]) {
+    getPlayers(targetPlayers?: SessionPlayer[]): Player[] {
       const rawPlayers = get().players
       if(!targetPlayers) {
         return rawPlayers
       }
-      return targetPlayers.map(({player}) => rawPlayers.find(({id}) => player === id))
+      return targetPlayers
+        .map(({player}) => rawPlayers.find(({id}) => player === id))
+        .filter(player => !!player)
     },
 
     savePlayer(player: Player) {
