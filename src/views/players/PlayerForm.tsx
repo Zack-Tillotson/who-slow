@@ -39,20 +39,22 @@ export function PlayerForm({playerId}: ViewProps) {
 
   return (
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
-      <Controller
-        name="id"
-        disabled
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => <TextInput {...field} label="ID" />}
-      />
+      {!!playerId && (
+        <Controller
+          name="id"
+          disabled
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <TextInput {...field} label="ID" />}
+        />
+      )}
       <Controller
         name="name"
         control={control}
         rules={{ required: true }}
         render={({ field }) => <TextInput {...field} label="Name" />}
       />      
-      <Button type="submit">Submit</Button>
+      <Button type="submit" mt="lg">Submit</Button>
     </form>
   )
 }

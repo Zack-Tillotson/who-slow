@@ -36,6 +36,16 @@ export type Session = {
   events: SessionEvent[],
 }
 
+export type SessionForm = {
+  id: number,
+  campaign: Campaign["id"],
+  game: Game["bggId"],
+  players: {
+    player: Player["name"],
+    color: SessionPlayer["color"],
+  }[],
+}
+
 export type DataState = {
   games: Game[],
   players: Player[],
@@ -66,7 +76,8 @@ export type DataState = {
   getSession: (stringId: string|number) => Session | undefined,
   getSessions: () => Session[],
   saveSession: (session: Session) => Session,
-  getSessionForm: (stringId?: string, campaignId?: string) => Session,
+  getSessionForm: (stringId?: string, campaignId?: string) => SessionForm,
+  saveSessionForm: (data: SessionForm) => Session,
   getSessionStatus: (session: Session) => string,
   getSessionStatusText: (session: Session) => string,
   setSessionEvents: (session: Session, events: SessionEvent[]) => Session,

@@ -17,9 +17,7 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       if(!targetPlayers) {
         return rawPlayers
       }
-      return rawPlayers.filter(({id: targetId}) => 
-        targetPlayers.find(({player}) => player == targetId)
-      )
+      return targetPlayers.map(({player}) => rawPlayers.find(({id}) => player === id))
     },
 
     savePlayer(player: Player) {
