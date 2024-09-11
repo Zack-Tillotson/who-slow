@@ -105,13 +105,12 @@ export function SessionForm({sessionId}: ViewProps) {
         control={control}
         rules={{ required: true }}
         render={({ field }) => (
-          <Select 
+          <Autocomplete 
             {...field}
             label="Game"
             data-testid="select-game"
             required
-            value={`${field.value}`}
-            data={games.map(game => ({label: game.name + '', value: `${game.bggId}`}))}
+            data={games.map(game => game.name)}
           />
         )}
       />

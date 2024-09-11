@@ -14,6 +14,16 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       return get().games
     },
 
+    getOrCreateGameByName(name: string) {
+      const games = get().getGames()
+      const game = games.find(game => game.name.toLowerCase() === name.toLowerCase())
+      if(game) {
+        return game
+      }
+
+      return this.saveGame({bggId: -1, name})
+    },
+
     saveGame(game: Game) {
       // TODO validate
 
