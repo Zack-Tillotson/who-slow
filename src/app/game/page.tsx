@@ -5,10 +5,8 @@ export const metadata: Metadata = {
   title: "Games | Who Slow ",
 }
 
-export default function CampaignPage() {
+export default function GamePage() {
   return (
-    <>
-      <Games />
-    </>
+    <Games />
   )
 }

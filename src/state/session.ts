@@ -18,18 +18,27 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
     saveSession(session: Session) {
       // TODO validate
 
-      const {getSessions} = get()
+      const {getSessions, getCampaign, saveCampaign} = get()
       const sessions = getSessions()
       
       // Update ID as needed
       if(typeof session.id === 'string') session.id = Number(session.id)
       if(session.id < 0) {
-        session.id = sessions.length
+        session.id = (sessions[sessions.length - 1]?.id ?? 0) + 1
       }
 
       // Add events as needed
       if(!session.events) {
         session.events = []
+      }
+
+      // Update campaign as needed
+      if(session.campaign === -1) {
+        let defaultCampaign = getCampaign(0)
+        if(!defaultCampaign) {
+          defaultCampaign = saveCampaign({id: 0, name: 'Just play'})
+        }
+        session.campaign = defaultCampaign.id
       }
 
       const updatedSessions = [...sessions]
@@ -49,9 +58,9 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       return session
     },
 
-    getSessionForm(stringId = '-1', campaignId = '-1') {
-      if(stringId && stringId != '-1') {
-        const session = get().getSession(stringId)
+    getSessionForm(sessionId = '-1', campaignId = '-1') {
+      if(sessionId != '-1') {
+        const session = get().getSession(sessionId)
         if(session) {
           return session
         }
@@ -60,10 +69,14 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       const sessions = get().getCampaignSessions(Number(campaignId))
       if(sessions.length > 0) {
         const priorSession = sessions[sessions.length - 1]
-        const copySession = JSON.parse(JSON.stringify(priorSession))
+        const {campaign, game, sessionPlayers} = JSON.parse(JSON.stringify(priorSession))
         return {
-          ...copySession,
           id: -1,
+          date: Date.now(),
+          campaign,
+          game,
+          sessionPlayers: sessionPlayers.slice(0, 2),
+          events: [],
         }
       }
 

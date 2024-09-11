@@ -22,7 +22,7 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       
       // Update ID as needed
       if(campaign.id < 0) {
-        campaign.id = campaigns.length
+        campaign.id = (campaigns[campaigns.length - 1]?.id + 1) ?? 0
       }
 
       const updatedCampaigns = [...campaigns]
