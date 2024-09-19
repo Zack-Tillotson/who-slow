@@ -3,7 +3,7 @@ import {
   DataState,
 } from './types'
 
-export default function (get: () => DataState, set: (state: Partial<DataState>) => void) {
+export default function campaignState(get: () => DataState, set: (state: Partial<DataState>) => void) {
   return {
     getCampaign(targetId: string|number) {
       const campaign = get().getCampaigns().find(({id}) => id === Number(targetId))

@@ -5,7 +5,7 @@ import {
   SessionForm,
 } from './types'
 
-export default function (get: () => DataState, set: (state: Partial<DataState>) => void) {
+export default function sessionState(get: () => DataState, set: (state: Partial<DataState>) => void) {
   return {
     getSession(stringId: string | number) {
       const session = get().getSessions().find(({id}) => id === Number(stringId))
