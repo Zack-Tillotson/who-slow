@@ -3,7 +3,7 @@ import {
   DataState,
 } from './types'
 
-export default function (get: () => DataState, set: (state: Partial<DataState>) => void) {
+export default function gameState(get: () => DataState, set: (state: Partial<DataState>) => void) {
   return {
     getGame(stringId: string|number) {
       const game = get().getGames().find(({bggId}) => bggId == Number(stringId))

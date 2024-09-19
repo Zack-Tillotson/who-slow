@@ -4,7 +4,7 @@ import {
   DataState,
 } from './types'
 
-export default function (get: () => DataState, set: (state: Partial<DataState>) => void) {
+export default function playerState(get: () => DataState, set: (state: Partial<DataState>) => void) {
   return {
     getPlayer(stringId: string|number) {
       const player = get().getPlayers().find(({id}) => id === Number(stringId))
