@@ -1,7 +1,7 @@
 'use client'
 
 import { useDataState } from "@/state";
-import { Alert, Button, Text, Title } from "@mantine/core";
+import { Alert, Button, Image, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -26,7 +26,7 @@ export function Game({gameId}: ViewProps) {
     )
   }
 
-  const {name, bggId} = game
+  const {name, bggId, yearPublished, image} = game
 
   const handleDeleteClick = () => {
     const result = removeGame(gameId)
@@ -41,7 +41,9 @@ export function Game({gameId}: ViewProps) {
   return (
     <>
       <Title order={1}>{name}</Title>
+      <Text>Year: {yearPublished}</Text>
       <Text>BGG Id: #{bggId}</Text>
+      <Image src={image} alt={`${name} box art`} />
       <Button component={Link} href={`edit/`}>Edit</Button>
       <Button onClick={handleDeleteClick}>Delete</Button>
       {!!error && (

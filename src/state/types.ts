@@ -1,6 +1,8 @@
 export type Game = {
   bggId: number,
   name: string,
+  yearPublished?: number,
+  image?: string,
 }
 
 export type Player = {
