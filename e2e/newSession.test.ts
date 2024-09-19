@@ -46,20 +46,20 @@ test.describe('new session', () => {
     return
   }
 
-//   test('can fill out form', async ({ page }) => {
-//     await page.getByRole('button', {name: 'Player count'}).click()
-//     await page.getByRole('button', {name: 'Player count'}).click()
+  // test('can fill out form', async ({ page }) => {
+  //   await page.getByRole('button', {name: 'Player count'}).click()
+  //   await page.getByRole('button', {name: 'Player count'}).click()
 
-//     await selectMuiOption(page, 'select-campaign', 'TCampaign')
-//     await selectMuiOption(page, 'select-game', 'TGame')
-//     await selectMuiOption(page, 'select-player1', 'Alice')
-//     await selectMuiOption(page, 'select-player2', 'Bobby')
-//     await selectMuiOption(page, 'select-player3', 'Charleigh')
+  //   await selectMuiOption(page, 'select-campaign', 'TCampaign')
+  //   await selectMuiOption(page, 'select-game', 'TGame')
+  //   await selectMuiOption(page, 'select-player1', 'Alice')
+  //   await selectMuiOption(page, 'select-player2', 'Bobby')
+  //   await selectMuiOption(page, 'select-player3', 'Charleigh')
     
-//     await page.getByTestId('input-color1').fill(COLORS[0])
-//     await page.getByTestId('input-color2').fill(COLORS[1])
-//     await page.getByTestId('input-color3').fill(COLORS[2])
+  //   await page.getByTestId('input-color1').fill(COLORS[0])
+  //   await page.getByTestId('input-color2').fill(COLORS[1])
+  //   await page.getByTestId('input-color3').fill(COLORS[2])
 
-//     await page.getByRole('button', { name: 'Submit' }).click();
-//   })
-// })
+  //   await page.getByRole('button', { name: 'Submit' }).click();
+  // })
+})
