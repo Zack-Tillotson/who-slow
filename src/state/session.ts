@@ -71,9 +71,7 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
 
       const players = get().getPlayers()
 
-      const game = get().getOrCreateGameByName(formData.game)
-
-      session.game = game.bggId
+      session.game = Number(formData.game)
       session.campaign = formData.campaign
       session.sessionPlayers = formData.players.map(({player, color}, index) => {
         let foundPlayer = players.find(({name}) => name == player)
@@ -101,11 +99,10 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
               player: player.name, 
               color: session.sessionPlayers[index].color,
             }))
-          const gameName = get().getGame(session.game)?.name || ''
           return {
             id: session.id,
             campaign: session.campaign,
-            game: gameName,
+            game: session.game,
             players,
           }
         }
@@ -121,11 +118,10 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
             player: player.name, 
             color: sessionPlayers[index].color,
           }))
-        const gameName = get().getGame(game)?.name || ''
         return {
           id: -1,
           campaign,
-          game: gameName,
+          game,
           players,
         }
       }
@@ -133,7 +129,7 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       return {
         id: -1,
         campaign: Number(campaignId),
-        game: '',
+        game: 0,
         players: [],
       }
     },
