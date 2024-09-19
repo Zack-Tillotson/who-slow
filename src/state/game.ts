@@ -64,6 +64,8 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
       return {
         bggId: -1,
         name: '',
+        yearPublished: 0,
+        image: '',
       }
     },
 
