@@ -8,6 +8,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { SessionForm as SessionFormType } from "@/state/types";
 import { useState } from "react";
 import { IconChevronCompactDown, IconChevronCompactUp, IconPlus, IconX } from "@tabler/icons-react";
+import { BGG_GAME } from "../games/bggSafeAttrs";
+import { GameAutocomplete } from "../games/GameAutocomplete";
 
 type ViewProps = {
   sessionId?: string,
@@ -23,6 +25,7 @@ export function SessionForm({sessionId}: ViewProps) {
     saveSessionForm,
     getCampaigns,
     getGames,
+    saveGame,
     getPlayers,
   } = useDataState()
 
@@ -35,6 +38,8 @@ export function SessionForm({sessionId}: ViewProps) {
 
   const [playerCount, updatePlayerCount] = useState(session.players.length || 2)
 
+  const [gameName, updateGameName] = useState(games.find(({bggId}) => bggId === session.game)?.name ?? '')
+
   const { handleSubmit, control, setValue, getValues, formState: {isValid} } = useForm<SessionFormType>({
     defaultValues: session,
   })
@@ -43,6 +48,7 @@ export function SessionForm({sessionId}: ViewProps) {
       const result = saveSessionForm({
         ...data,
         players: data.players.slice(0, playerCount),
+        game: games.find(({name}) => name === gameName)?.bggId ?? 0,
       })
       router.push(`/session/${result.id}/`)
     } catch(e) {
@@ -83,6 +89,12 @@ export function SessionForm({sessionId}: ViewProps) {
     setPlayerValues(aIndex, bValues)
   }
 
+  const handleGameSelect = (game: BGG_GAME) => {
+    saveGame(game)
+    setValue('game', game.bggId)
+    updateGameName(game.name)
+  }
+
   return (
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
       <Controller
@@ -100,20 +112,7 @@ export function SessionForm({sessionId}: ViewProps) {
           />
         )}
       />
-      <Controller
-        name="game"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <Autocomplete 
-            {...field}
-            label="Game"
-            data-testid="select-game"
-            required
-            data={games.map(game => game.name)}
-          />
-        )}
-      />
+      <GameAutocomplete label="Game" onSelect={handleGameSelect} defaultGame={gameName} />
       <Divider mt="lg" mb="lg" />
       <Group gap="0" mb="lg">
         <Title order={2} size="xs" flex={1}>{playerCount} Players</Title>
@@ -121,7 +120,7 @@ export function SessionForm({sessionId}: ViewProps) {
           onClick={handleAddPlayerClick}
           leftSection={<IconPlus size="1rem" stroke={1.5} />}
         >
-          Add player
+          Player count
         </Button>
       </Group>
       {new Array(playerCount).fill('').map((player, index) => (

@@ -3,12 +3,10 @@
 import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Autocomplete, Button, Input, TextInput, Title } from "@mantine/core"
+import { Button, TextInput, Title } from "@mantine/core"
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { STATES, useGameSearch } from "./useGameSearch";
-import { Game } from "@/state/types";
 import { BGG_GAME } from "./bggSafeAttrs";
+import { GameAutocomplete } from "./GameAutocomplete";
 
 type ViewProps = {
   gameId?: string,
@@ -40,14 +38,6 @@ export function GameForm({gameId}: ViewProps) {
     setValue('yearPublished', attrs.yearPublished)
   }
 
-  const {
-    queryTerm,
-    queryState,
-    gamesList,
-    handleQueryChange,
-    handleItemSelection,
-   } = useGameSearch(handleLoadAttrs)
-
   const handleLocalSubmit = (data: FormInputs) => {
     try {
       const result = saveGame(data)
@@ -62,19 +52,7 @@ export function GameForm({gameId}: ViewProps) {
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
       <section>
         <Title order={2}>Name</Title>
-        <Autocomplete 
-          label="Lookup on Board Game Geek"
-          data={gamesList.map(game => ({
-            label: `${game.name} (${game.yearPublished})`, 
-            value: `${game.bggId}`,
-          }))}
-          limit={10}
-          value={queryTerm}
-          onChange={handleQueryChange}
-          disabled={queryState === STATES.ATTR}
-          comboboxProps={{onOptionSubmit: handleItemSelection}}
-        />
-        {queryState}
+        <GameAutocomplete onSelect={handleLoadAttrs} />
       </section>
       <section>
         <Title order={2}>BGG Attributes</Title>

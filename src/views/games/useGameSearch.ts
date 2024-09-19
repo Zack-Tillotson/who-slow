@@ -3,13 +3,6 @@
 import { useState, useEffect, useDebugValue } from "react";
 import bggNameSearch from './bggNameSearch'
 import bggGameAttrs, { BGG_GAME } from "./bggSafeAttrs";
-import { Game } from "@/state/types";
-
-interface BggGame {
-  name: string,
-  yearPublished: number,
-  bggId: number,
-}
 
 export const STATES = {
   PRE: 'PRE',
@@ -24,11 +17,15 @@ const DEBOUNCE_TIME = 1000
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const cancel = {fn: () => {}}
 
-export function useGameSearch(attrsCallback: (game: BGG_GAME) => void) {
+export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQuery: string) {
   
   const [queryState, updateQueryState] = useState(STATES.PRE)
-  const [queryTerm, updateQueryTerm] = useState('')
-  const [gamesList, updateGamesList] = useState<BggGame[]>([])
+  const [queryTerm, updateQueryTerm] = useState(initialQuery ?? '')
+  const [gamesList, updateGamesList] = useState<Partial<BGG_GAME>[]>([])
+
+  useEffect(() => {
+    updateQueryTerm(initialQuery)
+  }, [initialQuery])
 
   useEffect(() => {
     if(!queryTerm) {
