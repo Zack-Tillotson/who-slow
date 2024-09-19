@@ -71,9 +71,7 @@ export default function (get: () => DataState, set: (state: Partial<DataState>) 
 
       const players = get().getPlayers()
 
-      const game = get().getOrCreateGameByName(formData.game)
-
-      session.game = game.bggId
+      session.game = Number(formData.game)
       session.campaign = formData.campaign
       session.sessionPlayers = formData.players.map(({player, color}, index) => {
         let foundPlayer = players.find(({name}) => name == player)
