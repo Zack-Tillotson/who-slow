@@ -14,8 +14,7 @@ export const STATES = {
 
 const DEBOUNCE_TIME = 1000
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const cancel = {fn: () => {}}
+const cancel = {fn: () => {console.log('cancel')}}
 
 export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQuery: string) {
   
