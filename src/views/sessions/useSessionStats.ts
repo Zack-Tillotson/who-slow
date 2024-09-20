@@ -1,3 +1,4 @@
+import { useDataState } from "@/state"
 import { Player, Session, SessionPlayer } from "@/state/types"
 
 export type Turn = {
@@ -15,6 +16,9 @@ export type TurnPlayer = {
 
 export function useSessionStats(session: Session, fullPlayers: Player[]) {
   const {events} = session
+
+  const {getGame} = useDataState()
+  const game = getGame(session.game)
 
   const turns = events.map((event, index) => {
     if(index - 1 < 0) return null
@@ -46,8 +50,12 @@ export function useSessionStats(session: Session, fullPlayers: Player[]) {
   const slowestPlayer = [...playersWithTurns].sort((a, b) => b.time - a.time)[0] as TurnPlayer
 
   return {
-    time: turns.reduce((time, turn) => time + turn.time, 0),
     players: playersWithTurns,
+    game: {
+      ...game,
+      time: turns.reduce((time, turn) => time + turn.time, 0),
+      rounds: playersWithTurns.reduce((max, player) => Math.max(max, player.turns.length), 0),
+    },
     highlights: {
       shortestTurn,
       longestTurn,
