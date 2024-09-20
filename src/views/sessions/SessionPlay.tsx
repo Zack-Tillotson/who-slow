@@ -47,8 +47,6 @@ export function SessionPlay({sessionId}: ViewProps) {
   const {events, sessionPlayers} = session
   const players = getPlayers(sessionPlayers)
 
-  
-
   return (
     <div className={styles.container}>
       <div>

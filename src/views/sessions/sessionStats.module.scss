@@ -1,13 +1,21 @@
-.playerColorContainer {
-  position: relative;
-  text-shadow: 0 0 3px white;
+.chart {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-gap: 4px;
+}
+
+.chartColorStat {
+  padding: 3px;
+}
+
+.chartColorBar {
+  width: 100%;
+}
+
+.chartTitle {
+  color: #333;
 }
 
 .playerColor {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: -1;
+  text-shadow: 0 0 3px #fff;
 }
