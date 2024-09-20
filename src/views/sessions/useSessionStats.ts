@@ -47,7 +47,7 @@ export function useSessionStats(session: Session, fullPlayers: Player[]) {
 
   const longestTurn = turns.sort((a, b) => b.time - a.time)[0] as Turn
   const shortestTurn = turns.sort((a, b) => a.time - b.time)[0] as Turn
-  const slowestPlayer = [...playersWithTurns].sort((a, b) => b.time - a.time)[0] as TurnPlayer
+  const slowestPlayer = [...playersWithTurns].sort((a, b) => b.time - a.time)[0]
 
   return {
     players: playersWithTurns,

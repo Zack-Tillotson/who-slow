@@ -150,7 +150,7 @@ export function SessionStats({sessionId}: ViewProps) {
             <div key={`${index}-bar`}>
               <div
                 className={styles.playerColor}
-                style={{width: `${player.time / stats.game.time * 100}%`, backgroundColor: player.color}}>
+                style={{width: `${player.time / stats.highlights.slowestPlayer.time * 100}%`, backgroundColor: player.color}}>
                   {'\u00A0'}
               </div>
             </div>
