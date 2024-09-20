@@ -8,15 +8,60 @@ import { useSessionStats } from "./useSessionStats";
 
 import styles from './sessionStats.module.scss'
 
-function nicePrintTime(ms: number) {
-  const minutes = Math.trunc(Number(ms / 1000 / 60))
+function getTimePieces(ms: number) {
+  const hours = Math.trunc(Number(ms / 1000 / 60 / 60))
+  const minutes = Math.trunc(Number((ms - hours * 1000 * 60 * 60) / 1000 / 60))
   const seconds = Math.trunc(Number((ms - minutes * 1000 * 60) / 1000))
-  return `${('' + minutes).padStart(2, '0')}:${('' + seconds).padStart(2, '0')}`
+  return {
+    hours,
+    minutes,
+    seconds,
+  }
+}
+
+function nicePrintTime(ms: number) {
+  const {hours, minutes, seconds} = getTimePieces(ms)
+  
+  if(hours) {
+    return `${hours}h ${('' + minutes).padStart(2, '0')}m`
+  }
+  if(minutes) {
+    return `${minutes}m ${('' + seconds).padStart(2, '0')}s`
+  }
+  return `${seconds}s`
+}
+
+function chartPrintTime(ms: number) {
+  const {hours, minutes, seconds} = getTimePieces(ms)
+
+  if(hours) {
+    return `${hours}:${('' + minutes).padStart(2, '0')}:${('' + seconds).padStart(2, '0')}`
+  }
+  return `${minutes}:${('' + seconds).padStart(2, '0')}`
 }
 
 
 type ViewProps = {
   sessionId: string,
+}
+
+interface HighlightStatType {
+  icon: string,
+  label: string,
+  value: string|number,
+  valueBg?: string,
+}
+
+function HighlightStat({icon, label, value, valueBg}: HighlightStatType) {
+  return (
+    <Stack ta="center" gap="0">
+      <Text size="24px">{icon}</Text>
+      <Title order={3} size="md" fw="normal">{label}</Title>
+      <Text fw={600} style={{background: valueBg || ''}} className={styles.playerColor} >
+        {value}
+      </Text>
+    </Stack>
+  )
 }
 
 export function SessionStats({sessionId}: ViewProps) {
@@ -38,50 +83,139 @@ export function SessionStats({sessionId}: ViewProps) {
   
   return (
     <div>
-      <Title order={1} size="lg" ta="center" p="md">
-        {stats.highlights.slowestPlayer.player.name} Slow!
-      </Title>
+      <Stack gap="0">
+        <Title
+          order={1}
+          size="lg"
+          p="0"
+          m="0"
+        >
+          Who slow?
+        </Title>
+        <Text
+          className={styles.playerColorContainer + ' ' + styles.playerColor}
+          size="xl"
+          p="md"
+          mb="1px"
+          fw={600}
+          style={{backgroundColor: stats.highlights.slowestPlayer.color}}
+        >
+          {stats.highlights.slowestPlayer.player.name} slow!
+        </Text>
+      </Stack>
 
-      <Divider />
+      <Divider mt="md" mb="md" />
       
-      <Title order={2} size="md">Total game length: {nicePrintTime(stats.time)}</Title>
-      <div>
-        {stats.players.map((player, index) => (
-          <Text key={index} className={styles.playerColorContainer} size="md" pl="xs" mb="1px">
-            <div className={styles.playerColor} style={{width: `${player.time / stats.time * 100}%`, backgroundColor: player.color}} />
-            {player.player.name}: {nicePrintTime(player.time)}
-          </Text>
-        ))}
-      </div>
+      <Title order={2} size="md" mb="md">Game statistics</Title>
+      
       <Group grow>
-        <Stack ta="center">
-          <Title order={3}>Slowest Turn</Title>
-          <Text size="48px">🐢</Text>
-          <Text bg={`${stats.highlights.longestTurn.sessionPlayer?.color}`}>
-            {stats.highlights.longestTurn.player.name}: {nicePrintTime(stats.highlights.longestTurn.time)}
-          </Text>
-        </Stack>
-        <Stack ta="center">
-          <Title order={3}>Fastest Turn</Title>
-          <Text size="48px">⚡</Text>
-          <Text bg={stats.highlights.shortestTurn.sessionPlayer?.color}>
-            {stats.highlights.shortestTurn.player.name}: {nicePrintTime(stats.highlights.shortestTurn.time)}
-          </Text>
-        </Stack>
+        <HighlightStat
+          icon="🕑"
+          label="Time"
+          value={nicePrintTime(stats.game.time)} 
+        />
+        <HighlightStat
+          icon="⟳"
+          label="Rounds"
+          value={stats.game.rounds}
+        />
+      </Group>
+      <Group grow mt="md">
+        <HighlightStat
+          icon="🐢"
+          label="Slowest turn"
+          value={`${stats.highlights.longestTurn.player.name}: ${nicePrintTime(stats.highlights.longestTurn.time)}`}
+          valueBg={stats.highlights.longestTurn.sessionPlayer?.color}
+        />
+        <HighlightStat
+          icon="⚡"
+          label="Fastest turn"
+          value={`${stats.highlights.shortestTurn.player.name}: ${nicePrintTime(stats.highlights.shortestTurn.time)}`}
+          valueBg={stats.highlights.shortestTurn.sessionPlayer?.color}
+        />
       </Group>
 
-      <Divider />
+      <Title order={2} size="md" mt="md" mb="md">Time per player</Title>
+      <div className={styles.chart}>
+        {stats.players.map((player, index) => (
+          [
+            <div key={`${index}-name`} className={styles.chartColorStat}>
+              {player.player.name}
+            </div>
+          ,
+            <div key={`${index}-time`} className={styles.chartColorStat}>
+              {chartPrintTime(player.time)}
+            </div>
+          ,
+            <div key={`${index}-bar`}>
+              <div
+                className={styles.playerColor}
+                style={{width: `${player.time / stats.game.time * 100}%`, backgroundColor: player.color}}>
+                  {'\u00A0'}
+              </div>
+            </div>
+          ]
+        )).reduce((all, subset) => ([...all, ...subset]), [])}
+
+      </div>
+
+      {stats.game && (
+        <div>
+          <Title order={3} size="lg">{stats.game.name} ({stats.game.yearPublished})</Title>
+          <img src={stats.game.image} alt={`Box art for ${stats.game.name}`} />
+        </div>
+      )}
+
+      <Divider mt="md" mb="md" />
       
-      {stats.players.map((player, playerIndex) => (
+      <Title order={2} size="md" mb="md">Player statistics</Title>
+      {stats.players.map(player => (
         <div key={player.player.id}>
-          <Title order={2} size="md">{player.player.name}: {nicePrintTime(player.time)}</Title>
-          <div>
+          <Title order={3} size="md" mt="lg">{player.player.name}</Title>
+          <div className={styles.chart}>
+            <Text
+              className={styles.chartTitle}
+              size="sm"
+            >
+              Turn
+            </Text>
+            <Text
+              className={styles.chartTitle}
+              size="sm"
+            >
+              Time
+            </Text>
+            <Text></Text>
             {player.turns.map((turn, index) => (
-              <Text key={index} className={styles.playerColorContainer} size="md" pl="xs" mb="1px">
-                <div className={styles.playerColor}style={{width: `${turn.time / stats.highlights.longestTurn.time * 100}%`, backgroundColor: player.color}} />
-                Turn {turn.round}: {nicePrintTime(turn.time)}
-              </Text>
-            ))}
+              [
+                <Text
+                  key={`${index}-round`}
+                  className={styles.playerColorContainer}
+                  size="sm"
+                >
+                  {turn.round}
+                </Text>
+              ,
+                <Text
+                  key={`${index}-value`}
+                  size="sm"
+                >
+                  {chartPrintTime(turn.time)}
+                </Text>
+              ,
+                <div key={`${index}-bar`}>
+                  <div
+                    className={styles.playerColor}
+                    style={{
+                      width: `${turn.time / stats.highlights.longestTurn.time * 100}%`, 
+                      backgroundColor: player.color,
+                    }}
+                  >
+                    {'\u00A0'}
+                  </div>
+                </div>
+              ]
+            )).reduce((all, subset) => ([...all, ...subset]), [])}
           </div>
         </div>
       ))}
