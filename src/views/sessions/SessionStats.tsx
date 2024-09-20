@@ -86,6 +86,7 @@ export function SessionStats({sessionId}: ViewProps) {
       <Stack gap="0">
         <Title
           order={1}
+          className={styles.title}
           size="lg"
           p="0"
           m="0"
@@ -106,7 +107,7 @@ export function SessionStats({sessionId}: ViewProps) {
 
       <Divider mt="md" mb="md" />
       
-      <Title order={2} size="md" mb="md">Game statistics</Title>
+      <Title className={styles.title} order={2} size="md" mb="md">Game statistics</Title>
       
       <Group grow>
         <HighlightStat
@@ -135,7 +136,7 @@ export function SessionStats({sessionId}: ViewProps) {
         />
       </Group>
 
-      <Title order={2} size="md" mt="md" mb="md">Time per player</Title>
+      <Title className={styles.title} order={2} size="md" mt="md" mb="md">Time per player</Title>
       <div className={styles.chart}>
         {stats.players.map((player, index) => (
           [
@@ -175,23 +176,26 @@ export function SessionStats({sessionId}: ViewProps) {
           <div className={styles.chart}>
             <Text
               className={styles.chartTitle}
-              size="sm"
+              size="xs"
+              ta="center"
             >
               Turn
             </Text>
             <Text
               className={styles.chartTitle}
-              size="sm"
+              size="xs"
+              ta="center"
             >
               Time
             </Text>
-            <Text></Text>
+            <Text>{/* empty */}</Text>
             {player.turns.map((turn, index) => (
               [
                 <Text
                   key={`${index}-round`}
                   className={styles.playerColorContainer}
                   size="sm"
+                  ta="center"
                 >
                   {turn.round}
                 </Text>
@@ -199,6 +203,7 @@ export function SessionStats({sessionId}: ViewProps) {
                 <Text
                   key={`${index}-value`}
                   size="sm"
+                  ta="center"
                 >
                   {chartPrintTime(turn.time)}
                 </Text>
@@ -207,6 +212,7 @@ export function SessionStats({sessionId}: ViewProps) {
                   <div
                     className={styles.playerColor}
                     style={{
+                      fontSize: '12px',
                       width: `${turn.time / stats.highlights.longestTurn.time * 100}%`, 
                       backgroundColor: player.color,
                     }}
