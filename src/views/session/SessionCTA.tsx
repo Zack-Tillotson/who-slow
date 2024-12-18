@@ -6,9 +6,6 @@ import { Button, Card, NavLink, Stack, Title } from "@mantine/core";
 import Link from "next/link";
 
 export function SessionCTA() {
-
-  const {getCampaigns, getGames, } = useDataState()
-
   return (
     <Stack>
       <Title order={2} size="md" mt="lg">Setup a campaign</Title>

@@ -1,18 +1,13 @@
 'use client'
 
 import { useDataState } from "@/state";
+import { Campaign } from "@/state/types";
 import { Button, Card, Divider, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 
-export function Campaigns() {
+export function Campaigns({campaigns}: {campaigns: Campaign[]}) {
 
-  const {
-    getCampaigns,
-  } = useDataState()
-
-  const campaigns = getCampaigns()
-  
   return (
     <>
       <Group>
