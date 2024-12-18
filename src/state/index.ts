@@ -2,6 +2,7 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 import { 
   Campaign,
@@ -50,3 +51,7 @@ export const useDataState = create<DataState, [["zustand/persist", { campaigns: 
     }
   )
 )
+
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('Data state', useDataState);
+}
