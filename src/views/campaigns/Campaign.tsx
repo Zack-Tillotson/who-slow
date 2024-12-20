@@ -5,27 +5,21 @@ import { Box, Button, Divider, Group, Pill, Stack, Text, Title } from "@mantine/
 import Link from "next/link";
 import { Session } from "../sessions";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
+import { Campaign as CampaignType, Session as SessionType} from "@/state/types";
 
 type CampaignViewProps = {
   campaignId: string,
+  campaign: CampaignType | null,
+  sessions: SessionType[],
 }
 
-export function Campaign({campaignId}: CampaignViewProps) {
-
-  const {
-    getCampaign,
-    getCampaignSessions,
-  } = useDataState()
-  const campaign = getCampaign(campaignId)
+export function Campaign({campaignId, campaign, sessions}: CampaignViewProps) {
 
   if(!campaign) {
     return (
       <h1>Error: campaign not found</h1>
     )
   }
-
-  const {id, name} = campaign
-  const sessions = [...getCampaignSessions(id)].reverse()
     
   return (
     <>
@@ -58,7 +52,7 @@ export function Campaign({campaignId}: CampaignViewProps) {
       {!sessions.length && (
         <Text>No sessions yet</Text>
       )}
-      {sessions.map((session) => (
+      {[...sessions].reverse().map((session) => (
         <Session key={session.id} sessionId={`${session.id}`} />
       ))}
     </>

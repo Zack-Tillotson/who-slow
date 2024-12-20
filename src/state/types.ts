@@ -6,18 +6,18 @@ export type Game = {
 }
 
 export type Player = {
-  id: number,
+  id: string,
   name: string,
 }
 
 export type Campaign = {
-  id: number,
+  id: string,
   name: string,
   sessions?: Session[],
 }
 
 export type SessionPlayer = {
-  id: number,
+  id: string,
   player: Player["id"],
   order: number,
   color: string,
@@ -30,7 +30,7 @@ export type SessionEvent = {
 }
 
 export type Session = {
-  id: number,
+  id: string,
   date: number,
   campaign: Campaign["id"],
   game: Game["bggId"],
@@ -39,7 +39,7 @@ export type Session = {
 }
 
 export type SessionForm = {
-  id: number,
+  id: string,
   campaign: Campaign["id"],
   game: Game["bggId"],
   players: {
@@ -62,7 +62,7 @@ export type DataState = {
   getCampaignSessions: (campaignId: number) => Session[],
   getCampaigns: () => Campaign[],
   saveCampaign: (campaign: Campaign) => Campaign,
-  getCampaignForm: (stringId?: string) => Campaign,
+  getCampaignForm: (campaign?: Campaign) => Campaign,
 
   getGame: (stringId: string|number) => Game | undefined,
   getGames: () => Game[],
@@ -73,7 +73,7 @@ export type DataState = {
   getPlayer: (stringId: string|number) => Player | undefined,
   getPlayers: (targetPlayers?: SessionPlayer[]) => Player[],
   savePlayer: (player: Player) => Player,
-  getPlayerForm: (stringId?: string) => Player,
+  getPlayerForm: (player?: Player) => Player,
 
   getSession: (stringId: string|number) => Session | undefined,
   getSessions: () => Session[],

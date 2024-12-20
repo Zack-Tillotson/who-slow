@@ -42,16 +42,13 @@ export default function campaignState(get: () => DataState, set: (state: Partial
       return campaign
     },
 
-    getCampaignForm(stringId?: string) {
-      if(stringId) {
-        const campaign = get().getCampaign(stringId)
-        if(campaign) {
-          return campaign
-        }
+    getCampaignForm(campaign?: Campaign) {
+      if(campaign) {
+        return {...campaign}
       }
 
       return {
-        id: -1,
+        id: '',
         name: '',
       }
     },

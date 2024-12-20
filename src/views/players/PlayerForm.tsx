@@ -3,42 +3,57 @@
 import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, TextInput } from "@mantine/core"
+import { Button, Loader, TextInput, Title } from "@mantine/core"
 import { useRouter } from "next/navigation";
+import { Player } from "@/state/types";
+import { useState } from "react";
+import { library } from "@/state/remote";
 
 type ViewProps = {
   playerId?: string,
+  player?: Player,
 }
 
 interface FormInputs {
-  id: number
+  id: string
   name: string
 }
 
-export function PlayerForm({playerId}: ViewProps) {
+const enum formStates {
+  CLEAN,
+  PENDING,
+  SUCCESS,
+  ERROR,
+}
+
+export function PlayerForm({playerId, player}: ViewProps) {
   
   const router = useRouter()
   const {
     getPlayerForm,
-    savePlayer,
   } = useDataState()
-  const player = getPlayerForm(playerId)
+  const formPlayer = getPlayerForm(player)
   
   const { handleSubmit, control } = useForm<FormInputs>({
-    defaultValues: player,
+    defaultValues: formPlayer,
   })
-  const handleLocalSubmit = (data: FormInputs) => {
+  
+  const [formState, updateFormState] = useState<formStates>(formStates.CLEAN)
+  const handleLocalSubmit = async (data: FormInputs) => {
+    updateFormState(formStates.PENDING)
     try {
-      const result = savePlayer({...data, id: player.id})
+      const result = await library().savePlayer({...data, id: formPlayer.id})
       router.push(`/player/${result.id}/`)
-    } catch(e) {
-      console.log(e)
-      return
+      updateFormState(formStates.SUCCESS)
+    } catch (e) {
+      console.log('WARN', 'form submission failed', e)
+      updateFormState(formStates.ERROR)
     }
   }
 
   return (
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
+      <Title order={1}>{!!player ? 'Edit' : 'New'} Player</Title>
       {!!playerId && (
         <Controller
           name="id"
@@ -54,7 +69,9 @@ export function PlayerForm({playerId}: ViewProps) {
         rules={{ required: true }}
         render={({ field }) => <TextInput {...field} label="Name" />}
       />      
-      <Button type="submit" mt="lg">Submit</Button>
-    </form>
+      <Button type="submit" disabled={formState === formStates.PENDING}>
+        Submit
+        {formState === formStates.PENDING && (<Loader />)}
+      </Button>    </form>
   )
 }

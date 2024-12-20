@@ -50,16 +50,13 @@ export default function playerState(get: () => DataState, set: (state: Partial<D
       return player
     },
 
-    getPlayerForm(stringId?: string) {
-      if(stringId) {
-        const player = get().getPlayer(stringId)
-        if(player) {
-          return player
-        }
+    getPlayerForm(player?: Player) {
+      if(player) {
+        return {...player}
       }
 
       return {
-        id: -1,
+        id: '',
         name: '',
       }
     },

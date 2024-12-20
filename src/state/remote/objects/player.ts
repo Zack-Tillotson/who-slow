@@ -1,8 +1,8 @@
 import Ajv, {JSONSchemaType} from "ajv"
-import {Campaign} from '../../types'
+import {Player} from '../../types'
 
 const ajv = new Ajv()
-const schema: JSONSchemaType<Campaign> = {
+const schema: JSONSchemaType<Player> = {
   type: "object",
   properties: {
     id: {type: "string"},
@@ -14,7 +14,7 @@ const schema: JSONSchemaType<Campaign> = {
 
 const validator = ajv.compile(schema)
 
-export function buildCampaign(id?: string, data: any = {}) {
+export function buildPlayer(id?: string, data: any = {}) {
   const {name} = data
   const builtObject = {id, name}
   const isValid = validator(builtObject)
