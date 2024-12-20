@@ -1,19 +1,16 @@
 'use client'
 
 import { useDataState } from "@/state";
-import { Button, Title } from "@mantine/core";
+import { Button, Text, Title } from "@mantine/core";
+import { Player as PlayerType } from "@/state/types";
 import Link from "next/link";
 
 type ViewProps = {
   playerId: string,
+  player: PlayerType,
 }
 
-export function Player({playerId}: ViewProps) {
-
-  const {
-    getPlayer,
-  } = useDataState()
-  const player = getPlayer(playerId)
+export function Player({playerId, player}: ViewProps) {
 
   if(!player) {
     return (
@@ -25,7 +22,8 @@ export function Player({playerId}: ViewProps) {
 
   return (
     <>
-      <Title order={1}>Player: {name}</Title>
+      <Title order={1}>Player</Title>
+      <Text>Name: {name}</Text>
       <Button component={Link} href={`edit/`}>Edit</Button>
     </>
   )

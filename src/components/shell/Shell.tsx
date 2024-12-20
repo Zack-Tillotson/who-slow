@@ -11,6 +11,7 @@ import { NavLinks } from '../navLinks';
 
 import logo from '@/assets/headline-250x50.png'
 import styles from './shell.module.scss'
+import useClientConfig from '@/state/firebase/useClientConfig';
 
 type ShellType = Readonly<{
   children: React.ReactNode;
@@ -28,6 +29,7 @@ export function Shell({children}: ShellType) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  useClientConfig()
 
   const isHydrated = !!(useDataState?.persist?.hasHydrated())
 

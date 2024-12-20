@@ -1,5 +1,5 @@
 import { NavLink } from '@mantine/core'
-import {IconMapCog, IconUsers, IconDice5, IconHome, IconChevronRight} from '@tabler/icons-react'
+import {IconMapCog, IconUsers, IconDice5, IconHome, IconChevronRight, IconMan} from '@tabler/icons-react'
 
 interface NavLinksProps {
   withHome?: boolean,
@@ -25,6 +25,11 @@ const navLinks = [{
   title: 'Games', 
   desc: 'Configure the games you play. Link with BoardGameGeek to get detailed info.', 
   IconImage: IconDice5,
+}, {
+  href: '/profile/', 
+  title: 'Profile', 
+  desc: 'Manage your profile and user information.', 
+  IconImage: IconMan,
 }
 ]
 

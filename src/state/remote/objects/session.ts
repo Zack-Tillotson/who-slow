@@ -5,21 +5,26 @@ const ajv = new Ajv()
 const schema: JSONSchemaType<Session> = {
   type: "object",
   properties: {
-    id: {type: "number"},
-    name: {type: "string"},
-    sessions: {type: "object", nullable: true},
+    id: {type: "string"},
+    campaign: {type: "string"},
+    date: {type: "number"},
+    game: {type: "string"},
+    sessionPlayers: {type: "array"},
+    events: {type: "array"},
   },
-  required: ["bggId", "name"],
+  required: ["id", "campaign", "date", "game", "sessionPlayers"],
   additionalProperties: false,
 }
 
 const validator = ajv.compile(schema)
 
-export function buildCampaign(data: any) {
-  const isValid = validator(data)
+export function buildSession(id?: string, data: any = {}) {
+  const {campaign, date, game, sessionPlayers, events} = data
+  const builtObject = {id, campaign, date, game, sessionPlayers, events}
+  const isValid = validator(builtObject)
   if(!isValid) {
-    console.log('Validation error', 'game', validator.errors)
+    console.log('Validation error', 'session', validator.errors)
     throw new Error('Validation error')
   }
-  return data
+  return builtObject
 }
