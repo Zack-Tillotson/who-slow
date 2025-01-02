@@ -43,16 +43,13 @@ export default function gameState(get: () => DataState, set: (state: Partial<Dat
       return game
     },
 
-    getGameForm(stringId?: string) {
-      if(stringId) {
-        const game = get().getGame(stringId)
-        if(game) {
-          return game
-        }
+    getGameForm(game?: Game) {
+      if(game) {
+        return {...game}
       }
 
       return {
-        bggId: -1,
+        id: '',
         name: '',
         yearPublished: 0,
         image: '',

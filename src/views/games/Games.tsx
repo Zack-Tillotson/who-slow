@@ -1,18 +1,17 @@
 'use client'
 
 import { useDataState } from "@/state";
+import { Game } from "@/state/types";
 import { Button, Group, Stack, Text, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 
-export function Games() {
+export type GamesParams = {
+  games?: Game[],
+}
 
-  const {
-    getGames,
-  } = useDataState()
+export function Games({games}: GamesParams) {
 
-  const games = getGames()
-  
   return (
     <>
       <Group>
@@ -26,15 +25,15 @@ export function Games() {
         </Button>
       </Group>
       
-      {games.map(({bggId, name}) => (
-        <Group key={bggId} p="sm">
+      {games?.map(({id, name}) => (
+        <Group key={id} p="sm">
           <Stack flex={1} gap="0">
             <Text size="xs">Game</Text>
             <Title order={2} size="lg">{name}</Title>
           </Stack>
           <Button
             component={Link}
-            href={`/game/${bggId}/`}
+            href={`/game/${id}/`}
             variant="outline"
           >
             View

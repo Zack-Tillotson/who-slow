@@ -1,5 +1,5 @@
 export type Game = {
-  bggId: number,
+  id: string,
   name: string,
   yearPublished?: number,
   image?: string,
@@ -33,7 +33,7 @@ export type Session = {
   id: string,
   date: number,
   campaign: Campaign["id"],
-  game: Game["bggId"],
+  game: Game["id"],
   sessionPlayers: SessionPlayer[],
   events: SessionEvent[],
 }
@@ -41,7 +41,7 @@ export type Session = {
 export type SessionForm = {
   id: string,
   campaign: Campaign["id"],
-  game: Game["bggId"],
+  game: Game["id"],
   players: {
     player: Player["name"],
     color: SessionPlayer["color"],
@@ -68,7 +68,7 @@ export type DataState = {
   getGames: () => Game[],
   saveGame: (game: Game) => Game,
   removeGame: (stringId: string|number) => boolean,
-  getGameForm: (stringId?: string) => Game,
+  getGameForm: (game?: Game) => Game,
 
   getPlayer: (stringId: string|number) => Player | undefined,
   getPlayers: (targetPlayers?: SessionPlayer[]) => Player[],
