@@ -1,7 +1,7 @@
 'use client'
 
-import auth from "@/state/auth";
 import firebase from "@/state/firebase";
+import { signInAnonymously } from "firebase/auth";
 import { Button, Stack, Title } from "@mantine/core";
 import { useEffect } from "react";
 
@@ -10,7 +10,7 @@ export function AuthCTA() {
     (async () => {
       const auth = firebase().getAuth()
       console.log('auth', auth.currentUser)
-      await auth.authStateReady
+      await auth.authStateReady()
       console.log('auth', auth.currentUser)  
     })()
   }, [])
@@ -18,7 +18,11 @@ export function AuthCTA() {
   const handleClick = (type: string) => () => {
     switch(type) {
       case 'anonymous': {
-        auth.loginAnonymous()
+        (async () => {
+          const auth = firebase().getAuth()
+          await auth.authStateReady()
+          signInAnonymously(auth)
+        })
       }
       return
       default: {

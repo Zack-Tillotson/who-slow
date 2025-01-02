@@ -1,3 +1,6 @@
+import getAuthState from "@/state/getAuthState"
+import { library } from "@/state/remote"
+import { AuthCTA } from "@/views/AuthCTA"
 import { GameForm } from "@/views/games"
 
 type PageProps = {
@@ -6,8 +9,14 @@ type PageProps = {
   },
 }
 
-export default function GamePage({params: {gameId}}: PageProps) {
+export default async function GamePage({params: {gameId}}: PageProps) {
+  const auth = await getAuthState()
+  if(!auth.currentUser) {
+    return <AuthCTA />
+  }
+
+  const game = await library().getGame(gameId)
   return (
-    <GameForm gameId={gameId} />
+    <GameForm gameId={gameId} game={game} />
   )
 }

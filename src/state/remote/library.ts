@@ -5,6 +5,7 @@ import { Campaign, Game, Player, Session } from "../types"
 import { buildCampaign } from "./objects/campaign"
 import { buildSession } from "./objects/session"
 import { buildPlayer } from "./objects/player"
+import { buildGame } from './objects/game'
 
 export async function getUid(firebase: FirebaseConnection) {
   await firebase.getAuth().authStateReady()
@@ -83,6 +84,40 @@ export async function savePlayer(firebase: FirebaseConnection, player: Player): 
   return buildPlayer(docRef.id, dbDoc)
 }
 
+
+export async function getGames(firebase: FirebaseConnection): Promise<Game[]> {
+  const q = query(collection(firebase.getDB(), 'games'))
+  const queryDocs = await getDocs(q)
+
+  const list: Game[] = []
+  queryDocs.forEach(doc => list.push(buildGame(doc.id, doc.data())))
+  
+  return list
+}
+
+export async function getGame(firebase: FirebaseConnection, id: string): Promise<Game> {  
+  const q = doc(firebase.getDB(), 'games', id)
+  const qDoc = await getDoc(q)
+
+  return buildGame(id, qDoc.data())
+}
+
+export async function saveGame(firebase: FirebaseConnection, game: Game): Promise<Game> {
+
+  const {id, ...attrs} = game
+  const dbDoc = {...attrs, owner: await getUid(firebase)}
+
+  let docRef;
+  if(id) {
+    docRef = doc(firebase.getDB(), 'games', id)
+  } else {
+    docRef = doc(collection(firebase.getDB(), 'games'))
+  }
+
+  await setDoc(docRef, dbDoc)
+  return buildGame(docRef.id, dbDoc)
+}
+
 export async function getCampaignSessions(firebase: FirebaseConnection, campaignId: string) {
   const uid = await getUid(firebase)
 
@@ -107,6 +142,10 @@ export function libraryFactory(firebase: FirebaseConnection) {
     getPlayers: () => getPlayers(firebase),
     getPlayer: (id: string) => getPlayer(firebase, id),
     savePlayer: (player: Player) => savePlayer(firebase, player),
+
+    getGames: () => getGames(firebase),
+    getGame: (id: string) => getGame(firebase, id),
+    saveGame: (game: Game) => saveGame(firebase, game),
     
     getCampaignSessions: (id: string) => getCampaignSessions(firebase, id),
   }

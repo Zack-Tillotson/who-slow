@@ -1,6 +1,5 @@
 'use client'
 
-import { useDataState } from "@/state";
 import { Player } from "@/state/types";
 import { Button, Group, Stack, Text, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";

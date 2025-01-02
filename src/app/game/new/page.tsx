@@ -1,6 +1,6 @@
 import { GameForm } from "@/views/games"
 
-export default function CampaignPage() {
+export default function GamePage() {
   return (
     <GameForm />
   )
