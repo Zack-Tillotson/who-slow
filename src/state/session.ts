@@ -3,6 +3,8 @@ import {
   SessionEvent,
   DataState,
   SessionForm,
+  Campaign,
+  Player,
 } from './types'
 
 export default function sessionState(get: () => DataState, set: (state: Partial<DataState>) => void) {
@@ -89,47 +91,28 @@ export default function sessionState(get: () => DataState, set: (state: Partial<
       return get().saveSession(session)
     },
 
-    getSessionForm(sessionId = '-1', campaignId = '-1'): SessionForm {
-      if(sessionId != '-1') {
-        const session = get().getSession(sessionId)
-        if(session) {
-          const players = get()
-            .getPlayers(session.sessionPlayers)
-            .map((player, index) => ({
-              player: player.name, 
+    getSessionForm(players: Player[], campaignId?: Campaign["id"], session?: Session): SessionForm {
+      if(session) {
+        const builtPlayers = session.sessionPlayers
+          .map((sessionPlayer, index) => {
+            const player = players.find(player => player.id == sessionPlayer.player)
+            return ({
+              player: player?.name ?? '', 
               color: session.sessionPlayers[index].color,
-            }))
-          return {
-            id: session.id,
-            campaign: session.campaign,
-            game: session.game,
-            players,
-          }
-        }
-      }
-
-      const sessions = get().getCampaignSessions(Number(campaignId))
-      if(sessions.length > 0) {
-        const priorSession = sessions[sessions.length - 1]
-        const {campaign, game, sessionPlayers} = priorSession
-        const players = get()
-          .getPlayers(sessionPlayers)
-          .map((player, index) => ({
-            player: player.name, 
-            color: sessionPlayers[index].color,
-          }))
+            })
+          })
         return {
-          id: -1,
-          campaign,
-          game,
-          players,
+          id: session.id,
+          campaign: session.campaign,
+          game: session.game,
+          players: builtPlayers,
         }
       }
 
       return {
-        id: -1,
-        campaign: Number(campaignId),
-        game: 0,
+        id: '',
+        campaign: campaignId || '',
+        game: '',
         players: [],
       }
     },

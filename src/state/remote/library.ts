@@ -1,6 +1,6 @@
-import { collection, getDocs, query, where, getDoc, doc, setDoc, and } from "firebase/firestore"
+import { collection, getDocs, query, where, getDoc, doc, setDoc, and, limit, serverTimestamp, updateDoc } from "firebase/firestore"
 import { FirebaseConnection } from "../firebase"
-import { Campaign, Game, Player, Session } from "../types"
+import { Campaign, FilledSession, Game, Player, Session, SessionConfig } from "../types"
 
 import { buildCampaign } from "./objects/campaign"
 import { buildSession } from "./objects/session"
@@ -9,7 +9,10 @@ import { buildGame } from './objects/game'
 
 export async function getUid(firebase: FirebaseConnection) {
   await firebase.getAuth().authStateReady()
-  const uid = firebase.getAuth().currentUser?.uid
+  const uid = firebase.getAuth().currentUser?.uid ?? ''
+  if(!uid) {
+    console.log('WARNING', 'getUid', 'user not authenticated')
+  }
   return uid
 }
 
@@ -17,7 +20,13 @@ export async function getCampaigns(firebase: FirebaseConnection): Promise<Campai
   const uid = await getUid(firebase)
 
   const q = query(collection(firebase.getDB(), 'campaigns'), where('owner', '==', uid))
-  const queryDocs = await getDocs(q)
+  let queryDocs
+  try {
+    queryDocs = await getDocs(q)
+  } catch(e) {
+    console.log("Error", "getCampaigns", e)
+    throw e
+  }
 
   const list: Campaign[] = []
   queryDocs.forEach(doc => list.push(buildCampaign(doc.id, doc.data())))
@@ -53,7 +62,13 @@ export async function getPlayers(firebase: FirebaseConnection): Promise<Player[]
   const uid = await getUid(firebase)
 
   const q = query(collection(firebase.getDB(), 'players'), where('owner', '==', uid))
-  const queryDocs = await getDocs(q)
+  let queryDocs
+  try {
+    queryDocs = await getDocs(q)
+  } catch(e) {
+    console.log("Error", "getPlayers", e)
+    throw e
+  }
 
   const list: Player[] = []
   queryDocs.forEach(doc => list.push(buildPlayer(doc.id, doc.data())))
@@ -86,8 +101,15 @@ export async function savePlayer(firebase: FirebaseConnection, player: Player): 
 
 
 export async function getGames(firebase: FirebaseConnection): Promise<Game[]> {
-  const q = query(collection(firebase.getDB(), 'games'))
-  const queryDocs = await getDocs(q)
+  const q = query(collection(firebase.getDB(), 'games'), limit(100))
+  
+  let queryDocs
+  try {
+    queryDocs = await getDocs(q)
+  } catch(e) {
+    console.log("Error", "getGames", e)
+    throw e
+  }
 
   const list: Game[] = []
   queryDocs.forEach(doc => list.push(buildGame(doc.id, doc.data())))
@@ -105,7 +127,7 @@ export async function getGame(firebase: FirebaseConnection, id: string): Promise
 export async function saveGame(firebase: FirebaseConnection, game: Game): Promise<Game> {
 
   const {id, ...attrs} = game
-  const dbDoc = {...attrs, owner: await getUid(firebase)}
+  const dbDoc = {...attrs}
 
   let docRef;
   if(id) {
@@ -130,7 +152,60 @@ export async function getCampaignSessions(firebase: FirebaseConnection, campaign
   const list: Session[] = []
   queryDocs.forEach(doc => list.push(buildSession(doc.id, doc.data())))
   
-  return list
+  const campaignSessions = []
+  for(let i = 0 ; i < list.length ; i++) {
+    campaignSessions.push(await getFilledSession(firebase, list[i].id))
+  } 
+  return campaignSessions
+}
+
+export async function getSession(firebase: FirebaseConnection, id: string): Promise<Session> {  
+  const q = doc(firebase.getDB(), 'sessions', id)
+  const qDoc = await getDoc(q)
+
+  return buildSession(id, qDoc.data())
+}
+
+export async function getFilledSession(firebase: FirebaseConnection, id: string): Promise<FilledSession> {  
+  const session = await getSession(firebase, id)
+  const game = await getGame(firebase, session.game)
+  const players = await getSessionPlayers(firebase, session)
+  return {
+    session,
+    game,
+    players,
+  }
+}
+
+export async function getSessionPlayers(firebase: FirebaseConnection, session: Session): Promise<Player[]> {  
+  const players = []
+  for(let i = 0; i < session.sessionPlayers.length; i++) {
+    players.push(await getPlayer(firebase, session.sessionPlayers[i].player))
+  }
+  return players
+}
+
+export async function saveSessionConfig(firebase: FirebaseConnection, config: SessionConfig) {
+
+  const {id, ...attrs} = config
+  const dbDoc = {
+    ...attrs, 
+    owner: await getUid(firebase),
+    events: [],
+  }
+
+  let docRef;
+  if(id) {
+    docRef = doc(firebase.getDB(), 'sessions', id)
+  } else {
+    docRef = doc(collection(firebase.getDB(), 'sessions'))
+  }
+
+  await setDoc(docRef, dbDoc)
+  await updateDoc(docRef, {date: serverTimestamp()})
+
+  const queryDoc = (await getDoc(docRef)).data()
+  return buildSession(docRef.id, queryDoc)
 }
 
 export function libraryFactory(firebase: FirebaseConnection) {
@@ -148,5 +223,10 @@ export function libraryFactory(firebase: FirebaseConnection) {
     saveGame: (game: Game) => saveGame(firebase, game),
     
     getCampaignSessions: (id: string) => getCampaignSessions(firebase, id),
+
+    getSession: (id: string) => getSession(firebase, id),
+    getFilledSession: (id: string) => getFilledSession(firebase, id),
+    getSessionPlayers: (session: Session) => getSessionPlayers(firebase, session),
+    saveSessionConfig: (session: SessionConfig) => saveSessionConfig(firebase, session)
   }
 }

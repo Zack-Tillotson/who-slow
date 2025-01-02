@@ -17,9 +17,7 @@ export type Campaign = {
 }
 
 export type SessionPlayer = {
-  id: string,
   player: Player["id"],
-  order: number,
   color: string,
 }
 
@@ -36,6 +34,14 @@ export type Session = {
   game: Game["id"],
   sessionPlayers: SessionPlayer[],
   events: SessionEvent[],
+}
+
+export type SessionConfig = Pick<Session, 'id' | 'campaign' | 'game' | 'sessionPlayers'>
+
+export type FilledSession = {
+  session: Session,
+  game: Game,
+  players: Player[],
 }
 
 export type SessionForm = {
