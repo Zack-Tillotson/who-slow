@@ -5,51 +5,51 @@ import { useForm, Controller } from "react-hook-form"
 
 import { Button, ColorInput, Group, Select, Stack, Divider, Title, Autocomplete } from "@mantine/core"
 import { useSearchParams, useRouter } from "next/navigation";
-import { SessionForm as SessionFormType } from "@/state/types";
+import { Campaign, Game, Player, SessionForm as SessionFormType } from "@/state/types";
 import { useState } from "react";
 import { IconChevronCompactDown, IconChevronCompactUp, IconPlus, IconX } from "@tabler/icons-react";
 import { BGG_GAME } from "../games/bggSafeAttrs";
 import { GameAutocomplete } from "../games/GameAutocomplete";
+import { library } from "@/state/remote";
 
 type ViewProps = {
   sessionId?: string,
   campaign?: string,
+  games: Game[],
+  players: Player[],
+  campaigns: Campaign[],
 }
 
-export function SessionForm({sessionId}: ViewProps) {
-  
+export function SessionForm({sessionId, games, players, campaigns}: ViewProps) {  
   const router = useRouter()
   const params = useSearchParams()
   const {
     getSessionForm,
-    saveSessionForm,
-    getCampaigns,
-    getGames,
-    saveGame,
-    getPlayers,
   } = useDataState()
 
-  const campaign = params.get('campaignId') || '-1'
+  const campaign = params.get('campaignId') || ''
   const session = getSessionForm(sessionId, campaign)
   
-  const campaigns = getCampaigns()
-  const games = getGames()
-  const players = getPlayers()
-
   const [playerCount, updatePlayerCount] = useState(session.players.length || 2)
 
-  const [gameName, updateGameName] = useState(games.find(({bggId}) => bggId === session.game)?.name ?? '')
+  const [gameName, updateGameName] = useState(games.find(({id}) => id === session.game)?.name ?? '')
 
   const { handleSubmit, control, setValue, getValues, formState: {isValid} } = useForm<SessionFormType>({
     defaultValues: session,
   })
-  const handleLocalSubmit = (data: SessionFormType) => {
+  const handleLocalSubmit = async (data: SessionFormType) => {
     try {
-      const result = saveSessionForm({
-        ...data,
-        players: data.players.slice(0, playerCount),
-        game: games.find(({name}) => name === gameName)?.bggId ?? 0,
-      })
+      const {id, players: formPlayers, campaign, game} = data
+      const builtSession = {
+        id,
+        campaign,
+        game,
+        sessionPlayers: formPlayers.slice(0, playerCount).map(player => {
+          const id = players.find(({name}) => name === player.player)?.id ?? ''
+          return {...player, player: id}
+        }),
+      }
+      const result = await library().saveSessionConfig(builtSession)
       router.push(`/session/${result.id}/`)
     } catch(e) {
       console.log(e)
@@ -58,7 +58,7 @@ export function SessionForm({sessionId}: ViewProps) {
   }
 
   const handleAddPlayerClick = () => {
-    updatePlayerCount(playerCount+1)
+    updatePlayerCount(playerCount + 1)
   }
 
   const handleRemovePlayer = (playerIndex: number) => () => {
@@ -79,7 +79,6 @@ export function SessionForm({sessionId}: ViewProps) {
   const setPlayerValues = (playerIndex: number, {player, color}: {player: string, color: string}) => {
     setValue(`players.${playerIndex}.player`, player)
     setValue(`players.${playerIndex}.color`, color)
-
   }
 
   const handleSwapPlayers = (aIndex: number, bIndex: number) => () => {
@@ -89,9 +88,10 @@ export function SessionForm({sessionId}: ViewProps) {
     setPlayerValues(aIndex, bValues)
   }
 
-  const handleGameSelect = (game: BGG_GAME) => {
-    saveGame(game)
-    setValue('game', game.bggId)
+  const handleGameSelect = async (bggGame: BGG_GAME) => {
+    const {bggId, ...gameAttrs} = bggGame
+    const game = await library().saveGame({id: `${bggId}`, ...gameAttrs})
+    setValue('game', game.id)
     updateGameName(game.name)
   }
 
@@ -108,11 +108,16 @@ export function SessionForm({sessionId}: ViewProps) {
             data-testid="select-campaign"
             required
             value={`${field.value}`}
-            data={campaigns.map(campaign => ({label: campaign.name, value: `${campaign.id}`}))}
+            data={campaigns.map(campaign => ({label: campaign.name, value: campaign.id}))}
           />
         )}
       />
-      <GameAutocomplete label="Game" onSelect={handleGameSelect} defaultGame={gameName} />
+      <Group>
+        <div>
+          Game selected: {getValues('game')} - {gameName}
+        </div>
+        <GameAutocomplete label="Game" onSelect={handleGameSelect} defaultGame={gameName} />
+      </Group>
       <Divider mt="lg" mb="lg" />
       <Group gap="0" mb="lg">
         <Title order={2} size="xs" flex={1}>{playerCount} Players</Title>

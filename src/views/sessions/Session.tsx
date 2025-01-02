@@ -1,22 +1,18 @@
 'use client'
 
 import { useDataState } from "@/state";
+import { Game, Player, FullSession } from "@/state/types";
 import { Button, Divider, Group, Paper, Pill, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
 
 type ViewProps = {
   sessionId: string,
+  session: FullSession,
+  game: Game,
+  players: Player[],
 }
 
-export function Session({sessionId}: ViewProps) {
-
-  const {
-    getSession,
-    getGame,
-    getPlayer,
-    getSessionStatusText,
-  } = useDataState()
-  const session = getSession(sessionId)
+export function Session({sessionId, session, game, players}: ViewProps) {
 
   if(!session) {
     return (
@@ -27,7 +23,7 @@ export function Session({sessionId}: ViewProps) {
     )
   }
 
-  const status = getSessionStatusText(session)
+  const status = 'status'//getSessionStatusText(session)
 
   return (
     <Paper withBorder shadow="md" p="sm" mt="lg">
@@ -44,11 +40,11 @@ export function Session({sessionId}: ViewProps) {
       </Stack>
       <Stack gap="0">
         <Text size="xs">Game</Text>
-        <Text size="xs" fw={700}>{getGame(session.game)?.name}</Text>
+        <Text size="xs" fw={700}>{game?.name}</Text>
       </Stack>
       <Stack gap="0">
         <Text size="xs">Players</Text>
-        <Text size="xs" fw={700}>{session.sessionPlayers.map(({player}) => (getPlayer(player)?.name ?? 'Player')).join(', ')}</Text>
+        <Text size="xs" fw={700}>{players.map((player) => player?.name ?? 'Player').join(', ')}</Text>
       </Stack>
       <Divider mt="sm" />
       <Group pt="md">

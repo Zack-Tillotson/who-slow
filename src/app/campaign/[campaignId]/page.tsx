@@ -21,9 +21,9 @@ export default async function CampaignPage({params: {campaignId}}: CampaignPageP
   }
 
   const campaign = await library().getCampaign(campaignId)
-  const sessions = await library().getCampaignSessions(campaignId)
+  const filledSessions = await library().getCampaignSessions(campaignId)
       
   return (
-    <Campaign campaignId={campaignId} campaign={campaign} sessions={sessions} />
+    <Campaign campaignId={campaignId} campaign={campaign} filledSessions={filledSessions} />
   )
 }

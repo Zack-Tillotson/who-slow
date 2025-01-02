@@ -1,26 +1,25 @@
 'use client'
 
-import { useDataState } from "@/state";
-import { Box, Button, Divider, Group, Pill, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Divider, Group, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import { Session } from "../sessions";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
-import { Campaign as CampaignType, Session as SessionType} from "@/state/types";
+import { Campaign as CampaignType, FilledSession, Session as SessionType} from "@/state/types";
 
 type CampaignViewProps = {
   campaignId: string,
   campaign: CampaignType | null,
-  sessions: SessionType[],
+  filledSessions: FilledSession[],
 }
 
-export function Campaign({campaignId, campaign, sessions}: CampaignViewProps) {
+export function Campaign({campaignId, campaign, filledSessions}: CampaignViewProps) {
 
   if(!campaign) {
     return (
       <h1>Error: campaign not found</h1>
     )
   }
-    
+
   return (
     <>
       <Group mb="lg">
@@ -49,12 +48,17 @@ export function Campaign({campaignId, campaign, sessions}: CampaignViewProps) {
         </Button>
       </Group>
       <Text size="sm">Create a session to record when you play a game, sessions keep track of which game you played and who the players are.</Text>
-      {!sessions.length && (
+      {!filledSessions.length && (
         <Text>No sessions yet</Text>
       )}
-      {[...sessions].reverse().map((session) => (
-        <Session key={session.id} sessionId={`${session.id}`} />
-      ))}
+      {[...filledSessions].reverse().map((session) => (
+        <Session
+          key={session.session.id}
+          sessionId={session.session.id}
+          {...session}
+        />
+        )
+      )}
     </>
   )
 }

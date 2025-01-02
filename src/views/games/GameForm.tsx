@@ -3,7 +3,7 @@
 import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, TextInput, Title } from "@mantine/core"
+import { Button, Text, TextInput, Title } from "@mantine/core"
 import { useRouter } from "next/navigation";
 import { BGG_GAME } from "./bggSafeAttrs";
 import { GameAutocomplete } from "./GameAutocomplete";
@@ -96,7 +96,9 @@ export function GameForm({gameId, game}: ViewProps) {
           render={({ field }) => <TextInput {...field} label="Image" />}
         />
       </section>
-      <Button type="submit" mt="lg" disabled={!getValues().id}>Submit</Button>
+      <Button type="submit" mt="lg" disabled={!(getValues().id)}>Submit</Button>
+      <Text>{formState === formStates.PENDING && 'Pending'}</Text>
+      <Text>{formState === formStates.ERROR && 'Error'}</Text>
     </form>
   )
 }
