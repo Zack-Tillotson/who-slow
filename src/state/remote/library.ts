@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, getDoc, doc, setDoc, and, limit, serverTimestamp, updateDoc } from "firebase/firestore"
+import { collection, getDocs, query, where, getDoc, doc, setDoc, and, limit, serverTimestamp, updateDoc, onSnapshot } from "firebase/firestore"
 import { FirebaseConnection } from "../firebase"
 import { Campaign, FilledSession, Game, Player, Session, SessionConfig } from "../types"
 
@@ -208,8 +208,23 @@ export async function saveSessionConfig(firebase: FirebaseConnection, config: Se
   return buildSession(docRef.id, queryDoc)
 }
 
+export function watchData<T>(firebase: FirebaseConnection, objectBuilder: (id?: string, data?: Object) => T, path: string, dataCallback: (data: T) => void) {
+  const docRef = doc(firebase.getDB(), path)
+  return onSnapshot(docRef, doc => {
+    const data = objectBuilder(doc.id, doc.data())
+    dataCallback(data)
+  })
+}
+
+export function setAttribute(firebase: FirebaseConnection, docPath: string, attrPath: string, value: any) {
+  const docRef = doc(firebase.getDB(), docPath)
+  return setDoc(docRef, {[attrPath]: value}, { merge: true })
+}
+
 export function libraryFactory(firebase: FirebaseConnection) {
   return {
+    ensureAuth: () => getUid(firebase),
+    
     getCampaigns: () => getCampaigns(firebase),
     getCampaign: (id: string) => getCampaign(firebase, id),
     saveCampaign: (campaign: Campaign) => saveCampaign(firebase, campaign),
@@ -227,6 +242,11 @@ export function libraryFactory(firebase: FirebaseConnection) {
     getSession: (id: string) => getSession(firebase, id),
     getFilledSession: (id: string) => getFilledSession(firebase, id),
     getSessionPlayers: (session: Session) => getSessionPlayers(firebase, session),
-    saveSessionConfig: (session: SessionConfig) => saveSessionConfig(firebase, session)
+    saveSessionConfig: (session: SessionConfig) => saveSessionConfig(firebase, session),
+
+    watchData: <T>(path: string, objectBuilder: () => T, dataCallback: (data: T) => void) => 
+      watchData<T>(firebase, objectBuilder, path, dataCallback),
+    setAttribute: (docPath: string, attrPath: string, value: any) => 
+      setAttribute(firebase, docPath, attrPath, value),
   }
 }
