@@ -19,19 +19,7 @@ type ShellType = Readonly<{
 
 export function Shell({children}: ShellType) {
   const [opened, { toggle }] = useDisclosure();
-  const [renderCount, forceRerender] = useState(0)
-  useEffect(() => {
-    const result = useDataState.persist.rehydrate()
-    if(!result) {
-      forceRerender(renderCount+1)
-    } else {
-      result.then(() => forceRerender(renderCount+1))
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
   useClientConfig()
-
-  const isHydrated = !!(useDataState?.persist?.hasHydrated())
 
   return (
     <AppShell
@@ -67,8 +55,7 @@ export function Shell({children}: ShellType) {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        {isHydrated && children}
-        {!isHydrated && 'Loading...'}
+        {children}
       </AppShell.Main>
     </AppShell>
   );

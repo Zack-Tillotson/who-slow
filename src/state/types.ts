@@ -55,40 +55,8 @@ export type SessionForm = {
 }
 
 export type DataState = {
-  games: Game[],
-  players: Player[],
-  campaigns: Campaign[],
-  sessions: Session[],
-
-  isInitialized: Boolean,
-  isLoading: Boolean,
-  isError: Boolean,
-
-  getCampaign: (stringId: string|number) => Campaign | undefined,
-  getCampaignSessions: (campaignId: number) => Session[],
-  getCampaigns: () => Campaign[],
-  saveCampaign: (campaign: Campaign) => Campaign,
   getCampaignForm: (campaign?: Campaign) => Campaign,
-
-  getGame: (stringId: string|number) => Game | undefined,
-  getGames: () => Game[],
-  saveGame: (game: Game) => Game,
-  removeGame: (stringId: string|number) => boolean,
   getGameForm: (game?: Game) => Game,
-
-  getPlayer: (stringId: string|number) => Player | undefined,
-  getPlayers: (targetPlayers?: SessionPlayer[]) => Player[],
-  savePlayer: (player: Player) => Player,
   getPlayerForm: (player?: Player) => Player,
-
-  getSession: (stringId: string|number) => Session | undefined,
-  getSessions: () => Session[],
-  saveSession: (session: Session) => Session,
   getSessionForm: (players: Player[], campaignId?: string, session?: Session) => SessionForm,
-  saveSessionForm: (data: SessionForm) => Session,
-  getSessionStatus: (session: Session) => string,
-  getSessionStatusText: (session: Session) => string,
-  setSessionEvents: (session: Session, events: SessionEvent[]) => Session,
-  pushSessionEvent: (session: Session, event: SessionEvent) => Session,
-  popSessionEvent: (session: Session, popCount?: number) => Session,
 }
