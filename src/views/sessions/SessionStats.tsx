@@ -7,6 +7,7 @@ import { useDataState } from "@/state";
 import { useSessionStats } from "./useSessionStats";
 
 import styles from './sessionStats.module.scss'
+import { Game, Player, Session } from "@/state/types";
 
 function getTimePieces(ms: number) {
   const hours = Math.trunc(Number(ms / 1000 / 60 / 60))
@@ -40,11 +41,6 @@ function chartPrintTime(ms: number) {
   return `${minutes}:${('' + seconds).padStart(2, '0')}`
 }
 
-
-type ViewProps = {
-  sessionId: string,
-}
-
 interface HighlightStatType {
   icon: string,
   label: string,
@@ -64,22 +60,22 @@ function HighlightStat({icon, label, value, valueBg}: HighlightStatType) {
   )
 }
 
-export function SessionStats({sessionId}: ViewProps) {
+type ViewProps = {
+  session?: Session,
+  players: Player[],
+  game: Game,
 
-  const {
-    getSession,
-    getPlayers,
-  } = useDataState()
-  const session = getSession(sessionId)
-  
+}
+
+export function SessionStats({session, players, game}: ViewProps) {
+
   if(!session) {
     throw new Error('session not found')
   }
   
   const {events, sessionPlayers} = session
-  const players = getPlayers(sessionPlayers)
   
-  const stats = useSessionStats(session, players)
+  const stats = useSessionStats(session, players, game)
   
   return (
     <div>
