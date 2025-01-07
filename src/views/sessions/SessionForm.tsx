@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form"
 
 import { Button, ColorInput, Group, Select, Stack, Divider, Title, Autocomplete } from "@mantine/core"
 import { useSearchParams, useRouter } from "next/navigation";
-import { Campaign, Game, Player, SessionForm as SessionFormType } from "@/state/types";
+import { Campaign, Game, Player, Session, SessionForm as SessionFormType } from "@/state/types";
 import { useState } from "react";
 import { IconChevronCompactDown, IconChevronCompactUp, IconPlus, IconX } from "@tabler/icons-react";
 import { BGG_GAME } from "../games/bggSafeAttrs";
@@ -14,21 +14,22 @@ import { library } from "@/state/remote";
 
 type ViewProps = {
   sessionId?: string,
+  session?: Session,
   campaign?: string,
   games: Game[],
   players: Player[],
   campaigns: Campaign[],
 }
 
-export function SessionForm({sessionId, games, players, campaigns}: ViewProps) {  
+export function SessionForm({sessionId, games, players, campaigns, session: currentSession}: ViewProps) {  
   const router = useRouter()
   const params = useSearchParams()
   const {
     getSessionForm,
   } = useDataState()
 
-  const campaign = params.get('campaignId') || ''
-  const session = getSessionForm(sessionId, campaign)
+  const campaignId = params.get('campaignId') || ''
+  const session = getSessionForm(players, campaignId, currentSession)
   
   const [playerCount, updatePlayerCount] = useState(session.players.length || 2)
 

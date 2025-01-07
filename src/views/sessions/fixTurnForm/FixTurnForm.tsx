@@ -11,15 +11,17 @@ const WHEN = {
   ['3 mins ago']: 3,
 }
 
+const DEFAULT_PLAYER_ID = '' as Player["id"]
+
 interface FixTurnFormProps {
   players: Player[],
-  onSubmit: (who: number, howLong: number) => void,
+  onSubmit: (who: Player["id"], howLong: number) => void,
   onCancel: () => void,
 }
 
 export function FixTurnForm({players, onSubmit, onCancel}: FixTurnFormProps) {
 
-  const [selectedPlayer, updateSelectedPlayer] = useState(-1)
+  const [selectedPlayer, updateSelectedPlayer] = useState(DEFAULT_PLAYER_ID)
   const [selectedWhen, updateSelectedWhen] = useState(0) // 0 = split the existing turn
 
   return (
@@ -63,7 +65,7 @@ export function FixTurnForm({players, onSubmit, onCancel}: FixTurnFormProps) {
         </Button>
         <Button 
             variant={'filled'}
-            disabled={selectedPlayer === -1}
+            disabled={selectedPlayer === DEFAULT_PLAYER_ID}
             onClick={() => onSubmit(selectedPlayer, selectedWhen)}>
               Submit
         </Button>
