@@ -1,5 +1,11 @@
-import { Metadata } from "next"
+import getAuthState from "@/state/getAuthState";
+import { library } from "@/state/remote";
 import { SessionStats } from "@/views/sessions"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Session | Who Slow ",
+}
 
 type PageProps = {
   params: {
@@ -7,12 +13,16 @@ type PageProps = {
   },
 }
 
-export const metadata: Metadata = {
-  title: "Session stats | Who Slow ",
-}
+export default async function SessionPage({params: {sessionId}}: PageProps) {
+  await getAuthState()
 
-export default function SessionPage({params: {sessionId}}: PageProps) {
+  const {session, game, players} = await library().getFilledSession(sessionId)
+
   return (
-    <SessionStats sessionId={sessionId} />
+    <SessionStats
+      session={session}
+      game={game}
+      players={players}
+    />
   )
 }
