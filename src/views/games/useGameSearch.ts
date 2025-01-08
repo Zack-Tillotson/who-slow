@@ -14,7 +14,7 @@ export const STATES = {
 
 const DEBOUNCE_TIME = 1000
 
-const cancel = {fn: () => {console.log('cancel')}}
+const cancel = {fn: () => {}}
 
 export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQuery: string) {
   
@@ -49,7 +49,7 @@ export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQu
         updateGamesList(results)
       })
       .catch(e => {
-        console.log(e)
+        console.log('ERROR', 'useGameSearch', e)
       })
 
   }, [queryTerm])
@@ -63,7 +63,7 @@ export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQu
     try {
       bggGameAttrs(bggId).then(attrsCallback)
     } catch(e) {
-      console.log(e)
+      console.log('ERROR', 'useGameSearch', e)
     }
     updateQueryState(STATES.PRE)
   }
