@@ -1,13 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import { AppShell,Burger } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import Image from 'next/image';
-import Link from 'next/link';
+import { AppShell,Burger } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import Image from 'next/image'
+import Link from 'next/link'
 
-import { useDataState } from '@/state';
-import { NavLinks } from '../navLinks';
+import { NavLinks } from '../navLinks'
 
 import logo from '@/assets/headline-250x50.png'
 import styles from './shell.module.scss'
