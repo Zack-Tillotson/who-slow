@@ -10,13 +10,13 @@ export function useSessionPlay(session: Session|null, game: Game, players: Playe
   const [isFixTurnDialogOpen, updateFixTurnDialog] = useState(false)
 
   const pushSessionEvent = (event: SessionEvent) => {
-    const updatedEvents = session ? [...session.events] : []
+    const updatedEvents = session ? [...(session.events || [])] : []
     updatedEvents.push(event)
     return setSessionEvents(updatedEvents)
   }
 
   const popSessionEvent = (popCount = 1) => {
-    const updatedEvents = session ? session.events.slice(0, -1 * popCount) : []
+    const updatedEvents = session ? (session.events || []).slice(0, -1 * popCount) : []
     return setSessionEvents(updatedEvents)
   }
 
@@ -51,7 +51,7 @@ export function useSessionPlay(session: Session|null, game: Game, players: Playe
   const handlePauseClick = () => {
     if(lastEvent.type === 'PAUSE') {
       const pauseDuration = Date.now() - lastEvent.when 
-      const updatedEvents = getSession().events.slice(0, -1).map(event => ({...event, when: event.when + pauseDuration }))
+      const updatedEvents = (getSession().events || []).slice(0, -1).map(event => ({...event, when: event.when + pauseDuration }))
       setSessionEvents(updatedEvents)
     } else {
       pushSessionEvent({type: 'PAUSE', when: Date.now()})

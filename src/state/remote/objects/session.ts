@@ -1,7 +1,6 @@
 import Ajv, {JSONSchemaType} from "ajv"
 import {Session} from '../../types'
 
-const ajv = new Ajv()
 const schema: JSONSchemaType<Session> = {
   type: "object",
   properties: {
@@ -9,13 +8,38 @@ const schema: JSONSchemaType<Session> = {
     campaign: {type: "string"},
     date: {type: "number"},
     game: {type: "string"},
-    sessionPlayers: {type: "array"},
-    events: {type: "array"},
+    sessionPlayers: {
+      type: "array", 
+      items: {
+        type: "object", 
+        properties: {
+          "player": {type: "string"},
+          "color": {type: "string"},
+        },
+        required: ["player", "color"],
+        additionalProperties: false,
+      },
+    },
+    events: {
+      type: "array",
+      nullable: true,
+      items: {
+        type: "object", 
+        properties: {
+          "who": {type: "string", nullable: true},
+          "when": {type: "number"},
+          "type": {type: "string"},
+        },
+        required: ["when", "type"],
+        additionalProperties: false,
+      },
+    },
   },
   required: ["id", "campaign", "date", "game", "sessionPlayers"],
   additionalProperties: false,
 }
 
+const ajv = new Ajv()
 const validator = ajv.compile(schema)
 
 export function buildSession(id?: string, data: any = {}) {
