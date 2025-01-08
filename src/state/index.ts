@@ -1,52 +1,84 @@
 'use client'
 
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 import { 
-  Campaign,
   DataState,
+  Campaign,
+  Game,
+  Session,
+  Player,
+  SessionForm,
 } from './types'
 
-import campaign from './campaign'
-import game from './game'
-import player from './player'
-import session from './session'
+export const useDataState = create<DataState>(
+  (set, get) => ({
+    isInitialized: false,
+    isLoading: false,
+    isError: false,
 
-export const useDataState = create<DataState, [["zustand/persist", { campaigns: Campaign[]; }]] >(
-  persist(
-    (set, get) => ({
-      games: [],
-      players: [],
-      campaigns: [{
-        id: 0,
-        name: 'Just play',
-      }],
-      sessions: [],
+    getCampaignForm(campaign?: Campaign) {
+      if(campaign) {
+        return {...campaign}
+      }
 
-      isInitialized: false,
-      isLoading: false,
-      isError: false,
+      return {
+        id: '',
+        name: '',
+      }
+    },
+    getGameForm(game?: Game) {
+      if(game) {
+        return {...game}
+      }
 
-      ...campaign(get, set),
-      ...game(get, set),
-      ...player(get, set),
-      ...session(get, set),
-    }),
-    {
-      name: 'who-slow-app-data',
-      partialize: ({
-        campaigns,
-        players,
-        games,
-        sessions,
-      }) => ({
-        campaigns,
-        players,
-        games,
-        sessions,
-      }),
-      skipHydration: true,
-    }
-  )
+      return {
+        id: '',
+        name: '',
+        yearPublished: 0,
+        image: '',
+      }
+    },
+    getPlayerForm(player?: Player) {
+      if(player) {
+        return {...player}
+      }
+
+      return {
+        id: '',
+        name: '',
+      }
+    },
+    
+    getSessionForm(players: Player[], campaignId?: Campaign["id"], session?: Session) {
+      if(session) {
+        const builtPlayers = session.sessionPlayers
+          .map((sessionPlayer, index) => {
+            const player = players.find(player => player.id == sessionPlayer.player)
+            return ({
+              player: player?.name ?? '', 
+              color: session.sessionPlayers[index].color,
+            })
+          })
+        return {
+          id: session.id,
+          campaign: session.campaign,
+          game: session.game,
+          players: builtPlayers,
+        }
+      }
+
+      return {
+        id: '',
+        campaign: campaignId || '',
+        game: '',
+        players: [],
+      }
+    },
+  })
 )
+
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('Data state', useDataState);
+}

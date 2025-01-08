@@ -1,28 +1,32 @@
 'use client'
 
 import Link from "next/link";
-import { Button, SimpleGrid, Group, Stack, Text, Title } from "@mantine/core"
+import { Button, Group, Text, Title } from "@mantine/core"
 
-import { useDataState } from "@/state";
 import { useSessionPlay } from "./useSessionPlay";
 import { Timer } from "./timer";
 import {FixTurnForm} from './fixTurnForm'
 
 import styles from './sessionPlay.module.scss'
 import { PlayerParade } from "./playerParade";
+import { Game, Player } from "@/state/types";
+
+import { useWatchSession } from "@/state/remote/useWatchData";
 
 type ViewProps = {
   sessionId: string,
+  game: Game,
+  players: Player[],
 }
 
-export function SessionPlay({sessionId}: ViewProps) {
+export function SessionPlay({sessionId, game, players}: ViewProps) {
+  const {
+    isInitialized,
+    data: session,
+  } = useWatchSession(sessionId)
 
   const {
-    getSession,
-    getPlayers,
-  } = useDataState()
-  const session = getSession(sessionId)
-  const {
+    isPending,
     isUnstarted,
     isEnded,
     isPaused,
@@ -36,7 +40,11 @@ export function SessionPlay({sessionId}: ViewProps) {
     handleUndoClick,
     handleFixTurnClick,
     handleFixTurnSubmit,
-  } = useSessionPlay(sessionId)
+  } = useSessionPlay(session, game, players)
+
+  if(!isInitialized) {
+    return `Loading....`
+  }
 
   if(!session) {
     return (
@@ -44,27 +52,40 @@ export function SessionPlay({sessionId}: ViewProps) {
     )
   }
 
-  const {events, sessionPlayers} = session
-  const players = getPlayers(sessionPlayers)
+  const {events = [], sessionPlayers} = session
 
   return (
     <div className={styles.container}>
       <div>
         {!isUnstarted && !isFixTurnDialogOpen && (
           <Group gap="xs">
-            <Button p="xs" m="0" fz="xs" onClick={handleUndoClick} disabled={isPaused || session.events.length === 0}>Undo</Button>
+            <Button
+              p="xs"
+              m="0"
+              fz="xs"
+              onClick={handleUndoClick}
+              disabled={isPending || isPaused || events.length === 0}
+            >
+              Undo
+            </Button>
             {isEnded && (
-              <>
-                <Button p="xs" m="0" fz="xs" component={Link} href={`/session/${sessionId}/stats/`}>View session stats</Button>
-              </>
+                <Button
+                  p="xs"
+                  m="0"
+                  fz="xs"
+                  component={Link}
+                  href={`/session/${session.id}/stats/`}
+                >
+                  View session stats
+                </Button>
             )}
             {!isEnded && (
               <>
-                <Button p="xs" m="0" fz="xs" onClick={handlePauseClick} disabled={isUnstarted}>
+                <Button p="xs" m="0" fz="xs" onClick={handlePauseClick} disabled={isPending || isUnstarted}>
                   {isPaused ? 'Unpause' : 'Pause'}
                 </Button>
-                <Button p="xs" m="0" fz="xs" onClick={handleFixTurnClick} disabled={isPaused || isUnstarted}>Fix turn</Button>
-                <Button p="xs" m="0" fz="xs" onClick={handleEndClick} disabled={isPaused || isUnstarted}>End</Button>
+                <Button p="xs" m="0" fz="xs" onClick={handleFixTurnClick} disabled={isPending || isPaused || isUnstarted}>Fix turn</Button>
+                <Button p="xs" m="0" fz="xs" onClick={handleEndClick} disabled={isPending || isPaused || isUnstarted}>End</Button>
               </>
             )}
           </Group>
@@ -86,7 +107,7 @@ export function SessionPlay({sessionId}: ViewProps) {
           <Button
             onClick={handlePlayerClick(nextTurn.playerId)}
             className={styles.playerButton}
-            disabled={isPaused || isEnded}
+            disabled={isPending || isPaused || isEnded}
             size="xl"
             p="lg"
             mt="xl"

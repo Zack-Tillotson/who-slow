@@ -1,15 +1,17 @@
 'use client'
 
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { AppShell,Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { useDataState } from '@/state';
+import { NavLinks } from '../navLinks';
 
 import logo from '@/assets/headline-250x50.png'
 import styles from './shell.module.scss'
-import { useEffect, useState } from 'react';
-import { useDataState } from '@/state';
-import { NavLinks } from '../navLinks';
-import Link from 'next/link';
+import useClientConfig from '@/state/firebase/useClientConfig';
 
 type ShellType = Readonly<{
   children: React.ReactNode;
@@ -17,18 +19,7 @@ type ShellType = Readonly<{
 
 export function Shell({children}: ShellType) {
   const [opened, { toggle }] = useDisclosure();
-  const [renderCount, forceRerender] = useState(0)
-  useEffect(() => {
-    const result = useDataState.persist.rehydrate()
-    if(!result) {
-      forceRerender(renderCount+1)
-    } else {
-      result.then(() => forceRerender(renderCount+1))
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const isHydrated = !!(useDataState?.persist?.hasHydrated())
+  useClientConfig()
 
   return (
     <AppShell
@@ -64,8 +55,7 @@ export function Shell({children}: ShellType) {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        {isHydrated && children}
-        {!isHydrated && 'Loading...'}
+        {children}
       </AppShell.Main>
     </AppShell>
   );

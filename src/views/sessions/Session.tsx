@@ -1,22 +1,24 @@
 'use client'
 
-import { useDataState } from "@/state";
+import { Game, Player, Session as SessionType } from "@/state/types";
 import { Button, Divider, Group, Paper, Pill, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
 
 type ViewProps = {
   sessionId: string,
+  session: SessionType,
+  game: Game,
+  players: Player[],
 }
 
-export function Session({sessionId}: ViewProps) {
+function getSessionStatus(session: SessionType) {
+  if(session.events?.length ?? 0 === 0) {
+    return ''
+  }
+  return [...session.events ?? []]?.reverse()[0]?.type ?? ''    
+}
 
-  const {
-    getSession,
-    getGame,
-    getPlayer,
-    getSessionStatusText,
-  } = useDataState()
-  const session = getSession(sessionId)
+export function Session({session, game, players}: ViewProps) {
 
   if(!session) {
     return (
@@ -27,16 +29,16 @@ export function Session({sessionId}: ViewProps) {
     )
   }
 
-  const status = getSessionStatusText(session)
+  const status = getSessionStatus(session)
 
   return (
     <Paper withBorder shadow="md" p="sm" mt="lg">
       <Group>
         <Title order={3} flex={1} size="md">Session</Title>
-        {status === 'Not started' && (
+        {status === '' && (
           <Button component={Link} href={`/session/${session.id}/edit`} variant="subtle">Edit</Button>
         )}
-        <Pill bg={status === 'Session ended' ? 'lightgreen' : ''}>{status}</Pill>
+        <Pill bg={status === 'END' ? 'lightgreen' : ''}>{status}</Pill>
       </Group>
       <Stack gap="0">
         <Text size="xs">Date</Text>
@@ -44,25 +46,25 @@ export function Session({sessionId}: ViewProps) {
       </Stack>
       <Stack gap="0">
         <Text size="xs">Game</Text>
-        <Text size="xs" fw={700}>{getGame(session.game)?.name}</Text>
+        <Text size="xs" fw={700}>{game?.name}</Text>
       </Stack>
       <Stack gap="0">
         <Text size="xs">Players</Text>
-        <Text size="xs" fw={700}>{session.sessionPlayers.map(({player}) => (getPlayer(player)?.name ?? 'Player')).join(', ')}</Text>
+        <Text size="xs" fw={700}>{players.map((player) => player?.name ?? 'Player').join(', ')}</Text>
       </Stack>
       <Divider mt="sm" />
       <Group pt="md">
         <Button
           component={Link}
           href={`/session/${session.id}/play`}
-          variant={status !== 'Session ended' ? "filled" : "subtle"}
+          variant={status !== 'END' ? "filled" : "subtle"}
         >
           Start session
         </Button>
         <Button
           component={Link}
           href={`/session/${session.id}/stats`}
-          variant={status === 'Session ended' ? "filled" : "subtle"}
+          variant={status === 'END' ? "filled" : "subtle"}
         >
           View stats
         </Button>

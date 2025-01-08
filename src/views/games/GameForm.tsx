@@ -3,48 +3,63 @@
 import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, TextInput, Title } from "@mantine/core"
+import { Button, Text, TextInput, Title } from "@mantine/core"
 import { useRouter } from "next/navigation";
 import { BGG_GAME } from "./bggSafeAttrs";
 import { GameAutocomplete } from "./GameAutocomplete";
+import { Game } from "@/state/types";
+import { useState } from "react";
+import { library } from "@/state/remote";
 
 type ViewProps = {
   gameId?: string,
+  game?: Game,
 }
 
 interface FormInputs {
-  bggId: number
+  id: string
   name: string
   image: string
   yearPublished: number
 }
 
-export function GameForm({gameId}: ViewProps) {
+const enum formStates {
+  CLEAN,
+  PENDING,
+  SUCCESS,
+  ERROR,
+}
+
+export function GameForm({gameId, game}: ViewProps) {
   
   const router = useRouter()
   const {
     getGameForm,
-    saveGame,
   } = useDataState()
-  const game = getGameForm(gameId)  
+  
+  const defaultValues = getGameForm(game)
+
   const { handleSubmit, control, getValues, setValue } = useForm<FormInputs>({
-    defaultValues: game,
+    defaultValues,
   })
 
   const handleLoadAttrs = (attrs: BGG_GAME) => {
-    setValue('bggId', attrs.bggId)
+    setValue('id', `${attrs.bggId}`)
     setValue('name', attrs.name)
     setValue('image', attrs.image)
     setValue('yearPublished', attrs.yearPublished)
   }
 
-  const handleLocalSubmit = (data: FormInputs) => {
+  const [formState, updateFormState] = useState<formStates>(formStates.CLEAN)
+  const handleLocalSubmit = async (data: FormInputs) => {
+    updateFormState(formStates.PENDING)
     try {
-      const result = saveGame(data)
-      router.push(`/game/${result.bggId}/`)
-    } catch(e) {
-      console.log(e)
-      return
+      const result = await library().saveGame(data)
+      router.push(`/game/${result.id}/`)
+      updateFormState(formStates.SUCCESS)
+    } catch (e) {
+      console.log('WARN', 'form submission failed', e)
+      updateFormState(formStates.ERROR)
     }
   }
 
@@ -63,7 +78,7 @@ export function GameForm({gameId}: ViewProps) {
           render={({ field }) => <TextInput {...field} label="Name" />}
         />
         <Controller
-          name="bggId"
+          name="id"
           control={control}
           rules={{ required: true }}
           render={({ field }) => <TextInput {...field} label="BGG ID" />}
@@ -81,7 +96,9 @@ export function GameForm({gameId}: ViewProps) {
           render={({ field }) => <TextInput {...field} label="Image" />}
         />
       </section>
-      <Button type="submit" mt="lg" disabled={!getValues().bggId}>Submit</Button>
+      <Button type="submit" mt="lg" disabled={!(getValues().id)}>Submit</Button>
+      <Text>{formState === formStates.PENDING && 'Pending'}</Text>
+      <Text>{formState === formStates.ERROR && 'Error'}</Text>
     </form>
   )
 }

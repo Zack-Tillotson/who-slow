@@ -1,44 +1,60 @@
 'use client'
 
-import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, TextInput } from "@mantine/core"
+import { Button, Loader, TextInput, Title } from "@mantine/core"
 import { useRouter } from "next/navigation";
+
+import { useDataState } from "@/state";
+import {Campaign as CampaignType} from '@/state/types'
+import { useState } from "react";
+import { library } from "@/state/remote";
 
 type CampaignViewProps = {
   campaignId?: string,
+  campaign?: CampaignType
 }
 
 interface FormInputs {
-  id: number
+  id: string
   name: string
 }
 
-export function CampaignForm({campaignId}: CampaignViewProps) {
+const enum formStates {
+  CLEAN,
+  PENDING,
+  SUCCESS,
+  ERROR,
+}
+
+export function CampaignForm({campaignId, campaign}: CampaignViewProps) {
   
   const router = useRouter()
   const {
     getCampaignForm,
-    saveCampaign,
   } = useDataState()
-  const campaign = getCampaignForm(campaignId)
+  const formCampaign = getCampaignForm(campaign)
   
   const { handleSubmit, control } = useForm<FormInputs>({
-    defaultValues: campaign,
+    defaultValues: formCampaign,
   })
-  const handleLocalSubmit = (data: FormInputs) => {
+  
+  const [formState, updateFormState] = useState<formStates>(formStates.CLEAN)
+  const handleLocalSubmit = async (data: FormInputs) => {
+    updateFormState(formStates.PENDING)
     try {
-      const result = saveCampaign({...data, id: campaign.id})
+      const result = await library().saveCampaign({...data, id: formCampaign.id})
       router.push(`/campaign/${result.id}/`)
-    } catch(e) {
-      console.log(e)
-      return
+      updateFormState(formStates.SUCCESS)
+    } catch (e) {
+      console.log('WARN', 'form submission failed', e)
+      updateFormState(formStates.ERROR)
     }
   }
 
   return (
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
+      <Title order={1}>{!!campaign ? 'Edit' : 'New'} Campaign</Title>
       <Controller
         name="id"
         disabled
@@ -52,7 +68,10 @@ export function CampaignForm({campaignId}: CampaignViewProps) {
         rules={{ required: true }}
         render={({ field }) => <TextInput {...field} label="Name" />}
       />
-      <Button type="submit">Submit</Button>
+      <Button type="submit" disabled={formState === formStates.PENDING}>
+        Submit
+        {formState === formStates.PENDING && (<Loader />)}
+      </Button>
     </form>
   )
 }

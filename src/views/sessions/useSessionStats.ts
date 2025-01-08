@@ -1,5 +1,5 @@
 import { useDataState } from "@/state"
-import { Player, Session, SessionPlayer } from "@/state/types"
+import { Game, Player, Session, SessionPlayer } from "@/state/types"
 
 export type Turn = {
     turn: number,
@@ -14,11 +14,8 @@ export type TurnPlayer = {
   color: SessionPlayer["color"],
 }
 
-export function useSessionStats(session: Session, fullPlayers: Player[]) {
-  const {events} = session
-
-  const {getGame} = useDataState()
-  const game = getGame(session.game)
+export function useSessionStats(session: Session, fullPlayers: Player[], game: Game) {
+  const {events = []} = session
 
   const turns = events.map((event, index) => {
     if(index - 1 < 0) return null
