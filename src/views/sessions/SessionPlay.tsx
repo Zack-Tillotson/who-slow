@@ -52,7 +52,7 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
     )
   }
 
-  const {events, sessionPlayers} = session
+  const {events = [], sessionPlayers} = session
 
   return (
     <div className={styles.container}>
@@ -64,7 +64,7 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
               m="0"
               fz="xs"
               onClick={handleUndoClick}
-              disabled={isPending || isPaused || session.events.length === 0}
+              disabled={isPending || isPaused || events.length === 0}
             >
               Undo
             </Button>

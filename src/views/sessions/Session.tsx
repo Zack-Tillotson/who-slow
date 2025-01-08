@@ -1,18 +1,24 @@
 'use client'
 
-import { useDataState } from "@/state";
-import { Game, Player, FullSession } from "@/state/types";
+import { Game, Player, Session as SessionType } from "@/state/types";
 import { Button, Divider, Group, Paper, Pill, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
 
 type ViewProps = {
   sessionId: string,
-  session: FullSession,
+  session: SessionType,
   game: Game,
   players: Player[],
 }
 
-export function Session({sessionId, session, game, players}: ViewProps) {
+function getSessionStatus(session: SessionType) {
+  if(session.events?.length ?? 0 === 0) {
+    return ''
+  }
+  return [...session.events ?? []]?.reverse()[0]?.type ?? ''    
+}
+
+export function Session({session, game, players}: ViewProps) {
 
   if(!session) {
     return (
@@ -23,16 +29,16 @@ export function Session({sessionId, session, game, players}: ViewProps) {
     )
   }
 
-  const status = 'status'//getSessionStatusText(session)
+  const status = getSessionStatus(session)
 
   return (
     <Paper withBorder shadow="md" p="sm" mt="lg">
       <Group>
         <Title order={3} flex={1} size="md">Session</Title>
-        {status === 'Not started' && (
+        {status === '' && (
           <Button component={Link} href={`/session/${session.id}/edit`} variant="subtle">Edit</Button>
         )}
-        <Pill bg={status === 'Session ended' ? 'lightgreen' : ''}>{status}</Pill>
+        <Pill bg={status === 'END' ? 'lightgreen' : ''}>{status}</Pill>
       </Group>
       <Stack gap="0">
         <Text size="xs">Date</Text>
@@ -51,14 +57,14 @@ export function Session({sessionId, session, game, players}: ViewProps) {
         <Button
           component={Link}
           href={`/session/${session.id}/play`}
-          variant={status !== 'Session ended' ? "filled" : "subtle"}
+          variant={status !== 'END' ? "filled" : "subtle"}
         >
           Start session
         </Button>
         <Button
           component={Link}
           href={`/session/${session.id}/stats`}
-          variant={status === 'Session ended' ? "filled" : "subtle"}
+          variant={status === 'END' ? "filled" : "subtle"}
         >
           View stats
         </Button>

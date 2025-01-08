@@ -6,7 +6,7 @@ const schema: JSONSchemaType<Campaign> = {
   type: "object",
   properties: {
     id: {type: "string"},
-    name: {type: "string"},
+    name: {type: "string"}
   },
   required: ["id", "name"],
   additionalProperties: false,

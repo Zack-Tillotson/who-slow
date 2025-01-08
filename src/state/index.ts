@@ -9,6 +9,7 @@ import {
   Game,
   Session,
   Player,
+  SessionForm,
 } from './types'
 
 export const useDataState = create<DataState>(
@@ -50,7 +51,7 @@ export const useDataState = create<DataState>(
       }
     },
     
-    getSessionForm(players: Player[], campaignId?: Campaign["id"], session?: Session): SessionForm {
+    getSessionForm(players: Player[], campaignId?: Campaign["id"], session?: Session) {
       if(session) {
         const builtPlayers = session.sessionPlayers
           .map((sessionPlayer, index) => {

@@ -15,7 +15,7 @@ export type TurnPlayer = {
 }
 
 export function useSessionStats(session: Session, fullPlayers: Player[], game: Game) {
-  const {events} = session
+  const {events = []} = session
 
   const turns = events.map((event, index) => {
     if(index - 1 < 0) return null
