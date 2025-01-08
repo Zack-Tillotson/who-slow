@@ -72,7 +72,7 @@ export class FirebaseConnection {
 
 let connection: FirebaseConnection;
 export default (idToken?: string) => {
-  if(!connection) {
+  if(!connection || idToken) {
     connection = new FirebaseConnection(config, {idToken})
   }
   return connection
