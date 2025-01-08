@@ -1,0 +1,10 @@
+# Settings for Cloud Run
+runConfig:
+  minInstances: 1
+  maxInstances: 2
+  concurrency: 2
+  cpu: 2
+  memoryMiB: 1024
+
+# Environment variables and secrets
+env:
