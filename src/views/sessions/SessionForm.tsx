@@ -3,11 +3,11 @@
 import { useDataState } from "@/state";
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, ColorInput, Group, Select, Stack, Divider, Title, Autocomplete } from "@mantine/core"
+import { Button, ColorInput, Group, Select, Stack, Divider, Title, Autocomplete, Alert } from "@mantine/core"
 import { useSearchParams, useRouter } from "next/navigation";
 import { Campaign, Game, Player, Session, SessionForm as SessionFormType } from "@/state/types";
 import { useState } from "react";
-import { IconChevronCompactDown, IconChevronCompactUp, IconPlus, IconX } from "@tabler/icons-react";
+import { IconChevronCompactDown, IconChevronCompactUp, IconExclamationCircleFilled, IconPlus, IconX } from "@tabler/icons-react";
 import { BGG_GAME } from "../games/bggSafeAttrs";
 import { GameAutocomplete } from "../games/GameAutocomplete";
 import { library } from "@/state/remote";
@@ -27,6 +27,7 @@ export function SessionForm({sessionId, games, players, campaigns, session: curr
   const {
     getSessionForm,
   } = useDataState()
+  const [error, updateError] = useState('')
 
   const campaignId = params.get('campaignId') || ''
   const session = getSessionForm(players, campaignId, currentSession)
@@ -50,8 +51,13 @@ export function SessionForm({sessionId, games, players, campaigns, session: curr
           return {...player, player: id}
         }),
       }
-      const result = await library().saveSessionConfig(builtSession)
-      router.push(`/session/${result.id}/`)
+      if(builtSession.sessionPlayers.find(({player}) => !player)) {
+        updateError('Player not found')
+      } else {
+        updateError('')
+        const result = await library().saveSessionConfig(builtSession)
+        router.push(`/session/${result.id}/`)
+      }
     } catch(e) {
       console.log(e)
       return
@@ -98,6 +104,17 @@ export function SessionForm({sessionId, games, players, campaigns, session: curr
 
   return (
     <form onSubmit={handleSubmit(handleLocalSubmit)}>
+      {error && (
+        <Alert
+          variant="filled"
+          color="orange"
+          title="Error"
+          icon={<IconExclamationCircleFilled />}
+        >
+          Unable to create the session. Fix errors and try again. {error}
+        </Alert>
+      )}
+
       <Controller
         name="campaign"
         control={control}
@@ -148,7 +165,7 @@ export function SessionForm({sessionId, games, players, campaigns, session: curr
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <Autocomplete 
+                <Select 
                   {...field}
                   flex={1}
                   label={`Name`}
