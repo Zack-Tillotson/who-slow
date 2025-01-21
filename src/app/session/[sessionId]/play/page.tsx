@@ -16,7 +16,9 @@ type PageProps = {
 export default async function SessionPage({params: {sessionId}}: PageProps) {
   await getAuthState()
 
-  const {game, players} = await library().getFilledSession(sessionId)
+  const session = await library().getSession(sessionId)
+  const game = await library().getGame(session.game)
+  const players = await library().getSessionPlayers(session)
 
   return (
     <SessionPlay

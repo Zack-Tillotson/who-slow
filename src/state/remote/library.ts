@@ -178,11 +178,16 @@ export async function getFilledSession(firebase: FirebaseConnection, id: string)
 }
 
 export async function getSessionPlayers(firebase: FirebaseConnection, session: Session): Promise<Player[]> {  
-  const players = []
-  for(let i = 0; i < session.sessionPlayers.length; i++) {
-    players.push(await getPlayer(firebase, session.sessionPlayers[i].player))
+  try {
+
+    const players = []
+    for(let i = 0; i < session.sessionPlayers.length; i++) {
+      players.push(await getPlayer(firebase, session.sessionPlayers[i].player))
+    }
+    return players
+  } catch(e) {
+    return []
   }
-  return players
 }
 
 export async function saveSessionConfig(firebase: FirebaseConnection, config: SessionConfig) {
