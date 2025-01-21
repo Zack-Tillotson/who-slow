@@ -1,14 +1,19 @@
-import { useDataState } from "@/state";
-import { library } from "@/state/remote";
 import { useSetData } from "@/state/remote/useSetData";
 import { Game, Player, Session, SessionEvent } from "@/state/types";
 import { useState } from "react";
+
+const DEFAULT_PLAYER = {
+  name: 'Player',
+  color: '#fff',
+  playerId: '',
+}
 
 export function useSessionPlay(session: Session|null, game: Game, players: Player[]) {
 
   const {isPending, set: setSessionEvents} = useSetData(`sessions/${session?.id}`, 'events')
   const [isFixTurnDialogOpen, updateFixTurnDialog] = useState(false)
-
+  const [isShareDialogOpen, updateShareDialogOpen] = useState(false)
+  
   const pushSessionEvent = (event: SessionEvent) => {
     const updatedEvents = session ? [...(session.events || [])] : []
     updatedEvents.push(event)
@@ -33,9 +38,9 @@ export function useSessionPlay(session: Session|null, game: Game, players: Playe
   const sessionPlayer = session?.sessionPlayers[nextSessionPlayerIndex]
   const nextPlayer = players.find(({id}) => session?.sessionPlayers[nextSessionPlayerIndex].player == id) || players[0]
   const nextTurn = {
-    playerId: nextPlayer?.id ?? '',
-    name: nextPlayer?.name ?? '',
-    color: sessionPlayer?.color ?? '',
+    playerId: sessionPlayer?.player ?? DEFAULT_PLAYER.playerId,
+    name: nextPlayer?.name ?? DEFAULT_PLAYER.name,
+    color: sessionPlayer?.color ?? DEFAULT_PLAYER.color,
   }
 
   function getSession() {
@@ -71,17 +76,22 @@ export function useSessionPlay(session: Session|null, game: Game, players: Playe
     pushSessionEvent({type: 'TURN_START', who, when})
     updateFixTurnDialog(false)
   }
+  const handleShareClick = () => {
+    updateShareDialogOpen(!isShareDialogOpen)
+  }
 
   return {
     isPending,
     isUnstarted,
     isEnded,
     isPaused,
+    isShareDialogOpen,
     isFixTurnDialogOpen,
 
     nextTurn,
 
     handlePlayerClick,
+    handleShareClick,
     handlePauseClick,
     handleEndClick,
     handleUndoClick,
