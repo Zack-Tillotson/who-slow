@@ -52,3 +52,7 @@ export function buildSession(id?: string, data: any = {}) {
   }
   return builtObject
 }
+
+export function generateShareCode() {
+  return Math.random().toString(36).slice(2, 8).toUpperCase()
+}

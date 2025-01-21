@@ -16,13 +16,14 @@ interface ShareFormProps {
 export function ShareForm({sessionId, onClose}: ShareFormProps) {
   const {
     shareLink,
+    handleCodeClick,
     handleShareClick,
   } = useShareSession(sessionId)
 
   return (
     <form className="share-form">
       <Title order={1}>Share session</Title>
-      <Divider />
+      <Divider mt="sm" mb="sm" />
       <Text>Use this form to share the game session. Anyone with the code 
         will be able to see, add, or remove events just like you (so be
         careful who you share with!).
@@ -31,17 +32,19 @@ export function ShareForm({sessionId, onClose}: ShareFormProps) {
         Click the {`"Share"`} button below to create a share code for this session,
         send it to others or have them navigate to the URL.
       </Text>
-      <Divider />
-      <Group>
+      <Divider mt="sm" mb="sm" />
+      <Title order={2} size="sm">Share link</Title>
+      <TextInput
+        value={shareLink}
+        readOnly
+        flex="1"
+        onClick={handleCodeClick}
+        placeholder={`Create a share code with the "Share" button`}
+      />
+      <Group mt="sm">
         <Button formAction={handleShareClick} type="submit">Share</Button>
-        <TextInput
-          value={shareLink}
-          readOnly
-          width="100%"
-          placeholder={`Create a share code with the "Share" button`}
-        />
+        <Button variant='outline' onClick={onClose}>Close</Button>
       </Group>
-      <Button variant='outline' onClick={onClose}>Close</Button>
     </form>
   );
 }
