@@ -4,22 +4,23 @@ import getAuthState from "@/state/getAuthState"
 import { library } from "@/state/remote"
 import { AuthCTA } from "@/views/AuthCTA"
 import { Session } from "@/views/sessions"
+import { redirect } from "next/navigation";
 
 type PageProps = {
   params: Promise<{
-    sessionId: string,
+    shareCode: string,
   }>,
 }
 
 export const metadata: Metadata = {
-  title: "Setup session | Who Slow ",
+  title: "Share session | Who Slow ",
 }
 
 export default async function SessionPage(props: PageProps) {
   const params = await props.params;
 
   const {
-    sessionId
+    shareCode,
   } = params;
 
   const auth = await getAuthState()
@@ -27,14 +28,7 @@ export default async function SessionPage(props: PageProps) {
     return <AuthCTA />
   }
 
-  const {session, game, players} = await library().getFilledSession(sessionId)
+  const sessionId = await library().getSessionIdFromShareCode(shareCode)
+  redirect(`/session/${sessionId}/play`)
 
-  return (
-    <Session
-      sessionId={sessionId}
-      session={session}
-      game={game}
-      players={players}
-    />
-  )
 }

@@ -8,11 +8,12 @@ type PageProps = {
 }
 
 export function Profile({auth}: PageProps) {
+  const user = auth.currentUser
   return (
     <Stack>
       <Title order={2} size="md" mt="lg">Profile</Title>
-      <Text>Profile ID: {auth.currentUser?.uid ?? 'No user found'}</Text>
-      <Text>Anonymous?: {auth.currentUser?.isAnonymous ?? ''}</Text>
+      <Text>Profile ID: {user?.uid ?? ''}</Text>
+      <Text>Anonymous?: {!user ? '' : user.isAnonymous ? 'yes' : 'no'}</Text>
     </Stack>
   )
 }

@@ -8,15 +8,23 @@ export const metadata: Metadata = {
 }
 
 type PageProps = {
-  params: {
+  params: Promise<{
     sessionId: string,
-  },
+  }>,
 }
 
-export default async function SessionPage({params: {sessionId}}: PageProps) {
+export default async function SessionPage(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    sessionId
+  } = params;
+
   await getAuthState()
 
-  const {game, players} = await library().getFilledSession(sessionId)
+  const session = await library().getSession(sessionId)
+  const game = await library().getGame(session.game)
+  const players = await library().getSessionPlayers(session)
 
   return (
     <SessionPlay

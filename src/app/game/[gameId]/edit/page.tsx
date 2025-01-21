@@ -4,12 +4,18 @@ import { AuthCTA } from "@/views/AuthCTA"
 import { GameForm } from "@/views/games"
 
 type PageProps = {
-  params: {
+  params: Promise<{
     gameId: string,
-  },
+  }>,
 }
 
-export default async function GamePage({params: {gameId}}: PageProps) {
+export default async function GamePage(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    gameId
+  } = params;
+
   const auth = await getAuthState()
   if(!auth.currentUser) {
     return <AuthCTA />

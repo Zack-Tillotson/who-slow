@@ -3,7 +3,7 @@ import { FirebaseConnection } from "../firebase"
 import { Campaign, FilledSession, Game, Player, Session, SessionConfig } from "../types"
 
 import { buildCampaign } from "./objects/campaign"
-import { buildSession } from "./objects/session"
+import { buildSession, generateShareCode } from "./objects/session"
 import { buildPlayer } from "./objects/player"
 import { buildGame } from './objects/game'
 
@@ -178,11 +178,51 @@ export async function getFilledSession(firebase: FirebaseConnection, id: string)
 }
 
 export async function getSessionPlayers(firebase: FirebaseConnection, session: Session): Promise<Player[]> {  
-  const players = []
-  for(let i = 0; i < session.sessionPlayers.length; i++) {
-    players.push(await getPlayer(firebase, session.sessionPlayers[i].player))
+  try {
+
+    const players = []
+    for(let i = 0; i < session.sessionPlayers.length; i++) {
+      players.push(await getPlayer(firebase, session.sessionPlayers[i].player))
+    }
+    return players
+  } catch(e) {
+    return []
   }
-  return players
+}
+
+export async function getSessionShareCode(firebase: FirebaseConnection, sessionId: string): Promise<string> {  
+  const q = doc(firebase.getDB(), 'shareCodes', sessionId)
+  const qDoc = await getDoc(q)
+  
+  if(qDoc.exists()) {
+    const code = qDoc.data().code
+    if(code) {
+      return code
+    }
+  }
+
+  const code = generateShareCode()
+
+  try {
+    await setDoc(doc(firebase.getDB(), 'shareCodes', sessionId), {code})
+  } catch(e) { console.log('Error', 'getSessionShareCode', 'shareCodes', e)}
+
+  try {
+    await setDoc(doc(firebase.getDB(), 'shareIds', code), {sessionId})
+  } catch(e) { console.log('Error', 'getSessionShareCode', 'shareIds', e)}
+
+  try {
+    await setAttribute(firebase, `sessions/${sessionId}`, 'shared', true)
+  } catch(e) { console.log('Error', 'getSessionShareCode', 'session shared attr', e)}
+
+  return code
+}
+
+export async function getSessionIdFromShareCode(firebase: FirebaseConnection, id: string): Promise<string> {  
+  const q = doc(firebase.getDB(), 'shareIds', id)
+  const qDoc = await getDoc(q)
+  
+  return qDoc.data()?.sessionId
 }
 
 export async function saveSessionConfig(firebase: FirebaseConnection, config: SessionConfig) {
@@ -243,6 +283,9 @@ export function libraryFactory(firebase: FirebaseConnection) {
     getFilledSession: (id: string) => getFilledSession(firebase, id),
     getSessionPlayers: (session: Session) => getSessionPlayers(firebase, session),
     saveSessionConfig: (session: SessionConfig) => saveSessionConfig(firebase, session),
+    
+    getSessionShareCode: (id: string) => getSessionShareCode(firebase, id),
+    getSessionIdFromShareCode: (id: string) => getSessionIdFromShareCode(firebase, id),
 
     watchData: <T>(path: string, objectBuilder: () => T, dataCallback: (data: T) => void) => 
       watchData<T>(firebase, objectBuilder, path, dataCallback),
