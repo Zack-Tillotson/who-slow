@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Player, SessionEvent } from '@/state/types'
+import { Player, SessionEvent, SessionPlayer } from '@/state/types'
 import { Button, Divider, Group, Text, Title } from '@mantine/core'
 
 import './fixTurnForm.module.scss'
@@ -14,8 +14,8 @@ const WHEN = {
 const DEFAULT_PLAYER_ID = '' as Player["id"]
 
 interface FixTurnFormProps {
-  players: Player[],
-  onSubmit: (who: Player["id"], howLong: number) => void,
+  players: SessionPlayer[],
+  onSubmit: (who: SessionPlayer["player"], howLong: number) => void,
   onCancel: () => void,
 }
 
@@ -31,9 +31,9 @@ export function FixTurnForm({players, onSubmit, onCancel}: FixTurnFormProps) {
       <Group>
         {players.map(player => (
             <Button
-              key={player.id}
-              variant={player.id == selectedPlayer ? 'filled' : 'outline'}
-              onClick={() => updateSelectedPlayer(player.id)}>
+              key={player.player}
+              variant={player.player == selectedPlayer ? 'filled' : 'outline'}
+              onClick={() => updateSelectedPlayer(player.player)}>
                 {player.name}
             </Button>
           ))}

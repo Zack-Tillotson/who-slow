@@ -47,8 +47,8 @@ export function SessionForm({sessionId, games, players, campaigns, session: curr
         campaign,
         game,
         sessionPlayers: formPlayers.slice(0, playerCount).map(player => {
-          const id = players.find(({name}) => name === player.player)?.id ?? ''
-          return {...player, player: id}
+          const {id, name} = players.find(({name}) => name === player.player) ?? {id: '', name: 'Player'}
+          return {...player, player: id, name}
         }),
       }
       if(builtSession.sessionPlayers.find(({player}) => !player)) {

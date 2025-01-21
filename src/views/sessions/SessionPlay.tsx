@@ -20,7 +20,7 @@ type ViewProps = {
   players: Player[],
 }
 
-export function SessionPlay({sessionId, game, players}: ViewProps) {
+export function SessionPlay({sessionId, game}: ViewProps) {
   const {
     isInitialized,
     data: session,
@@ -43,7 +43,7 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
     handleUndoClick,
     handleFixTurnClick,
     handleFixTurnSubmit,
-  } = useSessionPlay(session, game, players)
+  } = useSessionPlay(session, game)
 
   if(!isInitialized) {
     return `Loading....`
@@ -109,17 +109,17 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
                 )}
               </Group>
               <Title size="md">Current turn</Title>
-              <Timer events={events} players={players} sessionPlayers={sessionPlayers} forceShowClock={isFixTurnDialogOpen} />
+              <Timer events={events} players={session.sessionPlayers} forceShowClock={isFixTurnDialogOpen} />
             </div>
           )}
           {isFixTurnDialogOpen && (
             <FixTurnForm
-              players={players}
+              players={session.sessionPlayers}
               onCancel={handleFixTurnClick}
               onSubmit={handleFixTurnSubmit}
             />
           )}
-          <PlayerParade sessionPlayers={sessionPlayers} events={events} players={players} />
+          <PlayerParade players={sessionPlayers} events={events} />
           {!isFixTurnDialogOpen && (
             <div>
               {!events?.length && (<Text>Click to start</Text>)}

@@ -7,15 +7,14 @@ import { usePlayerParade } from './usePlayerParade';
 
 export interface PlayerParadeProps {
   events: SessionEvent[],
-  players: Player[],
-  sessionPlayers: SessionPlayer[],
+  players: SessionPlayer[],
 }
 
-export function PlayerParade({events, sessionPlayers, players}: PlayerParadeProps) {
+export function PlayerParade({events, players}: PlayerParadeProps) {
 
   const {
     turns,
-  } = usePlayerParade(events, players, sessionPlayers)
+  } = usePlayerParade(events, players)
 
   return (
     <div>

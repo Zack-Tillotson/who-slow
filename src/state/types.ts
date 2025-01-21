@@ -17,6 +17,7 @@ export type Campaign = {
 
 export type SessionPlayer = {
   player: Player["id"],
+  name: Player["name"],
   color: string,
 }
 

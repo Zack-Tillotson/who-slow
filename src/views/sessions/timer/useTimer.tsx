@@ -37,13 +37,12 @@ function getTimeSince(startTime = 0, endTime = 0): string {
   return `${minutes}`.padStart(2, '0') + ':' + `${seconds}`.padStart(2, '0') 
 }
 
-export function useTimer(events: SessionEvent[], players: Player[], sessionPlayers: SessionPlayer[]) {
+export function useTimer(events: SessionEvent[], players: SessionPlayer[]) {
 
   const firstEvent = events[0] || null
   const lastEvent = [...events].reverse()[0] || null
   const lastPlayerEvent = events.filter(tEvent => tEvent.type === 'TURN_START').reverse()[0] || null
-  const currentSessionPlayer = lastEvent ? sessionPlayers.find(player => player.player == lastEvent.who) : null
-  const currentPlayer = lastEvent ? players.find(player => player.id == lastEvent.who) : null
+  const currentPlayer = lastEvent ? players.find(player => player.player == lastEvent.who) : null
 
   const [clock, updateClock] = useState('')
   useEffect(() => {
@@ -64,7 +63,7 @@ export function useTimer(events: SessionEvent[], players: Player[], sessionPlaye
     break
 
     case (lastEvent && lastEvent.type === 'TURN_START'): {
-      borderColor = currentSessionPlayer?.color ?? COLOR_DEFAULT
+      borderColor = currentPlayer?.color ?? COLOR_DEFAULT
     }
     break
   }

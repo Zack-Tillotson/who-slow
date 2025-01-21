@@ -14,6 +14,7 @@ const schema: JSONSchemaType<Session> = {
         type: "object", 
         properties: {
           "player": {type: "string"},
+          "name": {type: "string"},
           "color": {type: "string"},
         },
         required: ["player", "color"],
