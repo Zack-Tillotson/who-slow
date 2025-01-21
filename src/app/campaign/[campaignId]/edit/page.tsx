@@ -5,16 +5,22 @@ import { CampaignForm } from "@/views/campaigns"
 import { Metadata } from "next"
 
 type CampaignPageProps = {
-  params: {
+  params: Promise<{
     campaignId: string,
-  },
+  }>,
 }
 
 export const metadata: Metadata = {
   title: "Edit campaign | Who Slow ",
 }
 
-export default async function CampaignPage({params: {campaignId}}: CampaignPageProps) {
+export default async function CampaignPage(props: CampaignPageProps) {
+  const params = await props.params;
+
+  const {
+    campaignId
+  } = params;
+
   const auth = await getAuthState()
   if(!auth.currentUser) {
     return <AuthCTA />

@@ -4,12 +4,18 @@ import { AuthCTA } from "@/views/AuthCTA"
 import { PlayerForm } from "@/views/players"
 
 type PageProps = {
-  params: {
+  params: Promise<{
     playerId: string,
-  },
+  }>,
 }
 
-export default async function PlayerPage({params: {playerId}}: PageProps) {
+export default async function PlayerPage(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    playerId
+  } = params;
+
   const auth = await getAuthState()
   if(!auth.currentUser) {
     return <AuthCTA />

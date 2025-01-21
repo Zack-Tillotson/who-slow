@@ -6,16 +6,22 @@ import { AuthCTA } from "@/views/AuthCTA"
 import { Session } from "@/views/sessions"
 
 type PageProps = {
-  params: {
+  params: Promise<{
     sessionId: string,
-  },
+  }>,
 }
 
 export const metadata: Metadata = {
   title: "Setup session | Who Slow ",
 }
 
-export default async function SessionPage({params: {sessionId}}: PageProps) {
+export default async function SessionPage(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    sessionId
+  } = params;
+
   const auth = await getAuthState()
   if(!auth.currentUser) {
     return <AuthCTA />
