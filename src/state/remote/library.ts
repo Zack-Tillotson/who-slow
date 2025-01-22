@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where, getDoc, doc, setDoc, and, limit, serverTimestamp, updateDoc, onSnapshot } from "firebase/firestore"
 import { FirebaseConnection } from "../firebase"
-import { Campaign, FilledSession, Game, Player, Session, SessionConfig } from "../types"
+import { Campaign, FilledSession, Game, Player, Session, SessionConfig, SessionPlayer } from "../types"
 
 import { buildCampaign } from "./objects/campaign"
 import { buildSession, generateShareCode } from "./objects/session"
@@ -225,11 +225,34 @@ export async function getSessionIdFromShareCode(firebase: FirebaseConnection, id
   return qDoc.data()?.sessionId
 }
 
+export async function ensureSessionPlayers(
+  firebase: FirebaseConnection,
+  rawSessionPlayers: SessionPlayer[]
+): Promise<SessionPlayer[]> {
+  const sessionPlayers = []
+  for(let i = 0 ; i < rawSessionPlayers.length; i++) {
+    const {player, name, color} = rawSessionPlayers[i]
+    if(player) {
+      sessionPlayers.push({name, color, player})
+      continue
+    }
+
+    const {id} = await savePlayer(firebase, {id: '', name})
+    sessionPlayers.push({name, color, player: id})
+  }
+  return sessionPlayers
+}
+
 export async function saveSessionConfig(firebase: FirebaseConnection, config: SessionConfig) {
 
-  const {id, ...attrs} = config
+  const {id, sessionPlayers: rawSessionPlayers, ...attrs} = config
+
+  const sessionPlayers = await ensureSessionPlayers(firebase, rawSessionPlayers)
+  console.log('session players', rawSessionPlayers, sessionPlayers)
+
   const dbDoc = {
-    ...attrs, 
+    ...attrs,
+    sessionPlayers,
     owner: await getUid(firebase),
     events: [],
   }

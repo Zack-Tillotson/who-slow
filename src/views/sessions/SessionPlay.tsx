@@ -69,61 +69,60 @@ export function SessionPlay({sessionId, game, userId}: ViewProps) {
       )}
       {!isShareDialogOpen && (
         <div>
-          {!isUnstarted && !isFixTurnDialogOpen && (
-            <div>
-              <Group gap="xs">
-                {isSessionOwner && (
-                  <Button
-                    p="xs"
-                    m="0"
-                    fz="xs"
-                    onClick={handleShareClick}
-                  >
-                    Share
-                  </Button>
-                )}
+          <div>
+            <Group gap="xs">
+              {isSessionOwner && (
                 <Button
                   p="xs"
                   m="0"
                   fz="xs"
-                  onClick={handleUndoClick}
-                  disabled={isPending || isPaused || events.length === 0}
+                  onClick={handleShareClick}
                 >
-                  Undo
+                  Share
                 </Button>
-                {isEnded && (
-                    <Button
-                      p="xs"
-                      m="0"
-                      fz="xs"
-                      component={Link}
-                      href={`/session/${session.id}/stats/`}
-                    >
-                      View session stats
-                    </Button>
-                )}
-                {!isEnded && (
-                  <>
-                    <Button p="xs" m="0" fz="xs" onClick={handlePauseClick} disabled={isPending || isUnstarted}>
-                      {isPaused ? 'Unpause' : 'Pause'}
-                    </Button>
-                    <Button p="xs" m="0" fz="xs" onClick={handleFixTurnClick} disabled={isPending || isPaused || isUnstarted}>Fix turn</Button>
-                    <Button p="xs" m="0" fz="xs" onClick={handleEndClick} disabled={isPending || isPaused || isUnstarted}>End</Button>
-                  </>
-                )}
-              </Group>
-              <Title size="md">Current turn</Title>
-              <Timer events={events} players={session.sessionPlayers} forceShowClock={isFixTurnDialogOpen} />
-            </div>
-          )}
+              )}
+              <Button
+                p="xs"
+                m="0"
+                fz="xs"
+                onClick={handleUndoClick}
+                disabled={isPending || isPaused || events.length === 0}
+              >
+                Undo
+              </Button>
+              {isEnded && (
+                  <Button
+                    p="xs"
+                    m="0"
+                    fz="xs"
+                    component={Link}
+                    href={`/session/${session.id}/stats/`}
+                  >
+                    View session stats
+                  </Button>
+              )}
+              {!isEnded && (
+                <>
+                  <Button p="xs" m="0" fz="xs" onClick={handlePauseClick} disabled={isPending || isUnstarted}>
+                    {isPaused ? 'Unpause' : 'Pause'}
+                  </Button>
+                  <Button p="xs" m="0" fz="xs" onClick={handleFixTurnClick} disabled={isPending || isPaused || isUnstarted}>Fix turn</Button>
+                  <Button p="xs" m="0" fz="xs" onClick={handleEndClick} disabled={isPending || isPaused || isUnstarted}>End</Button>
+                </>
+              )}
+            </Group>
+            <Title size="md">Current turn</Title>
+            <Timer events={events} players={session.sessionPlayers} forceShowClock={isFixTurnDialogOpen} />
+          </div>
+          <PlayerParade players={sessionPlayers} events={events} />
           {isFixTurnDialogOpen && (
             <FixTurnForm
               players={session.sessionPlayers}
+              nextPlayer={nextTurn.playerId}
               onCancel={handleFixTurnClick}
               onSubmit={handleFixTurnSubmit}
             />
           )}
-          <PlayerParade players={sessionPlayers} events={events} />
           {!isFixTurnDialogOpen && (
             <div>
               {!events?.length && (<Text>Click to start</Text>)}
