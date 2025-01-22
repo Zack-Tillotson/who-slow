@@ -67,7 +67,7 @@ type ViewProps = {
 
 }
 
-export function SessionStats({session, players, game}: ViewProps) {
+export function SessionStats({session, game}: ViewProps) {
 
   if(!session) {
     throw new Error('session not found')
@@ -75,7 +75,7 @@ export function SessionStats({session, players, game}: ViewProps) {
   
   const {events, sessionPlayers} = session
   
-  const stats = useSessionStats(session, players, game)
+  const stats = useSessionStats(session, game)
   
   return (
     <div>
@@ -122,13 +122,13 @@ export function SessionStats({session, players, game}: ViewProps) {
           icon="🐢"
           label="Slowest turn"
           value={`${stats.highlights.longestTurn.player.name}: ${nicePrintTime(stats.highlights.longestTurn.time)}`}
-          valueBg={stats.highlights.longestTurn.sessionPlayer?.color}
+          valueBg={stats.highlights.longestTurn.player?.color}
         />
         <HighlightStat
           icon="⚡"
           label="Fastest turn"
           value={`${stats.highlights.shortestTurn.player.name}: ${nicePrintTime(stats.highlights.shortestTurn.time)}`}
-          valueBg={stats.highlights.shortestTurn.sessionPlayer?.color}
+          valueBg={stats.highlights.shortestTurn.player?.color}
         />
       </Group>
 
@@ -167,7 +167,7 @@ export function SessionStats({session, players, game}: ViewProps) {
       
       <Title order={2} size="md" mb="md">Player statistics</Title>
       {stats.players.map(player => (
-        <div key={player.player.id}>
+        <div key={player.player.player}>
           <Title order={3} size="md" mt="lg">{player.player.name}</Title>
           <div className={styles.chart}>
             <Text

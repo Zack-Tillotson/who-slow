@@ -6,12 +6,11 @@ import { useTimer } from './useTimer';
 
 export interface TimerProps {
   events: SessionEvent[],
-  players: Player[],
-  sessionPlayers: SessionPlayer[],
+  players: SessionPlayer[],
   forceShowClock: boolean,
 }
 
-export function Timer({events, players, sessionPlayers, forceShowClock = false}: TimerProps) {
+export function Timer({events, players, forceShowClock = false}: TimerProps) {
 
   const {
     isClockVisible,
@@ -22,7 +21,7 @@ export function Timer({events, players, sessionPlayers, forceShowClock = false}:
     borderColor,
 
     handleClick,
-  } = useTimer(events, players, sessionPlayers)
+  } = useTimer(events, players)
 
   const showClock = isClockVisible || forceShowClock
 

@@ -21,7 +21,7 @@ type ViewProps = {
   campaigns: Campaign[],
 }
 
-export function SessionForm({sessionId, games, players, campaigns, session: currentSession}: ViewProps) {  
+export function SessionForm({games, players, campaigns, session: currentSession}: ViewProps) {  
   const router = useRouter()
   const params = useSearchParams()
   const {
@@ -46,12 +46,12 @@ export function SessionForm({sessionId, games, players, campaigns, session: curr
         id,
         campaign,
         game,
-        sessionPlayers: formPlayers.slice(0, playerCount).map(player => {
-          const id = players.find(({name}) => name === player.player)?.id ?? ''
-          return {...player, player: id}
+        sessionPlayers: formPlayers.slice(0, playerCount).map(({player: name, color}) => {
+          const playerId = players.find(({name: playerName}) => playerName === name)?.id ?? ''
+          return {player: playerId, name, color}
         }),
       }
-      if(builtSession.sessionPlayers.find(({player}) => !player)) {
+      if(builtSession.sessionPlayers.find(({name}) => !name)) {
         updateError('Player not found')
       } else {
         updateError('')
@@ -165,7 +165,7 @@ export function SessionForm({sessionId, games, players, campaigns, session: curr
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <Select 
+                <Autocomplete 
                   {...field}
                   flex={1}
                   label={`Name`}

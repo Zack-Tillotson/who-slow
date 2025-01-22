@@ -8,12 +8,14 @@ const schema: JSONSchemaType<Session> = {
     campaign: {type: "string"},
     date: {type: "number"},
     game: {type: "string"},
+    owner: {type: "string"},
     sessionPlayers: {
       type: "array", 
       items: {
         type: "object", 
         properties: {
           "player": {type: "string"},
+          "name": {type: "string"},
           "color": {type: "string"},
         },
         required: ["player", "color"],
@@ -43,8 +45,8 @@ const ajv = new Ajv()
 const validator = ajv.compile(schema)
 
 export function buildSession(id?: string, data: any = {}) {
-  const {campaign, date, game, sessionPlayers, events} = data
-  const builtObject = {id, campaign, date: date.toDate().getTime(), game, sessionPlayers, events}
+  const {campaign, date, game, sessionPlayers, events, owner} = data
+  const builtObject = {id, campaign, date: date.toDate().getTime(), game, sessionPlayers, events, owner}
   const isValid = validator(builtObject)
   if(!isValid) {
     console.log('Validation error', 'session', validator.errors, id, data)

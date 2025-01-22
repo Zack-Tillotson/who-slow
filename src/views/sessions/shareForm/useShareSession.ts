@@ -2,11 +2,14 @@
 
 import { library } from "@/state/remote"
 import { Session } from "@/state/types"
-import { useActionState} from "react"
+import { useActionState, useState} from "react"
 
-const createShareCode = (sessionId: Session["id"]) => async (previousCode: string) => {
+const createShareCode = (sessionId: Session["id"], onSuccess: () => void) => async (previousCode: string) => {
   try {
     const code = await library().getSessionShareCode(sessionId)
+    const shareLink = createShareLink(code)
+    navigator.clipboard.writeText(shareLink)
+    onSuccess()
     return code
   } catch(e) {
     console.log('WARN', 'Unable to create share code', e)
@@ -15,22 +18,31 @@ const createShareCode = (sessionId: Session["id"]) => async (previousCode: strin
 }
 
 function createShareLink(shareCode: string) {
-  return shareCode
+  return `${location.origin}/session/share/${shareCode}`
 }
 
 export function useShareSession(sessionId: Session["id"]) {
-  const [shareCode, handleShareClick, isPending] = useActionState(createShareCode(sessionId), '')
-
-  const shareLink = createShareLink(shareCode)
+  const [isNotificationVisible, updateIsNotificationVisible] = useState(false)
+  const [shareCode, handleShareClick, isPending] = useActionState(
+    createShareCode(sessionId, () => updateIsNotificationVisible(true))
+  , '')
   
   const handleCodeClick = () => {
-    navigator.clipboard.writeText(`${location.origin}/session/share/${shareLink}`)
+    const shareLink = createShareLink(shareCode)
+    navigator.clipboard.writeText(shareLink)
+    updateIsNotificationVisible(true)
+  }
+
+  const handleNotificationClose = () => {
+    updateIsNotificationVisible(false)
   }
 
   return {
     isPending,
-    shareLink,
+    isNotificationVisible,
+    shareCode,
     handleShareClick,
     handleCodeClick,
+    handleNotificationClose,
   }
 }

@@ -17,6 +17,7 @@ export type Campaign = {
 
 export type SessionPlayer = {
   player: Player["id"],
+  name: Player["name"],
   color: string,
 }
 
@@ -33,6 +34,7 @@ export type Session = {
   game: Game["id"],
   sessionPlayers: SessionPlayer[],
   events?: SessionEvent[],
+  owner: string,
 }
 
 export type SessionConfig = Pick<Session, 'id' | 'campaign' | 'game' | 'sessionPlayers'>

@@ -18,9 +18,10 @@ type ViewProps = {
   sessionId: string,
   game: Game,
   players: Player[],
+  userId: string,
 }
 
-export function SessionPlay({sessionId, game, players}: ViewProps) {
+export function SessionPlay({sessionId, game, userId}: ViewProps) {
   const {
     isInitialized,
     data: session,
@@ -33,6 +34,7 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
     isPaused,
     isShareDialogOpen,
     isFixTurnDialogOpen,
+    isSessionOwner,
     
     nextTurn,
 
@@ -43,7 +45,7 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
     handleUndoClick,
     handleFixTurnClick,
     handleFixTurnSubmit,
-  } = useSessionPlay(session, game, players)
+  } = useSessionPlay(session, game, userId)
 
   if(!isInitialized) {
     return `Loading....`
@@ -67,9 +69,9 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
       )}
       {!isShareDialogOpen && (
         <div>
-          {!isUnstarted && !isFixTurnDialogOpen && (
-            <div>
-              <Group gap="xs">
+          <div>
+            <Group gap="xs">
+              {isSessionOwner && (
                 <Button
                   p="xs"
                   m="0"
@@ -78,48 +80,49 @@ export function SessionPlay({sessionId, game, players}: ViewProps) {
                 >
                   Share
                 </Button>
-                <Button
-                  p="xs"
-                  m="0"
-                  fz="xs"
-                  onClick={handleUndoClick}
-                  disabled={isPending || isPaused || events.length === 0}
-                >
-                  Undo
-                </Button>
-                {isEnded && (
-                    <Button
-                      p="xs"
-                      m="0"
-                      fz="xs"
-                      component={Link}
-                      href={`/session/${session.id}/stats/`}
-                    >
-                      View session stats
-                    </Button>
-                )}
-                {!isEnded && (
-                  <>
-                    <Button p="xs" m="0" fz="xs" onClick={handlePauseClick} disabled={isPending || isUnstarted}>
-                      {isPaused ? 'Unpause' : 'Pause'}
-                    </Button>
-                    <Button p="xs" m="0" fz="xs" onClick={handleFixTurnClick} disabled={isPending || isPaused || isUnstarted}>Fix turn</Button>
-                    <Button p="xs" m="0" fz="xs" onClick={handleEndClick} disabled={isPending || isPaused || isUnstarted}>End</Button>
-                  </>
-                )}
-              </Group>
-              <Title size="md">Current turn</Title>
-              <Timer events={events} players={players} sessionPlayers={sessionPlayers} forceShowClock={isFixTurnDialogOpen} />
-            </div>
-          )}
+              )}
+              <Button
+                p="xs"
+                m="0"
+                fz="xs"
+                onClick={handleUndoClick}
+                disabled={isPending || isPaused || events.length === 0}
+              >
+                Undo
+              </Button>
+              {isEnded && (
+                  <Button
+                    p="xs"
+                    m="0"
+                    fz="xs"
+                    component={Link}
+                    href={`/session/${session.id}/stats/`}
+                  >
+                    View session stats
+                  </Button>
+              )}
+              {!isEnded && (
+                <>
+                  <Button p="xs" m="0" fz="xs" onClick={handlePauseClick} disabled={isPending || isUnstarted}>
+                    {isPaused ? 'Unpause' : 'Pause'}
+                  </Button>
+                  <Button p="xs" m="0" fz="xs" onClick={handleFixTurnClick} disabled={isPending || isPaused || isUnstarted}>Fix turn</Button>
+                  <Button p="xs" m="0" fz="xs" onClick={handleEndClick} disabled={isPending || isPaused || isUnstarted}>End</Button>
+                </>
+              )}
+            </Group>
+            <Title size="md">Current turn</Title>
+            <Timer events={events} players={session.sessionPlayers} forceShowClock={isFixTurnDialogOpen} />
+          </div>
+          <PlayerParade players={sessionPlayers} events={events} />
           {isFixTurnDialogOpen && (
             <FixTurnForm
-              players={players}
+              players={session.sessionPlayers}
+              nextPlayer={nextTurn.playerId}
               onCancel={handleFixTurnClick}
               onSubmit={handleFixTurnSubmit}
             />
           )}
-          <PlayerParade sessionPlayers={sessionPlayers} events={events} players={players} />
           {!isFixTurnDialogOpen && (
             <div>
               {!events?.length && (<Text>Click to start</Text>)}

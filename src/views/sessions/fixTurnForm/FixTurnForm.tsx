@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Player, SessionEvent } from '@/state/types'
+import { Player, SessionEvent, SessionPlayer } from '@/state/types'
 import { Button, Divider, Group, Text, Title } from '@mantine/core'
 
 import './fixTurnForm.module.scss'
@@ -11,17 +11,16 @@ const WHEN = {
   ['3 mins ago']: 3,
 }
 
-const DEFAULT_PLAYER_ID = '' as Player["id"]
-
 interface FixTurnFormProps {
-  players: Player[],
-  onSubmit: (who: Player["id"], howLong: number) => void,
+  players: SessionPlayer[],
+  nextPlayer: SessionPlayer["player"],
+  onSubmit: (who: SessionPlayer["player"], howLong: number) => void,
   onCancel: () => void,
 }
 
-export function FixTurnForm({players, onSubmit, onCancel}: FixTurnFormProps) {
+export function FixTurnForm({players, nextPlayer, onSubmit, onCancel}: FixTurnFormProps) {
 
-  const [selectedPlayer, updateSelectedPlayer] = useState(DEFAULT_PLAYER_ID)
+  const [selectedPlayer, updateSelectedPlayer] = useState(nextPlayer)
   const [selectedWhen, updateSelectedWhen] = useState(0) // 0 = split the existing turn
 
   return (
@@ -31,9 +30,9 @@ export function FixTurnForm({players, onSubmit, onCancel}: FixTurnFormProps) {
       <Group>
         {players.map(player => (
             <Button
-              key={player.id}
-              variant={player.id == selectedPlayer ? 'filled' : 'outline'}
-              onClick={() => updateSelectedPlayer(player.id)}>
+              key={player.player}
+              variant={player.player == selectedPlayer ? 'filled' : 'outline'}
+              onClick={() => updateSelectedPlayer(player.player)}>
                 {player.name}
             </Button>
           ))}
@@ -65,7 +64,6 @@ export function FixTurnForm({players, onSubmit, onCancel}: FixTurnFormProps) {
         </Button>
         <Button 
             variant={'filled'}
-            disabled={selectedPlayer === DEFAULT_PLAYER_ID}
             onClick={() => onSubmit(selectedPlayer, selectedWhen)}>
               Submit
         </Button>
