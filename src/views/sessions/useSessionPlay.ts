@@ -8,7 +8,7 @@ const DEFAULT_PLAYER = {
   playerId: '',
 }
 
-export function useSessionPlay(session: Session|null, game: Game, players: Player[]) {
+export function useSessionPlay(session: Session|null, game: Game, userId: string) {
 
   const {isPending, set: setSessionEvents} = useSetData(`sessions/${session?.id}`, 'events')
   const [isFixTurnDialogOpen, updateFixTurnDialog] = useState(false)
@@ -33,13 +33,13 @@ export function useSessionPlay(session: Session|null, game: Game, players: Playe
   const isUnstarted = events.length === 0
   const isEnded = !!lastEvent && lastEvent.type === 'END'
   const isPaused = !!lastEvent && lastEvent.type === 'PAUSE'
-  
+  const isSessionOwner = !!session && session.owner === userId
+
   const nextSessionPlayerIndex = turnEvents.length % (session?.sessionPlayers.length ?? 1)
   const sessionPlayer = session?.sessionPlayers[nextSessionPlayerIndex]
-  const nextPlayer = players.find(({id}) => session?.sessionPlayers[nextSessionPlayerIndex].player == id) || players[0]
   const nextTurn = {
     playerId: sessionPlayer?.player ?? DEFAULT_PLAYER.playerId,
-    name: nextPlayer?.name ?? DEFAULT_PLAYER.name,
+    name: sessionPlayer?.name ?? DEFAULT_PLAYER.name,
     color: sessionPlayer?.color ?? DEFAULT_PLAYER.color,
   }
 
@@ -87,6 +87,7 @@ export function useSessionPlay(session: Session|null, game: Game, players: Playe
     isPaused,
     isShareDialogOpen,
     isFixTurnDialogOpen,
+    isSessionOwner,
 
     nextTurn,
 

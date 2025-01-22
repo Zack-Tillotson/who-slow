@@ -4,17 +4,14 @@ import { Game, Player, Session, SessionPlayer } from "@/state/types"
 export type Turn = {
     turn: number,
     time: number,
-    player: Player,
-    sessionPlayer: SessionPlayer,
+    player: SessionPlayer,
 }
 
-export type TurnPlayer = {
-  player: Player,
+export interface TurnPlayer extends SessionPlayer {
   turns: Turn[],
-  color: SessionPlayer["color"],
 }
 
-export function useSessionStats(session: Session, fullPlayers: Player[], game: Game) {
+export function useSessionStats(session: Session, game: Game) {
   const {events = []} = session
 
   const turns = events.map((event, index) => {
@@ -24,17 +21,15 @@ export function useSessionStats(session: Session, fullPlayers: Player[], game: G
     return {
       turn: index,
       time: event.when - prevEvent.when,
-      player: fullPlayers.find(player => player.id == prevEvent.who),
-      sessionPlayer: session.sessionPlayers.find(({player}) => player == prevEvent.who)
+      player: session.sessionPlayers.find(({player}) => player == prevEvent.who)
     }
   }).filter(Boolean) as Turn[]
 
-  const playersWithTurns = session.sessionPlayers.map(sessionPlayer => {
-    const player = fullPlayers.find(player => player.id == sessionPlayer.player) as Player
+  const playersWithTurns = session.sessionPlayers.map(player => {
     return {
       player,
       turns: turns.filter(turn => turn.player == player),
-      color: sessionPlayer.color,
+      color: player.color,
     }
   }).map(player => ({
     ...player,
