@@ -18,9 +18,10 @@ type ViewProps = {
   sessionId: string,
   game: Game,
   players: Player[],
+  userId: string,
 }
 
-export function SessionPlay({sessionId, game}: ViewProps) {
+export function SessionPlay({sessionId, game, userId}: ViewProps) {
   const {
     isInitialized,
     data: session,
@@ -33,6 +34,7 @@ export function SessionPlay({sessionId, game}: ViewProps) {
     isPaused,
     isShareDialogOpen,
     isFixTurnDialogOpen,
+    isSessionOwner,
     
     nextTurn,
 
@@ -43,7 +45,7 @@ export function SessionPlay({sessionId, game}: ViewProps) {
     handleUndoClick,
     handleFixTurnClick,
     handleFixTurnSubmit,
-  } = useSessionPlay(session, game)
+  } = useSessionPlay(session, game, userId)
 
   if(!isInitialized) {
     return `Loading....`
@@ -70,14 +72,16 @@ export function SessionPlay({sessionId, game}: ViewProps) {
           {!isUnstarted && !isFixTurnDialogOpen && (
             <div>
               <Group gap="xs">
-                <Button
-                  p="xs"
-                  m="0"
-                  fz="xs"
-                  onClick={handleShareClick}
-                >
-                  Share
-                </Button>
+                {isSessionOwner && (
+                  <Button
+                    p="xs"
+                    m="0"
+                    fz="xs"
+                    onClick={handleShareClick}
+                  >
+                    Share
+                  </Button>
+                )}
                 <Button
                   p="xs"
                   m="0"

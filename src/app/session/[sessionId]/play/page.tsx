@@ -20,7 +20,7 @@ export default async function SessionPage(props: PageProps) {
     sessionId
   } = params;
 
-  await getAuthState()
+  const auth = await getAuthState()
 
   const session = await library().getSession(sessionId)
   const game = await library().getGame(session.game)
@@ -31,6 +31,7 @@ export default async function SessionPage(props: PageProps) {
       sessionId={sessionId}
       game={game}
       players={players}
+      userId={auth.currentUser?.uid ?? ''}
     />
   )
 }
