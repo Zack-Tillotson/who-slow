@@ -1,12 +1,13 @@
 'use client'
 
 import React from 'react'
-import { Button, Divider, Group, Text, TextInput, Title } from '@mantine/core'
+import { Button, Divider, Group, Notification, Text, TextInput, Title } from '@mantine/core'
 
 import { useShareSession } from './useShareSession'
 
 import './shareForm.module.scss'
 import { Session } from '@/state/types'
+import { IconCheck } from '@tabler/icons-react'
 
 interface ShareFormProps {
   sessionId: Session["id"],
@@ -15,9 +16,11 @@ interface ShareFormProps {
 
 export function ShareForm({sessionId, onClose}: ShareFormProps) {
   const {
-    shareLink,
+    shareCode,
+    isNotificationVisible,
     handleCodeClick,
     handleShareClick,
+    handleNotificationClose,
   } = useShareSession(sessionId)
 
   return (
@@ -35,7 +38,7 @@ export function ShareForm({sessionId, onClose}: ShareFormProps) {
       <Divider mt="sm" mb="sm" />
       <Title order={2} size="sm">Share link</Title>
       <TextInput
-        value={shareLink}
+        value={shareCode}
         readOnly
         flex="1"
         onClick={handleCodeClick}
@@ -45,6 +48,17 @@ export function ShareForm({sessionId, onClose}: ShareFormProps) {
         <Button formAction={handleShareClick} type="submit">Share</Button>
         <Button variant='outline' onClick={onClose}>Close</Button>
       </Group>
+      {isNotificationVisible && (
+        <Notification
+          title="Link copied to clipboard"
+          onClose={handleNotificationClose}
+          color="green"
+          icon={<IconCheck />}
+          mt="lg"
+        >
+          Share the link to allow others to view the session.
+        </Notification>
+      )}
     </form>
   );
 }
