@@ -1,5 +1,3 @@
-'use client'
-
 import { Stack, Text, Title } from "@mantine/core";
 import { Auth } from "firebase/auth";
 

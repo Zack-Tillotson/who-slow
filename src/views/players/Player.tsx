@@ -1,6 +1,5 @@
 'use client'
 
-import { useDataState } from "@/state";
 import { Button, Text, Title } from "@mantine/core";
 import { Player as PlayerType } from "@/state/types";
 import Link from "next/link";
