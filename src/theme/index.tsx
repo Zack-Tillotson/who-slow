@@ -4,16 +4,16 @@ import {
 } from '@mantine/core'
 
 const primaryTheme: MantineColorsTuple = [
-  "#eef4fc",
-  "#dbe5f3",
-  "#b1c8e7",
-  "#86abde",
-  "#6292d5",
-  "#4c81d1",
-  "#4079cf",
-  "#3368b8",
-  "#2a5ca5",
-  "#1b4f92"
+  "#ecf4ff",
+  "#dce4f5",
+  "#b9c7e2",
+  "#94a8d0",
+  "#748dc0",
+  "#5f7cb7",
+  "#5474b4",
+  "#44639f",
+  "#3a5890",
+  "#2c4b80"
 ]
 
 const secondaryTheme: MantineColorsTuple = [
