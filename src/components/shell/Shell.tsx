@@ -21,6 +21,7 @@ export function Shell({children}: ShellType) {
 
   return (
     <AppShell
+      className={styles.container}
       header={{ height: 75 }}
       navbar={{
         width: 300,
@@ -45,6 +46,7 @@ export function Shell({children}: ShellType) {
           onClick={toggle}
           hiddenFrom="sm"
           size="sm"
+          aria-label="Menu"
         />
       </AppShell.Header>
 
