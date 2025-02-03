@@ -16,12 +16,17 @@ type ViewProps = {
   sessionId?: string,
   session?: Session,
   campaign?: string,
-  games: Game[],
-  players: Player[],
-  campaigns: Campaign[],
+  games?: Game[],
+  players?: Player[],
+  campaigns?: Campaign[],
 }
 
-export function SessionForm({games, players, campaigns, session: currentSession}: ViewProps) {  
+export function SessionForm({
+  games = [], 
+  players = [], 
+  campaigns = [], 
+  session: currentSession,
+}: ViewProps) {  
   const router = useRouter()
   const params = useSearchParams()
   const {

@@ -1,6 +1,4 @@
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
+import { buildViewData } from "@/state/buildViewData"
 
 import { Game } from "@/views/games"
 
@@ -15,17 +13,15 @@ export default async function GamePage(props: PageProps) {
 
   const {
     gameId
-  } = params;
+  } = params
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
+  const {interstitial, data: {game}} = await buildViewData({game: gameId})
+
+  if(interstitial) { // Error, loading, etc
+    return interstitial 
   }
 
-  const game = await library().getGame(gameId)
   return (
-    <>
-      <Game gameId={gameId} game={game} />
-    </>
+    <Game gameId={gameId} game={game} />
   )
 }

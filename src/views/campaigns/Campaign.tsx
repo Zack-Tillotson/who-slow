@@ -8,11 +8,11 @@ import { Campaign as CampaignType, FilledSession, Session as SessionType} from "
 
 type CampaignViewProps = {
   campaignId: string,
-  campaign: CampaignType | null,
-  filledSessions: FilledSession[],
+  campaign?: CampaignType,
+  sessions?: FilledSession[],
 }
 
-export function Campaign({campaignId, campaign, filledSessions}: CampaignViewProps) {
+export function Campaign({campaignId, campaign, sessions = []}: CampaignViewProps) {
 
   if(!campaign) {
     return (
@@ -48,10 +48,10 @@ export function Campaign({campaignId, campaign, filledSessions}: CampaignViewPro
         </Button>
       </Group>
       <Text size="sm">Create a session to record when you play a game, sessions keep track of which game you played and who the players are.</Text>
-      {!filledSessions.length && (
+      {!sessions.length && (
         <Text>No sessions yet</Text>
       )}
-      {[...filledSessions].reverse().map((session) => (
+      {[...sessions].reverse().map((session) => (
         <Session
           key={session.session.id}
           sessionId={session.session.id}

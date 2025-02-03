@@ -6,10 +6,10 @@ import Link from "next/link";
 
 type ViewProps = {
   playerId: string,
-  player: PlayerType,
+  player?: PlayerType,
 }
 
-export function Player({playerId, player}: ViewProps) {
+export function Player({player}: ViewProps) {
 
   if(!player) {
     return (
@@ -17,7 +17,7 @@ export function Player({playerId, player}: ViewProps) {
     )
   }
 
-  const {id, name} = player
+  const {name} = player
 
   return (
     <>

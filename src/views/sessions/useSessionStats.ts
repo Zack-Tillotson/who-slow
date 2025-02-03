@@ -11,7 +11,7 @@ export interface TurnPlayer extends SessionPlayer {
   turns: Turn[],
 }
 
-export function useSessionStats(session: Session, game: Game) {
+export function useSessionStats(session: Session, game?: Game) {
   const {events = []} = session
 
   const turns = events.map((event, index) => {

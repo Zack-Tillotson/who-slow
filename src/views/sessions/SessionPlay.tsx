@@ -16,8 +16,8 @@ import { useWatchSession } from "@/state/remote/useWatchData";
 
 type ViewProps = {
   sessionId: string,
-  game: Game,
-  players: Player[],
+  game?: Game,
+  players?: Player[],
   userId: string,
 }
 

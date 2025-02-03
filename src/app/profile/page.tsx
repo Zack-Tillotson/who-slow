@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import getAuthState from "@/state/getAuthState";
-import { AuthCTA } from "@/views/AuthCTA";
+import { buildViewData } from "@/state/buildViewData";
 import { Profile } from "@/views/profile";
 
 export const metadata: Metadata = {
@@ -9,9 +8,11 @@ export const metadata: Metadata = {
 
 export default async function PlayerPage() {
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
+
+  const {interstitial, auth} = await buildViewData()
+
+  if(interstitial) { // Error, loading, etc
+    return interstitial 
   }
     
   return (

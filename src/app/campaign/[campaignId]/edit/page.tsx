@@ -1,6 +1,5 @@
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
+import { buildViewData } from "@/state/buildViewData"
+
 import { CampaignForm } from "@/views/campaigns"
 import { Metadata } from "next"
 
@@ -21,12 +20,11 @@ export default async function CampaignPage(props: CampaignPageProps) {
     campaignId
   } = params;
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
+  const {interstitial, data: {campaign}} = await buildViewData({campaign: campaignId})
 
-  const campaign = await library().getCampaign(campaignId)
+  if(interstitial) { // Error, loading, etc
+    return interstitial 
+  }
   return (
     <CampaignForm campaignId={campaignId} campaign={campaign} />
   )

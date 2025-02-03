@@ -1,9 +1,7 @@
 'use client'
 
-import Link from "next/link";
-import { Button, SimpleGrid, Group, Stack, Text, Title, Divider } from "@mantine/core"
+import { Group, Stack, Text, Title, Divider } from "@mantine/core"
 
-import { useDataState } from "@/state";
 import { useSessionStats } from "./useSessionStats";
 
 import styles from './sessionStats.module.scss'
@@ -62,8 +60,7 @@ function HighlightStat({icon, label, value, valueBg}: HighlightStatType) {
 
 type ViewProps = {
   session?: Session,
-  players: Player[],
-  game: Game,
+  game?: Game,
 
 }
 
@@ -72,9 +69,7 @@ export function SessionStats({session, game}: ViewProps) {
   if(!session) {
     throw new Error('session not found')
   }
-  
-  const {events, sessionPlayers} = session
-  
+    
   const stats = useSessionStats(session, game)
   
   return (

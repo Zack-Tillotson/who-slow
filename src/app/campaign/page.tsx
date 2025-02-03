@@ -1,12 +1,7 @@
 import { Metadata } from "next";
-import { headers } from 'next/headers'
 
-import firebase from "@/state/firebase";
-import { library } from "@/state/remote";
-import { AuthCTA } from "@/views/AuthCTA";
 import { Campaigns } from "@/views/campaigns";
-import { Campaign } from "@/state/types";
-import getAuthState from "@/state/getAuthState";
+import { buildViewData } from "@/state/buildViewData";
 
 export const metadata: Metadata = {
   title: "Campaigns | Who Slow ",
@@ -14,18 +9,12 @@ export const metadata: Metadata = {
 
 export default async function CampaignPage() {
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
+  const {interstitial, data: {campaigns}} = await buildViewData({campaigns: null})
 
-  let campaigns: Campaign[] = []
-  try {
-    campaigns = await library().getCampaigns()
-  } catch(e) {
-    console.log('DB Error', e)
+  if(interstitial) { // Error, loading, etc
+    return interstitial 
   }
-      
+  
   return (
     <Campaigns campaigns={campaigns} />
   )

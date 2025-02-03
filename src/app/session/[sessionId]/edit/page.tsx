@@ -1,5 +1,5 @@
-import getAuthState from "@/state/getAuthState";
-import { library } from "@/state/remote";
+import { buildViewData } from "@/state/buildViewData";
+
 import { SessionForm } from "@/views/sessions"
 import { Metadata } from "next";
 
@@ -20,19 +20,17 @@ export default async function SessionPage(props: PageProps) {
     sessionId
   } = params;
 
-  const auth = await getAuthState()
+  const {interstitial, auth, data: {session}} = await buildViewData({
+    session: sessionId
+  })
 
-  const session = await library().getSession(sessionId)
-  const games = await library().getGames()
-  const campaigns = await library().getCampaigns()
-  const players = await library().getPlayers()
+  if(interstitial) { // Error, loading, etc
+    return interstitial 
+  }
 
   return (
     <SessionForm
-      session={session}
-      games={games}
-      campaigns={campaigns}
-      players={players}
+      {...session}
     />
   )
 }

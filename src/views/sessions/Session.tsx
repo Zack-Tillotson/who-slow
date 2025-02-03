@@ -6,9 +6,9 @@ import Link from "next/link";
 
 type ViewProps = {
   sessionId: string,
-  session: SessionType,
-  game: Game,
-  players: Player[],
+  session?: SessionType,
+  game?: Game,
+  players?: Player[],
 }
 
 function getSessionStatus(session: SessionType) {
@@ -50,7 +50,7 @@ export function Session({session, game, players}: ViewProps) {
       </Stack>
       <Stack gap="0">
         <Text size="xs">Players</Text>
-        <Text size="xs" fw={700}>{players.map((player) => player?.name ?? 'Player').join(', ')}</Text>
+        <Text size="xs" fw={700}>{players?.map((player) => player?.name ?? 'Player').join(', ') ?? 'Players'}</Text>
       </Stack>
       <Divider mt="sm" />
       <Group pt="md">

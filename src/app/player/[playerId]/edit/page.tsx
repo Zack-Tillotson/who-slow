@@ -1,6 +1,5 @@
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
+import { buildViewData } from "@/state/buildViewData"
+
 import { PlayerForm } from "@/views/players"
 
 type PageProps = {
@@ -16,12 +15,12 @@ export default async function PlayerPage(props: PageProps) {
     playerId
   } = params;
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
 
-  const player = await library().getPlayer(playerId)
+  const {interstitial, data: {player}} = await buildViewData({player: playerId})
+
+  if(interstitial) { // Error, loading, etc
+    return interstitial 
+  }
   return (
     <PlayerForm playerId={playerId} player={player} />
   )

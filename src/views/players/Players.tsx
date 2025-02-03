@@ -6,10 +6,10 @@ import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 
 type PlayersParams = {
-  players: Player[],
+  players?: Player[],
 }
 
-export function Players({players}: PlayersParams) {
+export function Players({players = []}: PlayersParams) {
   
   return (
     <>
