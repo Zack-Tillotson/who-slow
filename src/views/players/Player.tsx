@@ -1,15 +1,12 @@
 'use client'
 
 import { Button, Text, Title } from "@mantine/core";
-import { Player as PlayerType } from "@/state/types";
 import Link from "next/link";
+import { ViewParams } from "@/components/view/types";
 
-type ViewProps = {
-  playerId: string,
-  player?: PlayerType,
-}
-
-export function Player({player}: ViewProps) {
+export function Player({viewState}: ViewParams) {
+  
+  const {data: {player}} = viewState
 
   if(!player) {
     return (

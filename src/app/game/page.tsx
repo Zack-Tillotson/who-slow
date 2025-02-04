@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import { Games } from "@/views/games"
-import { buildViewData } from "@/state/buildViewData"
+import { buildViewData } from "@/components/view/buildViewData"
+import { ViewContainer } from "@/components/view"
 
 export const metadata: Metadata = {
   title: "Games | Who Slow ",
@@ -8,13 +9,9 @@ export const metadata: Metadata = {
 
 export default async function GamePage() {
 
-  const {interstitial, data: {games}} = await buildViewData({games: null})
+  const viewState = await buildViewData({games: true})
 
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
-      
   return (
-    <Games games={games} />
+    <ViewContainer viewState={viewState} View={Games} />
   )
 }

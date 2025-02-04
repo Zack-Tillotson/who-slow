@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 
 import { Session } from "@/views/sessions"
-import { buildViewData } from "@/state/buildViewData";
+import { buildViewData } from "@/components/view/buildViewData";
+import { ViewContainer } from "@/components/view";
 
 type PageProps = {
   params: Promise<{
@@ -20,18 +21,9 @@ export default async function SessionPage(props: PageProps) {
     sessionId
   } = params;
 
-  const {interstitial, data: {session}} = await buildViewData({
-    session: sessionId
-  })
-
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
+  const viewState = await buildViewData({session: sessionId})
 
   return (
-    <Session
-      sessionId={sessionId}
-      {...session}
-    />
+    <ViewContainer viewState={viewState} View={Session} />
   )
 }

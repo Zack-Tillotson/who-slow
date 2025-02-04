@@ -2,18 +2,12 @@
 
 import Link from "next/link";
 import { Button, Image, Text, Title } from "@mantine/core";
-
-import { Game as GameType } from "@/state/types";
-
+import { ViewParams } from "@/components/view/types";
 import styles from './game.module.scss'
 
-
-type ViewProps = {
-  gameId: string,
-  game?: GameType,
-}
-
-export function Game({game}: ViewProps) {
+export function Game({viewState}: ViewParams) {
+  
+  const {data: {game}} = viewState
 
   if(!game) {
     return (

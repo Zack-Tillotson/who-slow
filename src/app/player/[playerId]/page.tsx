@@ -1,4 +1,5 @@
-import { buildViewData } from "@/state/buildViewData"
+import { ViewContainer } from "@/components/view";
+import { buildViewData } from "@/components/view/buildViewData"
 
 import { Player } from "@/views/players"
 
@@ -15,15 +16,9 @@ export default async function PlayerPage(props: PageProps) {
     playerId
   } = params;
 
-  const {interstitial, data: {player}} = await buildViewData({player: playerId})
+  const viewState = await buildViewData({player: playerId})
 
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
-      
   return (
-    <>
-      <Player playerId={playerId} player={player} />
-    </>
+    <ViewContainer viewState={viewState} View={Player} />
   )
 }

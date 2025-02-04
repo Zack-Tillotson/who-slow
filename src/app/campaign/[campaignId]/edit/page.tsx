@@ -1,7 +1,8 @@
-import { buildViewData } from "@/state/buildViewData"
-
-import { CampaignForm } from "@/views/campaigns"
 import { Metadata } from "next"
+import { CampaignForm } from "@/views/campaigns"
+
+import { buildViewData } from "@/components/view/buildViewData"
+import { ViewContainer } from "@/components/view"
 
 type CampaignPageProps = {
   params: Promise<{
@@ -20,12 +21,9 @@ export default async function CampaignPage(props: CampaignPageProps) {
     campaignId
   } = params;
 
-  const {interstitial, data: {campaign}} = await buildViewData({campaign: campaignId})
+  const viewState = await buildViewData({campaign: campaignId, sessions: campaignId})
 
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
   return (
-    <CampaignForm campaignId={campaignId} campaign={campaign} />
+    <ViewContainer viewState={viewState} View={CampaignForm} />
   )
 }

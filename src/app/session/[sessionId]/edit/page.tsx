@@ -1,4 +1,5 @@
-import { buildViewData } from "@/state/buildViewData";
+import { ViewContainer } from "@/components/view";
+import { buildViewData } from "@/components/view/buildViewData";
 
 import { SessionForm } from "@/views/sessions"
 import { Metadata } from "next";
@@ -20,17 +21,9 @@ export default async function SessionPage(props: PageProps) {
     sessionId
   } = params;
 
-  const {interstitial, auth, data: {session}} = await buildViewData({
-    session: sessionId
-  })
-
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
+  const viewState = await buildViewData({games: true, campaigns: true, players: true, session: sessionId})
 
   return (
-    <SessionForm
-      {...session}
-    />
+    <ViewContainer viewState={viewState} View={SessionForm} />
   )
 }

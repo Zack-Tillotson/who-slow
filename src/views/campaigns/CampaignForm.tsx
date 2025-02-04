@@ -1,77 +1,20 @@
 'use client'
 
-import { useForm, Controller } from "react-hook-form"
+import { ViewParams } from "@/components/view/types";
+import { NiceLoading } from "@/components/loading";
+import { CampaignForm as FormCampaign } from "./components/CampaignForm";
 
-import { Button, Loader, TextInput, Title } from "@mantine/core"
-import { useRouter } from "next/navigation";
+export function CampaignForm({viewState}: ViewParams) {
 
-import { useDataState } from "@/state";
-import {Campaign as CampaignType} from '@/state/types'
-import { useState } from "react";
-import { library } from "@/state/remote";
-
-type CampaignViewProps = {
-  campaignId?: string,
-  campaign?: CampaignType
-}
-
-interface FormInputs {
-  id: string
-  name: string
-}
-
-const enum formStates {
-  CLEAN,
-  PENDING,
-  SUCCESS,
-  ERROR,
-}
-
-export function CampaignForm({campaignId, campaign}: CampaignViewProps) {
-  
-  const router = useRouter()
   const {
-    getCampaignForm,
-  } = useDataState()
-  const formCampaign = getCampaignForm(campaign)
-  
-  const { handleSubmit, control } = useForm<FormInputs>({
-    defaultValues: formCampaign,
-  })
-  
-  const [formState, updateFormState] = useState<formStates>(formStates.CLEAN)
-  const handleLocalSubmit = async (data: FormInputs) => {
-    updateFormState(formStates.PENDING)
-    try {
-      const result = await library().saveCampaign({...data, id: formCampaign.id})
-      router.push(`/campaign/${result.id}/`)
-      updateFormState(formStates.SUCCESS)
-    } catch (e) {
-      console.log('WARN', 'form submission failed', e)
-      updateFormState(formStates.ERROR)
-    }
+    options: {campaign: campaignId}, 
+    data: {campaign},
+    meta: {isDataReady},
+  } = viewState
+
+  if(!isDataReady) {
+    return <NiceLoading />
   }
 
-  return (
-    <form onSubmit={handleSubmit(handleLocalSubmit)}>
-      <Title order={1}>{!!campaign ? 'Edit' : 'New'} Campaign</Title>
-      <Controller
-        name="id"
-        disabled
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => <TextInput {...field} label="ID" />}
-      />
-      <Controller
-        name="name"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => <TextInput {...field} label="Name" />}
-      />
-      <Button type="submit" disabled={formState === formStates.PENDING}>
-        Submit
-        {formState === formStates.PENDING && (<Loader />)}
-      </Button>
-    </form>
-  )
+  return <FormCampaign campaignId={campaignId} campaign={campaign} />
 }

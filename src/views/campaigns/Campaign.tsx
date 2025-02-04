@@ -1,18 +1,27 @@
 'use client'
 
-import { Box, Button, Divider, Group, Stack, Text, Title } from "@mantine/core";
+import { Button, Divider, Group, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
-import { Session } from "../sessions";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
-import { Campaign as CampaignType, FilledSession, Session as SessionType} from "@/state/types";
+import { ViewState } from "@/components/view/types";
+import { NiceLoading } from "@/components/loading";
+import { SessionCard } from "../sessions/components/SessionCard";
 
-type CampaignViewProps = {
-  campaignId: string,
-  campaign?: CampaignType,
-  sessions?: FilledSession[],
+interface ClientParams {
+  viewState: ViewState,
 }
 
-export function Campaign({campaignId, campaign, sessions = []}: CampaignViewProps) {
+export function Campaign({viewState}: ClientParams) {
+
+  const {
+    options: {campaign: campaignId}, 
+    data: {campaign, sessions = []},
+    meta: {isDataReady},
+  } = viewState
+
+  if(!isDataReady) {
+    return <NiceLoading />
+  }
 
   if(!campaign) {
     return (
@@ -52,10 +61,9 @@ export function Campaign({campaignId, campaign, sessions = []}: CampaignViewProp
         <Text>No sessions yet</Text>
       )}
       {[...sessions].reverse().map((session) => (
-        <Session
+        <SessionCard
           key={session.session.id}
-          sessionId={session.session.id}
-          {...session}
+          filledSession={session}
         />
         )
       )}

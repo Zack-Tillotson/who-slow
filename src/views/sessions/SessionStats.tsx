@@ -6,6 +6,9 @@ import { useSessionStats } from "./useSessionStats";
 
 import styles from './sessionStats.module.scss'
 import { Game, Player, Session } from "@/state/types";
+import { ViewParams } from "@/components/view/types";
+import { NiceError } from "@/components/error";
+import { NiceLoading } from "@/components/loading";
 
 function getTimePieces(ms: number) {
   const hours = Math.trunc(Number(ms / 1000 / 60 / 60))
@@ -58,17 +61,26 @@ function HighlightStat({icon, label, value, valueBg}: HighlightStatType) {
   )
 }
 
-type ViewProps = {
-  session?: Session,
-  game?: Game,
+export function SessionStats({viewState}: ViewParams) {  const {
+    options: {session: sessionId}, 
+    data: {session: filledSession},
+    meta: {isDataReady},
+  } = viewState
 
-}
-
-export function SessionStats({session, game}: ViewProps) {
-
-  if(!session) {
-    throw new Error('session not found')
+  if(!sessionId) {
+    return <NiceError />
   }
+
+  if(!isDataReady) {
+    return <NiceLoading />
+  }
+
+  if(!filledSession) {
+    return <NiceError />
+  }
+
+  const {session, game} = filledSession
+
     
   const stats = useSessionStats(session, game)
   

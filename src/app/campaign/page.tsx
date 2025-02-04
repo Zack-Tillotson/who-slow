@@ -1,7 +1,8 @@
-import { Metadata } from "next";
+import { Metadata } from "next"
 
-import { Campaigns } from "@/views/campaigns";
-import { buildViewData } from "@/state/buildViewData";
+import { buildViewData } from "@/components/view/buildViewData"
+import { ViewContainer } from "@/components/view"
+import { Campaigns } from "@/views/campaigns"
 
 export const metadata: Metadata = {
   title: "Campaigns | Who Slow ",
@@ -9,13 +10,9 @@ export const metadata: Metadata = {
 
 export default async function CampaignPage() {
 
-  const {interstitial, data: {campaigns}} = await buildViewData({campaigns: null})
-
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
+  const viewState = await buildViewData({campaigns: true})
   
   return (
-    <Campaigns campaigns={campaigns} />
+    <ViewContainer viewState={viewState} View={Campaigns} />
   )
 }

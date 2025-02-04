@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 import { JoinSessionForm } from "@/views/sessions"
 import { redirect } from "next/navigation";
-import { buildViewData } from "@/state/buildViewData";
+import { buildViewData } from "@/components/view/buildViewData";
 
 type PageProps = {
   params: Promise<{
@@ -28,7 +28,7 @@ export default async function SessionPage(props: PageProps) {
   }
 
   if(!shareCode) {
-    return <JoinSessionForm />  
+    return <JoinSessionForm />
   }
 
   if(!sessionId) {
