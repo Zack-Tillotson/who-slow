@@ -1,4 +1,4 @@
-import getAuthState from "@/state/getAuthState"
+import getAuthState from "@/state/auth/getAuthState"
 
 import { AuthCTA } from "@/views/AuthCTA"
 import { NiceError } from "@/components/error"
@@ -23,7 +23,8 @@ export async function buildViewData(options: ViewDataOptions = {}): Promise<View
       interstitial = <AuthCTA />
     }
 
-    if(!interstitial) {
+    // XXX SSR data loading disabled
+    if(!interstitial && false) {
       data = await fetchData(options)
       meta.isDataReady = true
     }
