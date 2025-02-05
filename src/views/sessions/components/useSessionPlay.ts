@@ -8,7 +8,7 @@ const DEFAULT_PLAYER = {
   playerId: '',
 }
 
-export function useSessionPlay(session: Session|null, game: Game, userId: string) {
+export function useSessionPlay(session: Session|null, game?: Game, userId?: string) {
 
   const {isPending, set: setSessionEvents} = useSetData(`sessions/${session?.id}`, 'events')
   const [isFixTurnDialogOpen, updateFixTurnDialog] = useState(false)

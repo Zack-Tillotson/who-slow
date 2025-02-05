@@ -1,18 +1,27 @@
 'use client'
 
-import { Box, Button, Divider, Group, Stack, Text, Title } from "@mantine/core";
+import { Button, Divider, Group, Stack, Text, Title } from "@mantine/core";
 import Link from "next/link";
-import { Session } from "../sessions";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
-import { Campaign as CampaignType, FilledSession, Session as SessionType} from "@/state/types";
+import { ViewState } from "@/components/view/types";
+import { NiceLoading } from "@/components/loading";
+import { SessionCard } from "../sessions/components/SessionCard";
 
-type CampaignViewProps = {
-  campaignId: string,
-  campaign: CampaignType | null,
-  filledSessions: FilledSession[],
+interface ClientParams {
+  viewState: ViewState,
 }
 
-export function Campaign({campaignId, campaign, filledSessions}: CampaignViewProps) {
+export function Campaign({viewState}: ClientParams) {
+
+  const {
+    options: {campaign: campaignId}, 
+    data: {campaign, sessions = []},
+    meta: {isDataReady},
+  } = viewState
+
+  if(!isDataReady) {
+    return <NiceLoading />
+  }
 
   if(!campaign) {
     return (
@@ -48,14 +57,13 @@ export function Campaign({campaignId, campaign, filledSessions}: CampaignViewPro
         </Button>
       </Group>
       <Text size="sm">Create a session to record when you play a game, sessions keep track of which game you played and who the players are.</Text>
-      {!filledSessions.length && (
+      {!sessions.length && (
         <Text>No sessions yet</Text>
       )}
-      {[...filledSessions].reverse().map((session) => (
-        <Session
+      {[...sessions].reverse().map((session) => (
+        <SessionCard
           key={session.session.id}
-          sessionId={session.session.id}
-          {...session}
+          filledSession={session}
         />
         )
       )}

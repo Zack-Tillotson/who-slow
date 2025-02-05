@@ -1,12 +1,8 @@
-import { FirebaseApp, FirebaseOptions, initializeApp, initializeServerApp } from "firebase/app";
-import { Firestore, getFirestore } from "firebase/firestore";
-import { Auth, getAuth } from "firebase/auth";
+import { FirebaseApp, FirebaseOptions, initializeApp, initializeServerApp } from "firebase/app"
+import { Firestore, getFirestore } from "firebase/firestore"
+import { Auth, getAuth } from "firebase/auth"
 
 import {config} from './firebase.config'
-
-export enum WatchTypes {
-  Games = 'games',
-}
 
 export type FirebaseOptionsParams = {
   idToken?: string,
@@ -14,7 +10,6 @@ export type FirebaseOptionsParams = {
 
 export class FirebaseConnection {
   public isInitialized = false
-  public watchTypes = WatchTypes 
 
   private options: FirebaseOptions
   private idToken: string = ''
@@ -70,6 +65,14 @@ export class FirebaseConnection {
   }
 }
 
+// XXX This is implicit persistent state
+//
+// This is invoked with an idToken parameter early in the server
+// flow for a request, and then that auth state is persisted for 
+// the rest of the request.
+// 
+// Is there a better way to handle this, perhaps inverting flow 
+// of control?
 let connection: FirebaseConnection;
 export default (idToken?: string) => {
   if(!connection || idToken) {

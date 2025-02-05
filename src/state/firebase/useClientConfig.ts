@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
+import { openDB } from 'idb';
 
 import {config} from './firebase.config'
 

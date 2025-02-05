@@ -1,6 +1,5 @@
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
+import { ViewContainer } from "@/components/view";
+import { buildViewData } from "@/components/view/buildViewData"
 
 import { Game } from "@/views/games"
 
@@ -15,17 +14,11 @@ export default async function GamePage(props: PageProps) {
 
   const {
     gameId
-  } = params;
+  } = params
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
+  const viewState = await buildViewData({game: gameId})
 
-  const game = await library().getGame(gameId)
   return (
-    <>
-      <Game gameId={gameId} game={game} />
-    </>
+    <ViewContainer viewState={viewState} View={Game} />
   )
 }

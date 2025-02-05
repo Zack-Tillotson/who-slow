@@ -1,9 +1,7 @@
 import { Metadata } from "next";
+import { buildViewData } from "@/components/view/buildViewData";
+import { ViewContainer } from "@/components/view";
 import { Players } from "@/views/players";
-import getAuthState from "@/state/getAuthState";
-import { AuthCTA } from "@/views/AuthCTA";
-import { library } from "@/state/remote";
-import { Player } from "@/state/types";
 
 export const metadata: Metadata = {
   title: "Players | Who Slow ",
@@ -11,19 +9,9 @@ export const metadata: Metadata = {
 
 export default async function PlayerPage() {
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
-
-  let players: Player[] = []
-  try {
-    players = await library().getPlayers()
-  } catch(e) {
-    console.log('DB Error', e)
-  }
-      
+  const viewState = await buildViewData({players: true})
+  
   return (
-    <Players players={players} />
+    <ViewContainer viewState={viewState} View={Players} />
   )
 }

@@ -1,5 +1,6 @@
-import getAuthState from "@/state/getAuthState";
-import { library } from "@/state/remote";
+import { ViewContainer } from "@/components/view";
+import { buildViewData } from "@/components/view/buildViewData";
+
 import { SessionForm } from "@/views/sessions"
 import { Metadata } from "next";
 
@@ -20,19 +21,9 @@ export default async function SessionPage(props: PageProps) {
     sessionId
   } = params;
 
-  const auth = await getAuthState()
-
-  const session = await library().getSession(sessionId)
-  const games = await library().getGames()
-  const campaigns = await library().getCampaigns()
-  const players = await library().getPlayers()
+  const viewState = await buildViewData({games: true, campaigns: true, players: true, session: sessionId})
 
   return (
-    <SessionForm
-      session={session}
-      games={games}
-      campaigns={campaigns}
-      players={players}
-    />
+    <ViewContainer viewState={viewState} View={SessionForm} />
   )
 }

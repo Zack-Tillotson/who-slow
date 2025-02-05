@@ -1,12 +1,13 @@
 'use client'
 
-import { useDataState } from "@/state";
-import { Campaign } from "@/state/types";
-import { Button, Card, Divider, Group, Paper, Stack, Text, Title } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
-import Link from "next/link";
+import { ViewParams } from "@/components/view/types"
+import { Button, Group, Stack, Text, Title } from "@mantine/core"
+import { IconPlus } from "@tabler/icons-react"
+import Link from "next/link"
 
-export function Campaigns({campaigns}: {campaigns: Campaign[]}) {
+export function Campaigns({viewState}: ViewParams) {
+  
+  const {data: {campaigns = []}} = viewState
 
   return (
     <>
@@ -20,7 +21,6 @@ export function Campaigns({campaigns}: {campaigns: Campaign[]}) {
           New
         </Button>
       </Group>
-      
       {campaigns.map(({id, name}) => (
         <Group key={id} p="sm">
           <Stack flex={1} gap="0">

@@ -1,20 +1,17 @@
 import { Metadata } from "next";
 
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
-import { JoinSessionForm } from "@/views/sessions"
-import { redirect } from "next/navigation";
+import { JoinSession } from "@/views/sessions"
+import { buildViewData } from "@/components/view/buildViewData";
+import { ViewContainer } from "@/components/view";
 
 export const metadata: Metadata = {
   title: "Share session | Who Slow ",
 }
 
 export default async function SessionPage() {
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
+  const viewState = await buildViewData()
 
-  return <JoinSessionForm />
+  return (
+    <ViewContainer viewState={viewState} View={JoinSession} />
+  )
 }

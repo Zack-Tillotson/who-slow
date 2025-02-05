@@ -1,16 +1,13 @@
 'use client'
 
-import { useDataState } from "@/state";
-import { Game } from "@/state/types";
+import { ViewParams } from "@/components/view/types";
 import { Button, Group, Stack, Text, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 
-export type GamesParams = {
-  games?: Game[],
-}
-
-export function Games({games}: GamesParams) {
+export function Games({viewState}: ViewParams) {
+  
+  const {data: {games}} = viewState
 
   return (
     <>

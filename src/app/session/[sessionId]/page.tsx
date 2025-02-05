@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
 import { Session } from "@/views/sessions"
+import { buildViewData } from "@/components/view/buildViewData";
+import { ViewContainer } from "@/components/view";
 
 type PageProps = {
   params: Promise<{
@@ -22,19 +21,9 @@ export default async function SessionPage(props: PageProps) {
     sessionId
   } = params;
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
-
-  const {session, game, players} = await library().getFilledSession(sessionId)
+  const viewState = await buildViewData({session: sessionId})
 
   return (
-    <Session
-      sessionId={sessionId}
-      session={session}
-      game={game}
-      players={players}
-    />
+    <ViewContainer viewState={viewState} View={Session} />
   )
 }

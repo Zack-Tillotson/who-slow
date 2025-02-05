@@ -1,6 +1,6 @@
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
+import { ViewContainer } from "@/components/view";
+import { buildViewData } from "@/components/view/buildViewData"
+
 import { PlayerForm } from "@/views/players"
 
 type PageProps = {
@@ -16,13 +16,9 @@ export default async function PlayerPage(props: PageProps) {
     playerId
   } = params;
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
+  const viewState = await buildViewData({player: playerId})
 
-  const player = await library().getPlayer(playerId)
   return (
-    <PlayerForm playerId={playerId} player={player} />
+    <ViewContainer viewState={viewState} View={PlayerForm} />
   )
 }
