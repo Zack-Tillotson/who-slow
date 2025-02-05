@@ -13,7 +13,7 @@ function useWatchData<T>(path: string, objectBuilder: () => T) {
   const dataEventCallback = useCallback(async (data: T) => {
     updateIsInitialized(true)
     updateData(data as T)
-  }, [path])
+  }, [])
 
   useEffect(() => {
     let unsubscribe = () => {}
@@ -22,7 +22,7 @@ function useWatchData<T>(path: string, objectBuilder: () => T) {
       unsubscribe = library().watchData<T>(path, objectBuilder, dataEventCallback)
     })()
     return unsubscribe
-  }, [path])
+  }, [path, objectBuilder, dataEventCallback])
 
   return {isInitialized, data}
 }

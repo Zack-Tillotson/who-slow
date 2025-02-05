@@ -15,12 +15,14 @@ export function useViewState(viewState: ViewState) {
   const [meta, updateMeta] = useState(viewState.meta)
   const [interstitial, updateInterstitial] = useState(viewState.interstitial)
   const auth = useClientAuth()
+
+  const {isDataReady} = meta
   
   useEffect(() => {
     if(!meta.isDataReady) {
       updateMeta({...meta, isCSR: true, isSSR: false, isLoading: true})
     }
-  }, [meta.isDataReady])
+  }, [isDataReady])
 
   useEffect(() => {
     if(!meta.isDataReady && !auth.isLoading) {
@@ -39,7 +41,7 @@ export function useViewState(viewState: ViewState) {
           })
       }
     }
-  }, [meta.isDataReady, auth.isLoading, auth.isAuthenticated, viewState.options])
+  }, [isDataReady, auth.isLoading, auth.isAuthenticated, viewState.options])
 
   return {data, meta, interstitial, options}
 }

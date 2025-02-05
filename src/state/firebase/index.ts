@@ -74,9 +74,11 @@ export class FirebaseConnection {
 // Is there a better way to handle this, perhaps inverting flow 
 // of control?
 let connection: FirebaseConnection;
-export default (idToken?: string) => {
+const factory = (idToken?: string) => {
   if(!connection || idToken) {
     connection = new FirebaseConnection(config, {idToken})
   }
   return connection
 }
+
+export default factory
