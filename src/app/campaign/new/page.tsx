@@ -1,4 +1,4 @@
-import { CampaignForm } from "@/views/campaigns"
+import { FormCampaign } from "@/components/form/FormCampaign";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,6 +6,6 @@ export const metadata: Metadata = {
 }
 export default function CampaignPage() {
   return (
-    <CampaignForm />
+    <FormCampaign />
   )
 }

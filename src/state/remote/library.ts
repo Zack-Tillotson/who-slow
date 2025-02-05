@@ -248,7 +248,6 @@ export async function saveSessionConfig(firebase: FirebaseConnection, config: Se
   const {id, sessionPlayers: rawSessionPlayers, ...attrs} = config
 
   const sessionPlayers = await ensureSessionPlayers(firebase, rawSessionPlayers)
-  console.log('session players', rawSessionPlayers, sessionPlayers)
 
   const dbDoc = {
     ...attrs,

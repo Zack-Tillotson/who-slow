@@ -1,10 +1,8 @@
 import { Metadata } from "next";
 
-import getAuthState from "@/state/getAuthState"
-import { library } from "@/state/remote"
-import { AuthCTA } from "@/views/AuthCTA"
-import { JoinSessionForm } from "@/views/sessions"
-import { redirect } from "next/navigation";
+import { buildViewData } from "@/components/view/buildViewData";
+import { ViewContainer } from "@/components/view";
+import { ShareSession } from "@/views/sessions";
 
 type PageProps = {
   params: Promise<{
@@ -23,19 +21,9 @@ export default async function SessionPage(props: PageProps) {
     shareCode,
   } = params;
 
-  const auth = await getAuthState()
-  if(!auth.currentUser) {
-    return <AuthCTA />
-  }
+  const viewState = await buildViewData({sessionId: shareCode})
 
-  if(!shareCode) {
-    return <JoinSessionForm />  
-  }
-
-  const sessionId = await library().getSessionIdFromShareCode(shareCode)
-  if(!sessionId) {
-    return <JoinSessionForm isInvalidCode paramCode={shareCode} />  
-  }
-
-  redirect(`/session/${sessionId}/play`)
+  return (
+    <ViewContainer viewState={viewState} View={ShareSession} />
+  )
 }

@@ -1,18 +1,19 @@
 import type { Metadata } from "next"
-import { 
-  ColorSchemeScript, 
+import {
   MantineProvider, 
 } from '@mantine/core'
 import { Inter } from "next/font/google"
 import { ErrorBoundary } from "react-error-boundary"
-import {theme} from '@/theme/'
+import { theme } from '@/theme/'
 import { Shell } from "@/components/shell"
-import {NiceError} from '@/components/error'
+import { NiceError } from '@/components/error'
+import { NiceLoading } from '@/components/loading'
 
 import "./_styles/reset.scss"
 import "./_styles/mantine.scss"
 import "./_styles/globals.scss"
 import '@mantine/core/styles.css'
+import { Suspense } from "react"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,7 +33,9 @@ export default function RootLayout({
           <MantineProvider theme={theme}>
             <Shell>
               <ErrorBoundary fallback={<NiceError />}>
-                {children}
+                <Suspense fallback={<NiceLoading />}>
+                  {children}
+                </Suspense>
               </ErrorBoundary>
             </Shell>
           </MantineProvider>    
