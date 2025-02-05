@@ -14,6 +14,7 @@ import { Game, Player } from "@/state/types";
 
 import { useWatchSession } from "@/state/remote/useWatchData";
 import { useClientAuth } from "@/state/auth/useClientAuth";
+import { NiceLoading } from "@/components/loading";
 
 type ViewProps = {
   sessionId: string,
@@ -50,7 +51,7 @@ export function SessionPlay({sessionId, game}: ViewProps) {
   } = useSessionPlay(session, game, user?.uid)
 
   if(!isInitialized) {
-    return `Loading....`
+    return <NiceLoading />
   }
 
   if(!session) {

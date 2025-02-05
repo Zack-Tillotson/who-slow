@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
-import { JoinSessionForm } from "@/views/sessions"
-import { redirect } from "next/navigation";
 import { buildViewData } from "@/components/view/buildViewData";
+import { ViewContainer } from "@/components/view";
+import { ShareSession } from "@/views/sessions";
 
 type PageProps = {
   params: Promise<{
@@ -21,19 +21,9 @@ export default async function SessionPage(props: PageProps) {
     shareCode,
   } = params;
 
-  const {interstitial, data: {sessionId}} = await buildViewData({sessionId: shareCode})
+  const viewState = await buildViewData({sessionId: shareCode})
 
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
-
-  if(!shareCode) {
-    return <JoinSessionForm />
-  }
-
-  if(!sessionId) {
-    return <JoinSessionForm isInvalidCode paramCode={shareCode} />  
-  }
-
-  redirect(`/session/${sessionId}/play`)
+  return (
+    <ViewContainer viewState={viewState} View={ShareSession} />
+  )
 }

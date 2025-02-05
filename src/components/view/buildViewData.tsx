@@ -23,7 +23,7 @@ export async function buildViewData(options: ViewDataOptions = {}): Promise<View
       interstitial = <AuthCTA />
     }
 
-    if(!interstitial && false) {
+    if(!interstitial) {
       data = await fetchData(options)
       meta.isDataReady = true
     }

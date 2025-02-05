@@ -1,18 +1,17 @@
 import { Metadata } from "next";
 
-import { JoinSessionForm } from "@/views/sessions"
+import { JoinSession } from "@/views/sessions"
 import { buildViewData } from "@/components/view/buildViewData";
+import { ViewContainer } from "@/components/view";
 
 export const metadata: Metadata = {
   title: "Share session | Who Slow ",
 }
 
 export default async function SessionPage() {
-  const {interstitial} = await buildViewData()
+  const viewState = await buildViewData()
 
-  if(interstitial) { // Error, loading, etc
-    return interstitial 
-  }
-
-  return <JoinSessionForm />
+  return (
+    <ViewContainer viewState={viewState} View={JoinSession} />
+  )
 }

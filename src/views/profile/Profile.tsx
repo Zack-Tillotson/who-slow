@@ -9,7 +9,7 @@ export function Profile() {
     <Stack>
       <Title order={2} size="md" mt="lg">Profile</Title>
       <Text>Profile ID: {user?.uid ?? ''}</Text>
-      <Text>Anonymous?: {!user ? '' : user.isAnonymous ? 'yes' : 'no'}</Text>
+      <Text>Anonymous: {!user ? '' : user.isAnonymous ? 'yes' : 'no'}</Text>
     </Stack>
   )
 }

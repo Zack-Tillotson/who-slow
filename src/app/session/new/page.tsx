@@ -6,6 +6,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "New session | Who Slow ",
 }
+
 export default async function SessionPage() {
   
   const viewState = await buildViewData({games: true, campaigns: true, players: true})
