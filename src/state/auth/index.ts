@@ -19,8 +19,10 @@ const loginAnonymous = async () => {
   return signInAnonymously(auth)
 }
 
-export default {
+const library = {
   isAuthenticated,
   getAuthUser,
   loginAnonymous,
 }
+
+export default library

@@ -2,13 +2,13 @@
 
 import { Group, Stack, Text, Title, Divider } from "@mantine/core"
 
-import { useSessionStats } from "./useSessionStats";
+import { useSessionStats } from "./useSessionStats"
 
 import styles from './sessionStats.module.scss'
-import { Game, Player, Session } from "@/state/types";
-import { ViewParams } from "@/components/view/types";
-import { NiceError } from "@/components/error";
-import { NiceLoading } from "@/components/loading";
+import { ViewParams } from "@/components/view/types"
+import { NiceError } from "@/components/error"
+import { NiceLoading } from "@/components/loading"
+import Image from "next/image"
 
 function getTimePieces(ms: number) {
   const hours = Math.trunc(Number(ms / 1000 / 60 / 60))
@@ -66,6 +66,10 @@ export function SessionStats({viewState}: ViewParams) {  const {
     data: {session: filledSession},
     meta: {isDataReady},
   } = viewState
+  
+  const {session, game} = filledSession || {}
+  const stats = useSessionStats(session, game)
+  
 
   if(!sessionId) {
     return <NiceError />
@@ -79,11 +83,6 @@ export function SessionStats({viewState}: ViewParams) {  const {
     return <NiceError />
   }
 
-  const {session, game} = filledSession
-
-    
-  const stats = useSessionStats(session, game)
-  
   return (
     <div>
       <Stack gap="0">
@@ -166,7 +165,7 @@ export function SessionStats({viewState}: ViewParams) {  const {
       {stats.game && (
         <div>
           <Title order={3} size="lg">{stats.game.name} ({stats.game.yearPublished})</Title>
-          <img src={stats.game.image} alt={`Box art for ${stats.game.name}`} />
+          <Image src={stats?.game?.image ?? ''} alt={`Box art for ${stats.game.name}`} />
         </div>
       )}
 

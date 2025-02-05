@@ -15,7 +15,7 @@ export function AuthCTA() {
       forceUpdate(renderCount + 1)
       updateIsInteractive(true)
     })()
-  }, [])
+  })
 
   const handleClick = (type: string) => () => {
     updateIsInteractive(false)
