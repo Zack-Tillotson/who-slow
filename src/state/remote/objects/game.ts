@@ -21,7 +21,7 @@ export function buildGame(id?: string, data: any = {}) {
   const builtObject = {id, name, yearPublished, image}
   const isValid = validator(builtObject)
   if(!isValid) {
-    console.log('Validation error', 'campaign', validator.errors)
+    console.log('Validation error', 'campaign', validator.errors, id, data)
     throw new Error('Validation error')
   }
   return builtObject

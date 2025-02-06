@@ -13,6 +13,7 @@ export const STATES = {
 }
 
 const DEBOUNCE_TIME = 1000
+const IS_DEV_MODE = process.env.NODE_ENV === 'development'
 
 const cancel = {fn: () => {}}
 
@@ -49,7 +50,9 @@ export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQu
         updateGamesList(results)
       })
       .catch(e => {
-        console.log('ERROR', 'useGameSearch', e)
+        if(IS_DEV_MODE) {
+          console.log('ERROR', 'useGameSearch', e)
+        }
       })
 
   }, [queryTerm])
@@ -63,7 +66,9 @@ export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQu
     try {
       bggGameAttrs(bggId).then(attrsCallback)
     } catch(e) {
-      console.log('ERROR', 'useGameSearch', e)
+      if(IS_DEV_MODE) {
+        console.log('ERROR', 'useGameSearch', e)
+      }
     }
     updateQueryState(STATES.PRE)
   }
