@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default async function SessionPage() {
   
-  const viewState = await buildViewData({games: true, campaigns: true, players: true})
+  const viewState = await buildViewData({campaigns: true, players: true})
 
   return (
     <ViewContainer viewState={viewState} View={SessionForm} />

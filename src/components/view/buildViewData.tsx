@@ -4,6 +4,9 @@ import { AuthCTA } from "@/views/AuthCTA"
 import { NiceError } from "@/components/error"
 import { fetchData } from "./fetchData"
 import { ViewData, ViewDataOptions, ViewMeta, ViewState } from "./types"
+import { NiceLoading } from "../loading"
+
+const SERVER_DATA_ENABLED = false
 
 export async function buildViewData(options: ViewDataOptions = {}): Promise<ViewState> {
   let interstitial = undefined
@@ -24,9 +27,11 @@ export async function buildViewData(options: ViewDataOptions = {}): Promise<View
     }
 
     // XXX SSR data loading disabled
-    if(!interstitial && false) {
+    if(!interstitial && SERVER_DATA_ENABLED) {
       data = await fetchData(options)
       meta.isDataReady = true
+    } else {
+      interstitial = <NiceLoading />
     }
 
   } catch(e) {
