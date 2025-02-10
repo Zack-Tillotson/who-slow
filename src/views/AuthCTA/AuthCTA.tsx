@@ -15,7 +15,8 @@ export function AuthCTA() {
       forceUpdate(renderCount + 1)
       updateIsInteractive(true)
     })()
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleClick = (type: string) => () => {
     updateIsInteractive(false)
