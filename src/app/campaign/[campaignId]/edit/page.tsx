@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   title: "Edit campaign | Who Slow ",
 }
 
+export const dynamic = 'force-static'
+
 export default async function CampaignPage(props: CampaignPageProps) {
   const params = await props.params;
 

@@ -21,19 +21,20 @@ export async function buildViewData(options: ViewDataOptions = {}): Promise<View
 
   try {
 
-    const auth = await getAuthState()
-    if(!auth.currentUser) {
-      interstitial = <AuthCTA />
-    }
-
-    // XXX SSR data loading disabled
-    if(!interstitial && SERVER_DATA_ENABLED) {
-      data = await fetchData(options)
-      meta.isDataReady = true
+    // XXX - enable server data?
+    if(SERVER_DATA_ENABLED) {
+      const auth = await getAuthState()
+      if(!auth.currentUser) {
+        interstitial = <AuthCTA />
+      }
+      
+      if(!interstitial) {
+        data = await fetchData(options)
+        meta.isDataReady = true
+      }
     } else {
       interstitial = <NiceLoading />
     }
-
   } catch(e) {
     interstitial = <NiceError />
     meta.isError = true
