@@ -9,6 +9,8 @@ type PageProps = {
   }>,
 }
 
+export const dynamic = 'force-static'
+
 export default async function PlayerPage(props: PageProps) {
   const params = await props.params;
 

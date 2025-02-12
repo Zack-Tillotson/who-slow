@@ -14,6 +14,8 @@ type PageProps = {
   }>,
 }
 
+export const dynamic = 'force-static'
+
 export default async function SessionPage(props: PageProps) {
   const params = await props.params;
 
