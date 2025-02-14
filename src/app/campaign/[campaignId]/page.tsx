@@ -14,7 +14,9 @@ export const metadata: Metadata = {
   title: "Campaign | Who Slow ",
 }
 
-export const dynamic = 'force-static'
+export async function generateStaticParams() {
+  return [{campaignId: 'xxx'}] // XXX https://github.com/vercel/next.js/issues/61213
+}
 
 export default async function CampaignPage(props: CampaignPageProps) {
   const params = await props.params;

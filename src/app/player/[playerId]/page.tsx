@@ -9,7 +9,9 @@ type PageProps = {
   }>,
 }
 
-export const dynamic = 'force-static'
+export async function generateStaticParams() {
+  return [{playerId: 'xxx'}] // XXX https://github.com/vercel/next.js/issues/61213
+}
 
 export default async function PlayerPage(props: PageProps) {
   const params = await props.params;

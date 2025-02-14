@@ -165,7 +165,7 @@ export function SessionStats({viewState}: ViewParams) {  const {
       {stats.game && (
         <div>
           <Title order={3} size="lg">{stats.game.name} ({stats.game.yearPublished})</Title>
-          <Image src={stats?.game?.image ?? ''} alt={`Box art for ${stats.game.name}`} />
+          <Image src={stats?.game?.image ?? ''} alt={`Box art for ${stats.game.name}`} width={340} height={340} />
         </div>
       )}
 

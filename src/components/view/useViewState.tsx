@@ -19,13 +19,13 @@ export function useViewState(viewState: ViewState) {
   const {isDataReady} = meta
   
   useEffect(() => {
-    if(!meta.isDataReady) {
-      updateMeta({...meta, isCSR: true, isSSR: false, isLoading: true})
+    if(!isDataReady) {
+      updateMeta(meta => ({...meta, isCSR: true, isSSR: false, isLoading: true}))
     }
   }, [isDataReady])
 
   useEffect(() => {
-    if(!meta.isDataReady && !auth.isLoading) {
+    if(!isDataReady && !auth.isLoading) {
       if(!auth.isAuthenticated) {
         updateInterstitial(<AuthCTA />)
       } else {
@@ -34,7 +34,7 @@ export function useViewState(viewState: ViewState) {
           .then(data => {
             updateData(data)
             updateInterstitial(undefined)
-            updateMeta({...meta, isLoading: false, isDataReady: true})
+            updateMeta(meta => ({...meta, isLoading: false, isDataReady: true}))
           }).catch(error => {
             updateInterstitial(<NiceError />)
             console.log('ERROR', 'Unable to load data', error)
