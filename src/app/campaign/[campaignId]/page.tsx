@@ -3,6 +3,7 @@ import { Campaign } from "@/views/campaigns"
 
 import { buildViewData } from "@/components/view/buildViewData";
 import { ViewContainer } from "@/components/view";
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 type CampaignPageProps = {
   params: Promise<{
@@ -14,11 +15,12 @@ export const metadata: Metadata = {
   title: "Campaign | Who Slow ",
 }
 
-export const dynamic = 'force-static'
+export async function generateStaticParams() {
+  return [{campaignId: PLACEHOLDER_ID}]
+}
 
 export default async function CampaignPage(props: CampaignPageProps) {
-  const params = await props.params;
-
+  const params = await props.params
   const {
     campaignId
   } = params

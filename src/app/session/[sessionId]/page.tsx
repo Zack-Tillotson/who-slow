@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Session } from "@/views/sessions"
 import { buildViewData } from "@/components/view/buildViewData";
 import { ViewContainer } from "@/components/view";
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 type PageProps = {
   params: Promise<{
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
   title: "Setup session | Who Slow ",
 }
 
-export const dynamic = 'force-static'
+
+export async function generateStaticParams() {
+  return [{sessionId: PLACEHOLDER_ID}]
+}
 
 export default async function SessionPage(props: PageProps) {
   const params = await props.params;

@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { buildViewData } from "@/components/view/buildViewData";
 import { ViewContainer } from "@/components/view";
 import { ShareSession } from "@/views/sessions";
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 type PageProps = {
   params: Promise<{
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
   title: "Share session | Who Slow ",
 }
 
-export const dynamic = 'force-static'
+
+export async function generateStaticParams() {
+  return [{shareCode: PLACEHOLDER_ID}]
+}
 
 export default async function SessionPage(props: PageProps) {
   const params = await props.params;

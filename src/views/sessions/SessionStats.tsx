@@ -8,7 +8,6 @@ import styles from './sessionStats.module.scss'
 import { ViewParams } from "@/components/view/types"
 import { NiceError } from "@/components/error"
 import { NiceLoading } from "@/components/loading"
-import Image from "next/image"
 
 function getTimePieces(ms: number) {
   const hours = Math.trunc(Number(ms / 1000 / 60 / 60))
@@ -165,7 +164,7 @@ export function SessionStats({viewState}: ViewParams) {  const {
       {stats.game && (
         <div>
           <Title order={3} size="lg">{stats.game.name} ({stats.game.yearPublished})</Title>
-          <Image src={stats?.game?.image ?? ''} alt={`Box art for ${stats.game.name}`} />
+          <img src={stats?.game?.image ?? ''} alt={`Box art for ${stats.game.name}`} width={400} height={400} />
         </div>
       )}
 

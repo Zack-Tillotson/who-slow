@@ -1,5 +1,6 @@
 import { ViewContainer } from "@/components/view";
 import { buildViewData } from "@/components/view/buildViewData";
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 import { SessionPlay } from "@/views/sessions"
 import { Metadata } from "next";
@@ -14,7 +15,10 @@ type PageProps = {
   }>,
 }
 
-export const dynamic = 'force-static'
+
+export async function generateStaticParams() {
+  return [{sessionId: PLACEHOLDER_ID}]
+}
 
 export default async function SessionPage(props: PageProps) {
   const params = await props.params;
