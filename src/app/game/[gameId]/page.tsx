@@ -11,11 +11,7 @@ type PageProps = {
 }
 
 export async function generateStaticParams() {
-<<<<<<< HEAD
-  return [{gameId: 'xxx'}] // XXX https://github.com/vercel/next.js/issues/61213
-=======
   return [{gameId: PLACEHOLDER_ID}]
->>>>>>> csr-routing-and-data
 }
 
 export default async function GamePage(props: PageProps) {
