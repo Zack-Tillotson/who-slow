@@ -7,7 +7,7 @@ export function useClientOptions(serverOptions: ViewDataOptions) {
   const csrId = searchParams.get('id')
 
   const clientOptions = useMemo(() => Object.keys(serverOptions).reduce(
-    (soFar, key) => ({...soFar, [key]: csrId}), {})
+    (soFar, key) => ({...soFar, [key]: csrId || true}), {})
   , [serverOptions, csrId])
   
   return clientOptions  
