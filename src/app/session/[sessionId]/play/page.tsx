@@ -1,5 +1,6 @@
 import { ViewContainer } from "@/components/view";
 import { buildViewData } from "@/components/view/buildViewData";
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 import { SessionPlay } from "@/views/sessions"
 import { Metadata } from "next";
@@ -15,7 +16,7 @@ type PageProps = {
 }
 
 export async function generateStaticParams() {
-  return [{sessionId: 'xxx'}] // XXX https://github.com/vercel/next.js/issues/61213
+  return [{sessionId: PLACEHOLDER_ID}]
 }
 
 export default async function SessionPage(props: PageProps) {

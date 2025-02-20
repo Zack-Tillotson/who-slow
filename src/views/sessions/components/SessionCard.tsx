@@ -1,8 +1,8 @@
 'use client'
 
+import { RouteLink } from "@/components/routeLink";
 import { FilledSession, Session as tSession} from "@/state/types";
 import { Button, Divider, Group, Paper, Pill, Stack, Text, Title } from "@mantine/core";
-import Link from "next/link";
 
 function getSessionStatus(session: tSession) {
   if(session.events?.length ?? 0 === 0) {
@@ -35,7 +35,7 @@ export function SessionCard({filledSession}: Params) {
       <Group>
         <Title order={3} flex={1} size="md">Session</Title>
         {status === '' && (
-          <Button component={Link} href={`/session/${session.id}/edit`} variant="subtle">Edit</Button>
+          <Button component={RouteLink} href={`/session/${session.id}/edit`} variant="subtle">Edit</Button>
         )}
         <Pill bg={status === 'END' ? 'lightgreen' : ''}>{status}</Pill>
       </Group>
@@ -54,14 +54,14 @@ export function SessionCard({filledSession}: Params) {
       <Divider mt="sm" />
       <Group pt="md">
         <Button
-          component={Link}
+          component={RouteLink}
           href={`/session/${session.id}/play`}
           variant={status !== 'END' ? "filled" : "subtle"}
         >
           Start session
         </Button>
         <Button
-          component={Link}
+          component={RouteLink}
           href={`/session/${session.id}/stats`}
           variant={status === 'END' ? "filled" : "subtle"}
         >

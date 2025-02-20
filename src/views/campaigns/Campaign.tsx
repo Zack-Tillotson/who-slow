@@ -1,11 +1,11 @@
 'use client'
 
 import { Button, Divider, Group, Stack, Text, Title } from "@mantine/core";
-import Link from "next/link";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import { ViewState } from "@/components/view/types";
 import { NiceLoading } from "@/components/loading";
 import { SessionCard } from "../sessions/components/SessionCard";
+import { RouteLink } from "@/components/routeLink";
 
 interface ClientParams {
   viewState: ViewState,
@@ -37,7 +37,7 @@ export function Campaign({viewState}: ClientParams) {
           <Title order={1} size="lg" flex={1}>{campaign.name || `"Just play" sessions`}</Title>
         </Stack>
         <Button
-          component={Link}
+          component={RouteLink}
           href={`/campaign/${campaignId}/edit`}
           variant="outline"
           leftSection={<IconPencil size="1rem" stroke={1.5} />}
@@ -49,7 +49,7 @@ export function Campaign({viewState}: ClientParams) {
       <Group mt="lg">
         <Title order={2} flex={1} size="md">Play sessions</Title>
         <Button
-          component={Link}
+          component={RouteLink}
           href={`/session/new/?campaignId=${campaignId}`}
           leftSection={<IconPlus size="1rem" stroke={1.5} />}
         >

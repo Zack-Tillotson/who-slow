@@ -1,5 +1,6 @@
 import { ViewContainer } from "@/components/view";
 import { buildViewData } from "@/components/view/buildViewData"
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 import { PlayerForm } from "@/views/players"
 
@@ -10,7 +11,7 @@ type PageProps = {
 }
 
 export async function generateStaticParams() {
-  return [{playerId: 'xxx'}] // XXX https://github.com/vercel/next.js/issues/61213
+  return [{playerId: PLACEHOLDER_ID}]
 }
 
 export default async function PlayerPage(props: PageProps) {

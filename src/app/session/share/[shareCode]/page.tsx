@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { buildViewData } from "@/components/view/buildViewData";
 import { ViewContainer } from "@/components/view";
 import { ShareSession } from "@/views/sessions";
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 type PageProps = {
   params: Promise<{
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 export async function generateStaticParams() {
-  return [{shareCode: 'xxx'}] // XXX https://github.com/vercel/next.js/issues/61213
+  return [{shareCode: PLACEHOLDER_ID}]
 }
 
 export default async function SessionPage(props: PageProps) {
