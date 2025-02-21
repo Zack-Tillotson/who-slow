@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Player } from "@/state/types";
 import { useState } from "react";
 import { library } from "@/state/remote";
+import { buildCsrRouteFromHref } from "@/components/view/buildRouteLink";
 
 type ViewProps = {
   playerId?: string,
@@ -43,7 +44,7 @@ export function PlayerForm({playerId, player}: ViewProps) {
     updateFormState(formStates.PENDING)
     try {
       const result = await library().savePlayer({...data, id: formPlayer.id})
-      router.push(`/player/${result.id}/`)
+      router.push(buildCsrRouteFromHref(`/player/${result.id}/`))
       updateFormState(formStates.SUCCESS)
     } catch (e) {
       console.log('WARN', 'form submission failed', e)

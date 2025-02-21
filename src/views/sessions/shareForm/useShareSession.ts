@@ -18,7 +18,7 @@ const createShareCode = (sessionId: Session["id"], onSuccess: () => void) => asy
 }
 
 function createShareLink(shareCode: string) {
-  return `${location.origin}/session/share/${shareCode}`
+  return `${location.origin}/session/share/?code=${shareCode}`
 }
 
 export function useShareSession(sessionId: Session["id"]) {

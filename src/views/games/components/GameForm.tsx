@@ -10,6 +10,7 @@ import { GameAutocomplete } from "./GameAutocomplete"
 import { Game } from "@/state/types";
 import { useState } from "react";
 import { library } from "@/state/remote";
+import { buildCsrRouteFromHref } from "@/components/view/buildRouteLink";
 
 type ViewProps = {
   gameId?: string,
@@ -55,7 +56,7 @@ export function GameForm({gameId, game}: ViewProps) {
     updateFormState(formStates.PENDING)
     try {
       const result = await library().saveGame(data)
-      router.push(`/game/${result.id}/`)
+      router.push(buildCsrRouteFromHref(`/game/${result.id}/`))
       updateFormState(formStates.SUCCESS)
     } catch (e) {
       console.log('WARN', 'form submission failed', e)
