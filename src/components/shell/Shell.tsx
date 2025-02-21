@@ -2,12 +2,10 @@
 
 import { AppShell,Burger } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { NavLinks } from '../navLinks'
 
-import logo from '@/assets/headline-250x50.png'
 import styles from './shell.module.scss'
 import useClientConfig from '@/state/firebase/useClientConfig';
 
@@ -32,13 +30,12 @@ export function Shell({children}: ShellType) {
     >
       <AppShell.Header px="sm" py="sm" className={styles.header}>
         <Link href="/">
-          <Image
+          <img
             className={styles.logo}
             width="250"
             height="50"
-            src={logo}
+            src={'/headline-250x50.png'}
             alt="Beautiful turtle logo"
-            priority
           />
         </Link>
         <Burger

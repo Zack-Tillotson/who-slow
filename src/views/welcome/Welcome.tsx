@@ -1,7 +1,4 @@
 import { Flex, Stack, Text, Title } from "@mantine/core";
-import Image from "next/image";
-
-import image from '@/assets/turtle-400x400.png'
 
 export function Welcome() {
   return (
