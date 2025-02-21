@@ -9,15 +9,14 @@ import './joinSessionForm.module.scss'
 
 type ComponentPropTypes = {
   isInvalidCode?: boolean,
-  paramCode?: string,
 }
 
-export function JoinSessionForm({isInvalidCode = false, paramCode}: ComponentPropTypes) {
+export function JoinSessionForm({isInvalidCode = false}: ComponentPropTypes) {
   const {
     shareCode,
     handleCodeChange,
     handleJoin,
-  } = useJoinSession(paramCode)
+  } = useJoinSession()
 
   return (
     <form className="share-form">
@@ -32,7 +31,7 @@ export function JoinSessionForm({isInvalidCode = false, paramCode}: ComponentPro
         flex="1"
         placeholder={`Six (6) character share code`}
         value={shareCode}
-        error={(isInvalidCode && paramCode === shareCode) ? 'Code not found' : ''}
+        error={isInvalidCode ? 'Code not found' : ''}
         onChange={handleCodeChange}
       />
       <Group mt="sm">

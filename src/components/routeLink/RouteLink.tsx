@@ -2,17 +2,11 @@ import { MouseEvent, MouseEventHandler } from "react"
 import Link, {LinkProps} from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { IS_STATIC, PLACEHOLDER_ID } from "@/navLinks"
+import { IS_STATIC} from "@/navLinks"
+import { buildCsrRouteFromHref } from "../view/buildRouteLink"
 
 interface RouteLinkProps extends LinkProps {
   onClick?: MouseEventHandler<HTMLAnchorElement>,
-}
-
-function buildCsrRouteFromHref(route: string) {
-  const [_, base, id, action] = route.split('/')
-  const csrId = id ? PLACEHOLDER_ID : ''
-  const csrRoute = '/' + [base, csrId, action, `?id=${id}`].filter(piece => piece).join('/')
-  return csrRoute
 }
 
 export function RouteLink({onClick, ...restProps}: RouteLinkProps) {

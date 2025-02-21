@@ -11,6 +11,7 @@ import { IconChevronCompactDown, IconChevronCompactUp, IconExclamationCircleFill
 import { BGG_GAME } from "../../games/components/bggSafeAttrs";
 import { GameAutocomplete } from "../../games/components/GameAutocomplete";
 import { library } from "@/state/remote";
+import { buildCsrRouteFromHref } from "@/components/view/buildRouteLink";
 
 type ViewProps = {
   sessionId?: string,
@@ -61,7 +62,7 @@ export function SessionForm({
       } else {
         updateError('')
         const result = await library().saveSessionConfig(builtSession)
-        router.push(`/session/${result.id}/`)
+        router.push(buildCsrRouteFromHref(`/session/${result.id}/`))
       }
     } catch(e) {
       console.log(e)

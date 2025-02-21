@@ -1,14 +1,15 @@
 'use client'
 
-import { useForm, Controller } from "react-hook-form"
 
+import { useState } from "react";
 import { Button, Loader, TextInput, Title } from "@mantine/core"
 import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form"
 
 import { useDataState } from "@/state";
 import {Campaign as CampaignType} from '@/state/types'
-import { useState } from "react";
 import { library } from "@/state/remote";
+import { buildCsrRouteFromHref } from "../view/buildRouteLink";
 
 type CampaignViewProps = {
   campaignId?: string,
@@ -44,7 +45,7 @@ export function FormCampaign({campaign}: CampaignViewProps) {
     updateFormState(formStates.PENDING)
     try {
       const result = await library().saveCampaign({...data, id: formCampaign.id})
-      router.push(`/campaign/${result.id}/`)
+      router.push(buildCsrRouteFromHref(`/campaign/${result.id}/`))
       updateFormState(formStates.SUCCESS)
     } catch (e) {
       console.log('WARN', 'form submission failed', e)
