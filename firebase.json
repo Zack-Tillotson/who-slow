@@ -1,12 +1,44 @@
 {
   "hosting": {
-    "public": "build",
+    "public": "out",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
     "rewrites": [
+      {
+        "source": "/player/**/edit{,/}",
+        "destination": "/player/xxx/edit/index.html"
+      },
+      {
+        "source": "/player/**",
+        "destination": "/player/xxx/index.html"
+      },
+      {
+        "source": "/game/**/edit{,/}",
+        "destination": "/game/xxx/edit/index.html"
+      },
+      {
+        "source": "/game/**",
+        "destination": "/game/xxx/index.html"
+      },
+      {
+        "source": "/campaign/**/edit{,/}",
+        "destination": "/campaign/xxx/edit/index.html"
+      },
+      {
+        "source": "/campaign/**",
+        "destination": "/campaign/xxx/index.html"
+      },
+      {
+        "source": "/session/**/edit{,/}",
+        "destination": "/session/xxx/edit/index.html"
+      },
+      {
+        "source": "/session/**",
+        "destination": "/session/xxx/index.html"
+      },
       {
         "source": "**",
         "destination": "/index.html"

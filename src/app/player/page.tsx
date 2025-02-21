@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   title: "Players | Who Slow ",
 }
 
+export const dynamic = 'force-static'
+
 export default async function PlayerPage() {
 
   const viewState = await buildViewData({players: true})
