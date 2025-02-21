@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   title: "New session | Who Slow ",
 }
 
+export const dynamic = 'force-static'
+
 export default async function SessionPage() {
   
   const viewState = await buildViewData({campaigns: true, players: true})

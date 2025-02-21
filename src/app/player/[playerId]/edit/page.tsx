@@ -1,5 +1,6 @@
 import { ViewContainer } from "@/components/view";
 import { buildViewData } from "@/components/view/buildViewData"
+import { PLACEHOLDER_ID } from "@/navLinks";
 
 import { PlayerForm } from "@/views/players"
 
@@ -9,7 +10,9 @@ type PageProps = {
   }>,
 }
 
-export const dynamic = 'force-static'
+export async function generateStaticParams() {
+  return [{playerId: PLACEHOLDER_ID}]
+}
 
 export default async function PlayerPage(props: PageProps) {
   const params = await props.params;

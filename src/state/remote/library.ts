@@ -112,7 +112,11 @@ export async function getGames(firebase: FirebaseConnection): Promise<Game[]> {
   }
 
   const list: Game[] = []
-  queryDocs.forEach(doc => list.push(buildGame(doc.id, doc.data())))
+  queryDocs.forEach(doc => {
+    try {
+      list.push(buildGame(doc.id, doc.data()))
+    } catch(e) {}
+  })
   
   return list
 }

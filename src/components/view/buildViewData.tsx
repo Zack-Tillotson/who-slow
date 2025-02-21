@@ -3,47 +3,33 @@ import getAuthState from "@/state/auth/getAuthState"
 import { AuthCTA } from "@/views/AuthCTA"
 import { NiceError } from "@/components/error"
 import { fetchData } from "./fetchData"
-import { ViewData, ViewDataOptions, ViewMeta, ViewState } from "./types"
+import { ViewDataOptions, ViewState } from "./types"
 import { NiceLoading } from "../loading"
-
-const SERVER_DATA_ENABLED = false
+import { viewStateFactory } from "./viewStateFactory"
+import { IS_STATIC } from "@/navLinks"
 
 export async function buildViewData(options: ViewDataOptions = {}): Promise<ViewState> {
-  let interstitial = undefined
-  let data: ViewData = {}
-  const meta: ViewMeta = {
-    isSSR: true,
-    isCSR: false,
-    isLoading: false,
-    isDataReady: false,
-    isError: false,
-  }
-
+  const viewState: ViewState = viewStateFactory(options)
+  
   try {
 
-    // XXX - enable server data?
-    if(SERVER_DATA_ENABLED) {
       const auth = await getAuthState()
       if(!auth.currentUser) {
-        interstitial = <AuthCTA />
+        viewState.interstitial = <AuthCTA />
+      }
+
+      if(IS_STATIC) {
+        viewState.interstitial = <NiceLoading />
       }
       
-      if(!interstitial) {
-        data = await fetchData(options)
-        meta.isDataReady = true
+      if(!viewState.interstitial) {
+        viewState.data = await fetchData(options)
+        viewState.meta.isDataReady = true
       }
-    } else {
-      interstitial = <NiceLoading />
-    }
   } catch(e) {
-    interstitial = <NiceError />
-    meta.isError = true
+    viewState.interstitial = <NiceError />
+    viewState.meta.isError = true
   }
   
-  return {
-    interstitial,
-    options,
-    data,
-    meta,
-  }
+  return viewState
 }
