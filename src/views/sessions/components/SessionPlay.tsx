@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link";
 import { Button, Group, Text, Title } from "@mantine/core"
 
 import { useSessionPlay } from "./useSessionPlay"
@@ -15,6 +14,7 @@ import { Game, Player } from "@/state/types";
 import { useWatchSession } from "@/state/remote/useWatchData";
 import { useClientAuth } from "@/state/auth/useClientAuth";
 import { NiceLoading } from "@/components/loading";
+import { RouteLink } from "@/components/routeLink";
 
 type ViewProps = {
   sessionId: string,
@@ -98,7 +98,7 @@ export function SessionPlay({sessionId, game}: ViewProps) {
                     p="xs"
                     m="0"
                     fz="xs"
-                    component={Link}
+                    component={RouteLink}
                     href={`/session/${session.id}/stats/`}
                   >
                     View session stats

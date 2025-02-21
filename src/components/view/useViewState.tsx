@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { ViewState } from "./types";
+import { ViewDataOptions, ViewState } from "./types";
 import { fetchData } from "./fetchData";
 import { NiceLoading } from "../loading";
 import { AuthCTA } from "@/views/AuthCTA";
 import { NiceError } from "../error";
 import { useClientAuth } from "@/state/auth/useClientAuth";
+import { useClientOptions } from "./useClientOptions";
 
 export function useViewState(viewState: ViewState) {
-  const {options} = viewState
-
+  const options = useClientOptions(viewState.options)
   const [data, updateData] = useState(viewState.data)
   const [meta, updateMeta] = useState(viewState.meta)
   const [interstitial, updateInterstitial] = useState(viewState.interstitial)
@@ -19,22 +19,22 @@ export function useViewState(viewState: ViewState) {
   const {isDataReady} = meta
   
   useEffect(() => {
-    if(!meta.isDataReady) {
-      updateMeta({...meta, isCSR: true, isSSR: false, isLoading: true})
+    if(!isDataReady) {
+      updateMeta(meta => ({...meta, isCSR: true, isSSR: false, isLoading: true}))
     }
   }, [isDataReady])
 
   useEffect(() => {
-    if(!meta.isDataReady && !auth.isLoading) {
+    if(!isDataReady && !auth.isLoading) {
       if(!auth.isAuthenticated) {
         updateInterstitial(<AuthCTA />)
       } else {
         updateInterstitial(<NiceLoading />)
-        fetchData(viewState.options)
+        fetchData(options)
           .then(data => {
             updateData(data)
             updateInterstitial(undefined)
-            updateMeta({...meta, isLoading: false, isDataReady: true})
+            updateMeta(meta => ({...meta, isLoading: false, isDataReady: true}))
           }).catch(error => {
             updateInterstitial(<NiceError />)
             console.log('ERROR', 'Unable to load data', error)
