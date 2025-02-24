@@ -7,13 +7,11 @@ import { useJoinSession } from './useJoinSession'
 
 import './joinSessionForm.module.scss'
 
-type ComponentPropTypes = {
-  isInvalidCode?: boolean,
-}
-
-export function JoinSessionForm({isInvalidCode = false}: ComponentPropTypes) {
+export function JoinSessionForm() {
   const {
     shareCode,
+    isError,
+    error,
     handleCodeChange,
     handleJoin,
   } = useJoinSession()
@@ -31,7 +29,7 @@ export function JoinSessionForm({isInvalidCode = false}: ComponentPropTypes) {
         flex="1"
         placeholder={`Six (6) character share code`}
         value={shareCode}
-        error={isInvalidCode ? 'Code not found' : ''}
+        error={isError ? error : ''}
         onChange={handleCodeChange}
       />
       <Group mt="sm">
