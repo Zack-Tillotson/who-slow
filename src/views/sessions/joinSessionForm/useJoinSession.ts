@@ -12,6 +12,10 @@ const getSessionIdFromShareCode = async (shareCode: string) => {
 }
 
 async function handleSessionIdLookup(shareCode: string, onSessionId: (sessionId: Session["id"]) => void) {
+  if(!shareCode) {
+    return false
+  }
+  
   const sessionId = await getSessionIdFromShareCode(shareCode)
 
   if(!sessionId) {
@@ -33,8 +37,12 @@ export function useJoinSession() {
   const [isSubmitted, updateIsSubmitted] = useState(false)
   const [error, updateError] = useState('')
 
-  const redirectOrError = () => {
-    const result = handleSessionIdLookup(
+  const redirectOrError = async () => {
+    if(shareCode.length !== 6) {
+      updateError('Code must be six (6) characters long.')
+      return
+    }
+    const result = await handleSessionIdLookup(
       shareCode, 
       (sessionId: Session["id"]) => router.push(buildCsrRouteFromHref(`/session/${sessionId}/play/`))
     )
@@ -51,17 +59,16 @@ export function useJoinSession() {
 
   const handleJoin = () => {
     updateIsSubmitted(true)
-    if(shareCode.length === 6) {
-      redirectOrError()
-    } else {
-      updateError('Code must be six (6) characters long.')
-    }
+    redirectOrError()
   }
 
-  const isError = isDirty && isSubmitted && !!error
+  const isError = isSubmitted && !!error
 
   useEffect(() => {
-    redirectOrError()
+    if(shareCode) {
+      // try joining if the code was included in the search param
+      handleJoin()
+    }
   }, [])
   
   return {

@@ -1,6 +1,6 @@
 'use client'
 
-import { Autocomplete, defaultVariantColorsResolver } from "@mantine/core"
+import { Autocomplete, ComboboxItem, defaultVariantColorsResolver } from "@mantine/core"
 import { STATES, useGameSearch } from "./useGameSearch";
 import { BGG_GAME } from "./bggSafeAttrs";
 import { useDisclosure } from "@mantine/hooks";
@@ -52,7 +52,8 @@ export function GameAutocomplete({
         label: `${game.name} (${game.yearPublished})`, 
         value: `${game.bggId}`,
       }))}
-      limit={10}
+      limit={20}
+      filter={({options}) => options as unknown as ComboboxItem[]}
       value={queryTerm}
       disabled={queryState === STATES.ATTR}
       dropdownOpened={dropdownOpened}

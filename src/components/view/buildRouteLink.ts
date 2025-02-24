@@ -1,6 +1,6 @@
 import { PLACEHOLDER_ID } from "@/navLinks"
 
-const BASE_ACTION_TYPES = ['new']
+const BASE_ACTION_TYPES = ['new', 'share']
 
 export function buildCsrRouteFromHref(route: string) {
   const [_, base, idOrBaseAction, action] = route.split('/')

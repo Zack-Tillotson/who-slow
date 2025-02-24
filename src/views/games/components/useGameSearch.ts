@@ -46,6 +46,7 @@ export function useGameSearch(attrsCallback: (game: BGG_GAME) => void, initialQu
       })
       .then(results => {
         if(!results) return
+        results.sort((a:BGG_GAME, b:BGG_GAME) => b.yearPublished - a.yearPublished)
         updateQueryState(STATES.RESULTS)
         updateGamesList(results)
       })
