@@ -18,7 +18,7 @@ export default async function PlayerPage(props: PageProps) {
 
   const {
     playerId
-  } = params;
+  } = params
 
   const viewState = await buildViewData({player: playerId})
 
