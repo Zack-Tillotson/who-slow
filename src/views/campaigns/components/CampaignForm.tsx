@@ -9,6 +9,7 @@ import { useDataState } from "@/state";
 import {Campaign as CampaignType} from '@/state/types'
 import { useState } from "react";
 import { library } from "@/state/remote";
+import { buildCsrRouteFromHref } from "@/components/view/buildRouteLink";
 
 type CampaignViewProps = {
   campaignId?: string,
@@ -44,7 +45,7 @@ export function CampaignForm({campaign}: CampaignViewProps) {
     updateFormState(formStates.PENDING)
     try {
       const result = await library().saveCampaign({...data, id: formCampaign.id})
-      router.push(`/campaign/${result.id}/`)
+      router.push(buildCsrRouteFromHref(`/campaign/${result.id}/`))
       updateFormState(formStates.SUCCESS)
     } catch (e) {
       console.log('WARN', 'form submission failed', e)
