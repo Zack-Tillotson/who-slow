@@ -1,9 +1,9 @@
 'use client'
 
-import { Button, Text, Title } from "@mantine/core";
+import Link from "next/link";
+import { Button, Image, Text, Title } from "@mantine/core";
 import { ViewParams } from "@/components/view/types";
 import styles from './game.module.scss'
-import { RouteLink } from "@/components/routeLink";
 
 export function Game({viewState}: ViewParams) {
   
@@ -22,8 +22,8 @@ export function Game({viewState}: ViewParams) {
       <Title order={1}>{name}</Title>
       <Text>Year: {yearPublished}</Text>
       <Text>BGG Id: #{id}</Text>
-      <img className={styles.gameImage} src={image} alt={`${name} box art`} height={340} width={340} />
-      <Button component={RouteLink} href={`edit/`}>Edit</Button>
+      <Image className={styles.gameImage} src={image} alt={`${name} box art`} height={340} width={340} />
+      <Button component={Link} href={`edit/`}>Edit</Button>
     </>
   )
 }
