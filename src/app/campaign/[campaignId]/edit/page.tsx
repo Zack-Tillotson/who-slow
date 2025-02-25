@@ -3,6 +3,7 @@ import { CampaignForm } from "@/views/campaigns"
 
 import { buildViewData } from "@/components/view/buildViewData"
 import { ViewContainer } from "@/components/view"
+import { PLACEHOLDER_ID } from "@/navLinks"
 
 type CampaignPageProps = {
   params: Promise<{
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 export async function generateStaticParams() {
-  return [{campaignId: 'xxx'}] // XXX https://github.com/vercel/next.js/issues/61213
+  return [{campaignId: PLACEHOLDER_ID}]
 }
 
 export default async function CampaignPage(props: CampaignPageProps) {
