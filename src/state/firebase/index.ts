@@ -4,8 +4,6 @@ import { Auth, getAuth } from "firebase/auth"
 
 import {config} from './firebase.config'
 
-const DATABASE_NAME = process.env.NEXT_PUBLIC_FIRESTORE_DATABASE || ''
-
 export type FirebaseOptionsParams = {
   idToken?: string,
 }
@@ -51,7 +49,7 @@ export class FirebaseConnection {
   getDB() {
     const app = this.getApp()
     if(!this.db) {
-      this.db = getFirestore(app, DATABASE_NAME)
+      this.db = getFirestore(app)
     }
 
     return this.db
