@@ -1,6 +1,6 @@
 {
   "name": "who-slow",
-  "version": "2.4.0-alpha1",
+  "version": "2.7.0",
   "repository": "git@github.com:Zack-Tillotson/who-slow.git",
   "author": "Zack Tillotson <ZackTillotson@gmail.com>",
   "license": "MIT",
@@ -9,16 +9,15 @@
     "build": "next build",
     "start": "next start",
     "test:unit": "vitest",
-    "test:e2e": "playwright test",
     "lint": "next lint"
   },
   "dependencies": {
     "ajv": "^8.17.1",
     "core^": "link:@mantine/core^",
+    "dotenv": "^16.4.7",
     "firebase": "11.1.0",
     "form^": "link:@mantine/form^",
     "hooks^": "link:@mantine/hooks^",
-    "idb": "^8.0.1",
     "next": "15.1.5",
     "notifications^": "link:@mantine/notifications^"
   },
@@ -27,7 +26,6 @@
     "@mantine/form": "^7.16.1",
     "@mantine/hooks": "^7.16.1",
     "@mantine/notifications": "^7.16.1",
-    "@playwright/test": "^1.49.1",
     "@tabler/icons-react": "^3.28.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -49,7 +47,6 @@
     "sharp": "^0.33.5",
     "simple-zustand-devtools": "^1.1.0",
     "typescript": "^5.7.3",
-    "use-query-params": "^2.2.1",
     "vitest": "^2.1.8",
     "zustand": "^4.5.6"
   }

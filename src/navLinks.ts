@@ -1,6 +1,6 @@
 import { IconDice5, IconHome, IconMan, IconMapCog, IconUsers } from "@tabler/icons-react"
 
-export const IS_STATIC = true//process.env.NODE_ENV === 'production' && process.env.STATIC_ONLY === 'true'
+export const IS_STATIC = process.env.NODE_ENV === 'production' && process.env.STATIC_ONLY === 'true'
 export const PLACEHOLDER_ID = '_'
 
 export const navLinks = [{

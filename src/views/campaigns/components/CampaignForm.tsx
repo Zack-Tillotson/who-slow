@@ -2,7 +2,7 @@
 
 import { useForm, Controller } from "react-hook-form"
 
-import { Button, Loader, TextInput, Title } from "@mantine/core"
+import { Alert, Button, Loader, TextInput, Title } from "@mantine/core"
 import { useRouter } from "next/navigation";
 
 import { useDataState } from "@/state";
@@ -10,6 +10,7 @@ import {Campaign as CampaignType} from '@/state/types'
 import { useState } from "react";
 import { library } from "@/state/remote";
 import { buildCsrRouteFromHref } from "@/components/view/buildRouteLink";
+import { IconExclamationCircleFilled } from "@tabler/icons-react";
 
 type CampaignViewProps = {
   campaignId?: string,
@@ -46,7 +47,6 @@ export function CampaignForm({campaign}: CampaignViewProps) {
     try {
       const result = await library().saveCampaign({...data, id: formCampaign.id})
       router.push(buildCsrRouteFromHref(`/campaign/${result.id}/`))
-      updateFormState(formStates.SUCCESS)
     } catch (e) {
       console.log('WARN', 'form submission failed', e)
       updateFormState(formStates.ERROR)
@@ -71,8 +71,13 @@ export function CampaignForm({campaign}: CampaignViewProps) {
       />
       <Button type="submit" disabled={formState === formStates.PENDING}>
         Submit
-        {formState === formStates.PENDING && (<Loader />)}
       </Button>
+      {formState === formStates.PENDING && (<Loader data-testid="spinner" />)}
+      {formState === formStates.ERROR && (
+        <Alert variant="light" color="red" title="Error" icon={<IconExclamationCircleFilled />}>
+          Unable to create the campaign. See warning in console.
+        </Alert>
+      )}
     </form>
   )
 }

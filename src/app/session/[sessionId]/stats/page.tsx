@@ -14,6 +14,7 @@ type PageProps = {
   }>,
 }
 
+
 export async function generateStaticParams() {
   return [{sessionId: PLACEHOLDER_ID}]
 }

@@ -10,6 +10,7 @@ type PageProps = {
   }>,
 }
 
+
 export async function generateStaticParams() {
   return [{gameId: PLACEHOLDER_ID}]
 }

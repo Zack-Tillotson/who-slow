@@ -6,10 +6,15 @@ import {SessionPlay as PlaySession} from './components/SessionPlay'
 import { NiceError } from "@/components/error"
 
 export function SessionPlay({viewState}: ViewParams) {  const {
-    options: {session: sessionId}, 
-    data: {game},
+    data: {session: filledSession},
     meta: {isDataReady},
   } = viewState
+
+  if(!filledSession) {
+    return <NiceError />
+  }
+
+  const {game, session: {id: sessionId}} = filledSession
 
   if(!sessionId) {
     return <NiceError />

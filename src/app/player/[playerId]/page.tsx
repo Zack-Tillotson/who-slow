@@ -10,6 +10,7 @@ type PageProps = {
   }>,
 }
 
+
 export async function generateStaticParams() {
   return [{playerId: PLACEHOLDER_ID}]
 }
@@ -19,7 +20,7 @@ export default async function PlayerPage(props: PageProps) {
 
   const {
     playerId
-  } = params
+  } = params;
 
   const viewState = await buildViewData({player: playerId})
 

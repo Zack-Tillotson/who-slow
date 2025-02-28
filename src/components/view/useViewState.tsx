@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { ViewDataOptions, ViewState } from "./types";
+import { ViewState } from "./types";
 import { fetchData } from "./fetchData";
 import { NiceLoading } from "../loading";
 import { AuthCTA } from "@/views/AuthCTA";

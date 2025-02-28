@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   title: "Setup session | Who Slow ",
 }
 
+
 export async function generateStaticParams() {
   return [{sessionId: PLACEHOLDER_ID}]
 }

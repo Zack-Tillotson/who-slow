@@ -22,7 +22,7 @@ export function Game({viewState}: ViewParams) {
       <Title order={1}>{name}</Title>
       <Text>Year: {yearPublished}</Text>
       <Text>BGG Id: #{id}</Text>
-      <img className={styles.gameImage} src={image} alt={`${name} box art`} height={340} width={340} />
+      <img className={styles.gameImage} src={image} alt={`${name} box art`} height={400} width={400} />
       <Button component={RouteLink} href={`edit/`}>Edit</Button>
     </>
   )
