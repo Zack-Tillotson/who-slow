@@ -1,0 +1,14 @@
+.container {
+  --mantine-color-dimmed: #555;
+}
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.logo {
+  display: inline-block;
+  width: 250px;
+  height: 50px;
+}

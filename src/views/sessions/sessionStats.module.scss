@@ -1,0 +1,27 @@
+.title {
+  color: #666;
+}
+
+.chart {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-gap: 4px;
+}
+
+.chartColorStat {
+  padding: 3px;
+}
+
+.chartColorBar {
+  width: 100%;
+}
+
+.chartTitle {
+  color: #333;
+}
+
+.playerColor {
+  text-shadow: 0 0 3px #fff;
+  border-radius: 2px;
+  border: solid 1px #eee;
+}
